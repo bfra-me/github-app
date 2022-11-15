@@ -1,5 +1,5 @@
 {
   "extends": [
-    "github>probot/.github"
+    "github>bfra-me/renovate-config"
   ]
 }
