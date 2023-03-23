@@ -1,15 +1,16 @@
 {
-  "name": "example-github-action",
-  "version": "1.0.0",
+  "name": "github-app",
+  "version": "0.0.0-development",
+  "description": "GitHub App template repository",
   "private": true,
-  "description": "Probot & GitHub Action example",
+  "packageManager": "yarn@3.5.0",
+  "author": "Marcus R. Brown <contact@marcusrbrown.com>",
+  "license": "MIT",
+  "repository": "github:bfra-me/github-app",
   "scripts": {
     "test": "node test/app.test.js",
     "build": "ncc build index.js -o dist"
   },
-  "author": "Gregor Martynus (https://twitter.com/gr2m)",
-  "license": "ISC",
-  "repository": "github:probot/example-github-action",
   "dependencies": {
     "@probot/adapter-github-actions": "3.1.3"
   },

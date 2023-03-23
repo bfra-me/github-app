@@ -1,5 +1,6 @@
-name: Say Hello World
-"on":
+---
+name: GitHub App
+'on':
   issues:
     types:
       - opened
