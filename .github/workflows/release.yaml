@@ -20,6 +20,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: rm .gitignore # dist/ folder is ignored by default
+      - run: nvm install 'lts/*'
       - run: yarn dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
