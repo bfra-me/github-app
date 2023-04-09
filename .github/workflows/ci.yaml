@@ -5,7 +5,7 @@ name: CI
     branches: [main, 'renovate/**']
   pull_request:
     branches: [main]
-    types: [opened, synchronize]
+    types: [opened, reopened, synchronize]
 
 jobs:
   test:
@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
       - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
-          cache: npm
-          node-version: 16
-      - run: npm ci
-      - run: npm test
+          cache: yarn
+          node-version-file: '.node-version'
+      - run: yarn install --immutable
+      - run: yarn test
