@@ -1,5 +1,8 @@
 {
-  "extends": [
-    "github>bfra-me/renovate-config"
-  ]
+  "extends": ["github>bfra-me/renovate-config"],
+  "force": {
+    "constraints": {
+      "node": "^16.20.0"
+    }
+  }
 }

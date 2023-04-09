@@ -1,8 +1,11 @@
-name: release
-on:
+---
+name: Release
+'on':
   push:
-    branches:
-      - main
+    branches: [main]
+
+env:
+  FORCE_COLOR: true
 
 jobs:
   release:
@@ -12,12 +15,12 @@ jobs:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
       - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
-          node-version: 16
-          cache: npm
-      - run: npm ci
-      - run: npm run build
+          cache: yarn
+          node-version-file: '.node-version'
+      - run: yarn install --immutable
+      - run: yarn build
       - run: rm .gitignore # dist/ folder is ignored by default
-      - run: npx semantic-release
+      - run: yarn dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:refs/heads/v1"

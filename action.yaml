@@ -1,0 +1,9 @@
+---
+name: GitHub App as a GitHub Action
+description: 'GitHub App as a GitHub Action [Template]'
+branding:
+  icon: "gift"
+  color: orange
+runs:
+  using: "node16"
+  main: "dist/index.js"
