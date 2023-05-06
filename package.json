@@ -7,6 +7,9 @@
   "author": "Marcus R. Brown <contact@marcusrbrown.com>",
   "license": "MIT",
   "repository": "github:bfra-me/github-app",
+  "engines": {
+    "node": "^16.20.0"
+  },
   "scripts": {
     "test": "node test/app.test.js",
     "build": "ncc build index.js -o dist"

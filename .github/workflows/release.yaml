@@ -16,11 +16,12 @@ jobs:
       - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           cache: yarn
-          node-version-file: '.node-version'
+          node-version-file: package.json
       - run: yarn install --immutable
       - run: yarn build
-      - run: rm .gitignore # dist/ folder is ignored by default
-      - run: nvm install 'lts/*'
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        with:
+          node-version: 'lts/*'
       - run: yarn dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
