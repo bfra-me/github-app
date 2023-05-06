@@ -1,53 +1,50 @@
-const { suite } = require("uvu");
-const assert = require("uvu/assert");
+const {suite} = require('uvu');
+const assert = require('uvu/assert');
 
-const nock = require("nock");
+const nock = require('nock');
 nock.disableNetConnect();
 
 // disable Probot logs
-process.env.LOG_LEVEL = "fatal";
-const { Probot, ProbotOctokit } = require("probot");
+process.env.LOG_LEVEL = 'fatal';
+const {Probot, ProbotOctokit} = require('probot');
 
-const app = require("../app");
+const app = require('../app');
 
 /** @type {import('probot').Probot */
 let probot;
-const test = suite("app");
+const test = suite('app');
 test.before.each(() => {
   probot = new Probot({
     id: 1,
-    githubToken: "test",
+    githubToken: 'test',
     Octokit: ProbotOctokit.defaults({
-      throttle: { enabled: false },
-      retry: { enabled: false },
+      throttle: {enabled: false},
+      retry: {enabled: false},
     }),
   });
   probot.load(app);
 });
 
-test("recieves issues.opened event", async function () {
-  const mock = nock("https://api.github.com")
+test('recieves issues.opened event', async function () {
+  const mock = nock('https://api.github.com')
     // create new check run
-    .post(
-      "/repos/probot/example-github-action/issues/1/comments",
-      (requestBody) => {
-        assert.equal(requestBody, { body: "Hello, World!" });
+    .post('/repos/probot/example-github-action/issues/1/comments', (requestBody) => {
+      assert.equal(requestBody, {body: 'Hello, World!'});
 
-        return true;
-      }
-    )
+      return true;
+    })
     .reply(201, {});
 
   await probot.receive({
-    name: "issues",
-    id: "1",
+    name: 'issues',
+    id: '1',
     payload: {
-      action: "opened",
+      action: 'opened',
       repository: {
         owner: {
-          login: "probot",
+          login: 'probot',
         },
-        name: "example-github-action",
+        name: 'example-github-action',
       },
       issue: {
         number: 1,
