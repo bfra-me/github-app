@@ -1,5 +1,6 @@
 bracketSpacing: false
 endOfLine: lf
+printWidth: 120
 singleQuote: true
 tabWidth: 2
 overrides:
@@ -8,6 +9,10 @@ overrides:
     options:
       singleQuote: false
       trailingComma: none
+  - files:
+      - '*.json5'
+    options:
+      parser: json
   - files:
       - '.vscode/*.json'
     options:

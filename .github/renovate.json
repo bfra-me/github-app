@@ -1,8 +1,15 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>bfra-me/renovate-config"],
-  "force": {
-    "constraints": {
-      "node": "^16.20.0"
+  "packageRules": [
+    {
+      "matchPackageNames": ["@types/node", "node", "nodejs/node"],
+      "allowedVersions": "< 17"
     }
+  ],
+  "postUpgradeTasks": {
+    "commands": ["yarn install --immutable", "yarn prettier --write ."],
+    "fileFilters": ["**/*"],
+    "executionMode": "branch"
   }
 }
