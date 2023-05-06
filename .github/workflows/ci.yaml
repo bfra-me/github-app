@@ -17,4 +17,6 @@ jobs:
           cache: yarn
           node-version-file: '.node-version'
       - run: yarn install --immutable
+      - name: Check formatting
+        run: yarn prettier --check .
       - run: yarn test
