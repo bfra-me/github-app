@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": "github:bfra-me/github-app",
   "engines": {
-    "node": "^16.20.0"
+    "node": "^16.20.0 || >=18"
   },
   "scripts": {
     "test": "node test/app.test.js",
