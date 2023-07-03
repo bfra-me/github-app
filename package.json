@@ -21,29 +21,11 @@
   "devDependencies": {
     "@semantic-release/git": "10.0.1",
     "@vercel/ncc": "0.36.1",
+    "conventional-changelog-conventionalcommits": "^6.1.0",
     "nock": "13.3.1",
     "prettier": "2.8.8",
     "semantic-release": "21.0.6",
     "uvu": "0.5.6"
-  },
-  "release": {
-    "branches": [
-      "main"
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "dist/index.js"
-          ],
-          "message": "build(release): compiled action for ${nextRelease.version}\n\n[skip ci]"
-        }
-      ],
-      "@semantic-release/github"
-    ]
   },
   "jest": {
     "testEnvironment": "node"
