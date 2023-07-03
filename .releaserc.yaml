@@ -3,16 +3,16 @@ branches: [main]
 plugins:
   - - '@semantic-release/commit-analyzer'
     - releaseRules:
-      - type: build
-        release: patch
-      - type: ci
-        release: patch
-      - type: docs
-        release: patch
+        - type: build
+          release: patch
+        - type: ci
+          release: patch
+        - type: docs
+          release: patch
 
   - - '@semantic-release/release-notes-generator'
     - presetConfig:
-          types:
+        types:
           - type: feat
             section: 'Features'
           - type: features
