@@ -5,6 +5,13 @@ name: CI
   pull_request:
     types: [opened, reopened, synchronize]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
