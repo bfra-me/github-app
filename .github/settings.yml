@@ -1,0 +1,6 @@
+---
+_extends: .github
+
+repository:
+  description: Template repository for a GitHub App that can be triggered by a GitHub Action
+  topics: github-app, template, actions, github-actions, probot, probot-app, probot-template, probot-template-repo
