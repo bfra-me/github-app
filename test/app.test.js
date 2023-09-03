@@ -25,7 +25,7 @@ test.before.each(() => {
   probot.load(app);
 });
 
-test('recieves issues.opened event', async function () {
+test('receives issues.opened event', async function () {
   const mock = nock('https://api.github.com')
     // create new check run
     .post('/repos/probot/example-github-action/issues/1/comments', (requestBody) => {
