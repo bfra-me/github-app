@@ -2,5 +2,18 @@
 _extends: .github
 
 repository:
+  name: github-app
   description: Template repository for a GitHub App that can be triggered by a GitHub Action
   topics: github-app, template, actions, github-actions, probot, probot-app, probot-template, probot-template-repo
+  is_template: true
+
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts: ['Test', 'Release']
+      enforce_admins: true
+      required_pull_request_reviews: null
+      restrictions: null
+      required_linear_history: true
