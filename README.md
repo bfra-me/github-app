@@ -4,7 +4,7 @@
 
 [![Build Status](https://github.com/probot/example-github-action/workflows/Test/badge.svg)](https://github.com/probot/example-github-action/actions)
 
-If you build a GitHub Action using Probot, we recommend you watch this repository as we will keep updating it implementing best practises and new APIs.
+If you build a GitHub Action using Probot, we recommend you watch this repository as we will keep updating it implementing best practices and new APIs.
 
 ## Usage
 
@@ -57,7 +57,7 @@ This repository is continuously publishing new versions to the special `v1` bran
 1. `"build": "ncc build index.js -o dist"` script - bundle the app into `dist/index.js`
 2. `"release"` - configure publishing from the `"main"` branch, and configure the `git` plugin to add a commit after publishing
 
-The other relevant bit is [`.github/workflows/release.yml`](.github/workflows/release.yml), which is run on each push to the default branch (`main`). It installs all dependencies, runs the `build` script, runs semantic-release which creates the GitHub release based on semantic commit message conventions (`fix: ...`, `feat: ...`) and commits the `dist/index.js` file. Then it pushes the changes to the `v1` branch, so that users will always get the latest version when referencing `probot/exmaple-github-action@v1`. If there should ever be a breaking change, we would change the publish branch to `v2`, etc.
+The other relevant bit is [`.github/workflows/release.yml`](.github/workflows/release.yml), which is run on each push to the default branch (`main`). It installs all dependencies, runs the `build` script, runs semantic-release which creates the GitHub release based on semantic commit message conventions (`fix: ...`, `feat: ...`) and commits the `dist/index.js` file. Then it pushes the changes to the `v1` branch, so that users will always get the latest version when referencing `probot/example-github-action@v1`. If there should ever be a breaking change, we would change the publish branch to `v2`, etc.
 
 ## License
 
