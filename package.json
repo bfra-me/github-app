@@ -22,7 +22,7 @@
     "@semantic-release/git": "10.0.1",
     "@vercel/ncc": "0.38.1",
     "conventional-changelog-conventionalcommits": "7.0.2",
-    "nock": "13.3.4",
+    "nock": "13.3.6",
     "prettier": "3.0.3",
     "semantic-release": "21.1.2",
     "uvu": "0.5.6"
