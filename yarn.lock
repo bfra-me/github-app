@@ -2827,7 +2827,7 @@ __metadata:
     conventional-changelog-conventionalcommits: 7.0.2
     nock: 13.3.8
     prettier: 3.1.0
-    probot: 12.3.1
+    probot: 12.3.2
     semantic-release: 21.1.2
     uvu: 0.5.6
   languageName: unknown
@@ -5247,9 +5247,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"probot@npm:12.3.1, probot@npm:^12.2.1":
-  version: 12.3.1
-  resolution: "probot@npm:12.3.1"
+"probot@npm:12.3.2, probot@npm:^12.2.1":
+  version: 12.3.2
+  resolution: "probot@npm:12.3.2"
   dependencies:
     "@octokit/core": ^3.2.4
     "@octokit/plugin-enterprise-compatibility": ^1.2.8
@@ -5286,7 +5286,7 @@ __metadata:
     uuid: ^8.3.2
   bin:
     probot: bin/probot.js
-  checksum: 4fccd3f327b64f11c04330dd1600a100277a4dbc0b6dfef03ad04c280cd5825fb14df2140cb2b6cb96e1577a248b2457a224f6129351204269e2fe683e62a497
+  checksum: cfb3b3f1c0e525963fbbcf6c9fc1c76c707e1a1fe9f5b2c96dd20de48f9cc838c0ac340244b57b62569c88eb85bd03469dede28b6ca314ea014600f9574afa0f
   languageName: node
   linkType: hard
 
