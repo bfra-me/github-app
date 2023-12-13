@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "description": "GitHub App template repository",
   "private": true,
-  "packageManager": "yarn@3.6.4",
+  "packageManager": "yarn@3.7.0",
   "author": "Marcus R. Brown <contact@marcusrbrown.com>",
   "license": "MIT",
   "repository": "github:bfra-me/github-app",
@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@probot/adapter-github-actions": "3.1.3",
-    "probot": "12.3.1"
+    "probot": "12.3.3"
   },
   "devDependencies": {
     "@semantic-release/git": "10.0.1",
     "@vercel/ncc": "0.38.1",
     "conventional-changelog-conventionalcommits": "7.0.2",
-    "nock": "13.3.6",
-    "prettier": "3.0.3",
+    "nock": "13.4.0",
+    "prettier": "3.1.1",
     "semantic-release": "21.1.2",
     "uvu": "0.5.6"
   },
