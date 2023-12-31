@@ -6,15 +6,16 @@ name: GitHub App
       - opened
 jobs:
   issuesOpened:
+    name: Issues opened
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
-          cache: yarn
+          cache: pnpm
           node-version-file: package.json
-      - run: yarn install --immutable
-      - run: yarn build
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

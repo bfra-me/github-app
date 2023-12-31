@@ -1,14 +1,24 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: ['github>bfra-me/renovate-config#v2.3.2', 'github>bfra-me/renovate-config:automerge/prForCI#v2.3.2'],
+  extends: ['github>bfra-me/renovate-config#v2.5.0'],
   packageRules: [
     {
       matchPackageNames: ['@types/node', 'node', 'nodejs/node'],
-      allowedVersions: '< 17',
+      allowedVersions: '>=18',
+    },
+    {
+      matchPackageNames: ['npm'],
+      constraintsFiltering: 'strict',
     },
   ],
   postUpgradeTasks: {
-    commands: ['yarn install --immutable', 'yarn run build', 'yarn prettier --write .'],
+    commands: [
+      'npm install -g pnpm@8',
+      'pnpm install --frozen-lockfile --ignore-scripts',
+      'git checkout -- .npmrc',
+      'pnpm run build',
+      'pnpm run format',
+    ],
     executionMode: 'branch',
   },
 }

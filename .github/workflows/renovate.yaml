@@ -1,5 +1,5 @@
 ---
-# Renovate this repository if this workflow file or the Renovate configuration file is changed.
+# Renovate this repository if Renovate-specific tasks are checked or if dispatched.
 name: Renovate
 
 'on':
@@ -8,10 +8,7 @@ name: Renovate
   pull_request:
     types: [edited]
   push:
-    branches: [main]
-    paths:
-      - '.github/workflows/renovate.yaml'
-      - '.github/renovate.json5?'
+    branches: ['**']
   workflow_dispatch:
     inputs:
       print_config:
@@ -20,11 +17,14 @@ name: Renovate
         type: boolean
         default: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions: {}
 
 jobs:
-  should-renovate:
-    name: Check if Renovate should run
+  renovate:
     if: >-
       (github.event_name != 'issues' && github.event_name != 'pull_request') ||
       (
@@ -42,23 +42,30 @@ jobs:
         contains(join(github.event.*.body, ''), '- [x] <!-- unlimit-branch=') ||
         contains(join(github.event.*.body, ''), '- [x] <!-- unschedule-branch=')
       )
-    outputs:
-      renovate: ${{ steps.create-output.outputs.renovate }}
-    runs-on: ubuntu-latest
-    steps:
-      - id: create-output
-        run: echo "renovate=true" >> $GITHUB_OUTPUT
-
-  renovate:
-    if: needs.should-renovate.outputs.renovate == 'true'
     name: Renovate
-    needs: should-renovate
     runs-on: ubuntu-latest
     steps:
-      - name: Renovate
-        uses: bfra-me/renovate-action@d6d1f148f765ad783ef29005e44b1917ce76db42 # v2.2.4
+      - if: github.event_name == 'push'
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - id: filter
+        if: github.event_name == 'push'
+        uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         with:
-          print_config: ${{ inputs.print_config || 'false' }}
+          filters: |
+            changes:
+              - '.github/workflows/renovate.yaml'
+              - '.github/renovate.json5'
+      - id: should-renovate
+        if: github.event_name != 'push' || steps.filter.outputs.changes == 'true'
+        run: echo 'renovate=true' >> $GITHUB_OUTPUT
+      - name: Renovate
+        if: steps.should-renovate.outputs.renovate == 'true'
+        uses: bfra-me/renovate-action@f7f0b9773ab375076917c2c05c9f678b3a10dffb # v2.3.2
+        with:
+          branch: ${{ github.ref != 'refs/heads/main' && github.ref_name || '' }}
+          cache: ${{ github.event_name == 'push' && contains('["main", "renovate/reconfigure"]', github.ref_name) }}
+          dry_run: ${{ github.event_name == 'push' && !contains('["main", "renovate/reconfigure"]', github.ref_name) }}
+          print_config: ${{ inputs.print_config }}
           renovate_app_id: ${{ secrets.APPLICATION_ID }}
           renovate_app_pem: ${{ secrets.APPLICATION_PRIVATE_KEY }}
           renovate_app_slug: ${{ github.repository_owner }}
