@@ -1,0 +1,10 @@
+---
+$schema: https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json
+config:
+  # line-length
+  MD013: false
+  # no-inline-html
+  MD033:
+    allowed_elements: [a, h3, img, p]
+  # first-line-heading/first-line-h1
+  MD041: false

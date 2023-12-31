@@ -6,8 +6,8 @@ plugins:
   - '@semantic-release/release-notes-generator'
 
   - - '@semantic-release/git'
-    - assets: ['dist/index.js']
-      message: 'build(release): compiled action for ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
+    - assets: ['dist', 'package.json']
+      message: 'chore(release): compiled action for ${nextRelease.version} [skip ci]'
 
   - - '@semantic-release/github'
     - successComment: false
@@ -20,6 +20,9 @@ analyzeCommits:
       release: patch
     - type: docs
       release: patch
+      scope: readme.md
+    - type: skip
+      release: false
 
 preset: conventionalcommits
 
@@ -29,23 +32,23 @@ presetConfig:
       section: 'Features'
     - type: features
       section: 'Features'
+    - type: build
+      section: 'Build System'
     - type: fix
       section: 'Bug Fixes'
+    - type: docs
+      section: 'Documentation'
+    - type: test
+      section: 'Tests'
+    - type: ci
+      section: 'Continuous Integration'
+    - type: style
+      section: 'Styles'
+    - type: refactor
+      section: 'Code Refactoring'
     - type: perf
       section: 'Performance Improvements'
     - type: revert
       section: 'Reverts'
-    - type: docs
-      section: 'Documentation'
-    - type: style
-      section: 'Styles'
     - type: chore
       section: 'Miscellaneous Chores'
-    - type: refactor
-      section: 'Code Refactoring'
-    - type: test
-      section: 'Tests'
-    - type: build
-      section: 'Build System'
-    - type: ci
-      section: 'Continuous Integration'

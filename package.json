@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "description": "GitHub App template repository",
   "private": true,
-  "packageManager": "yarn@3.7.0",
+  "packageManager": "pnpm@8.13.1",
   "author": "Marcus R. Brown <contact@marcusrbrown.com>",
   "license": "MIT",
   "repository": "github:bfra-me/github-app",
@@ -12,7 +12,9 @@
   },
   "scripts": {
     "test": "node test/app.test.js",
-    "build": "ncc build index.js -o dist"
+    "build": "ncc build index.js -o dist",
+    "check-format": "prettier --check .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@probot/adapter-github-actions": "3.1.3",
