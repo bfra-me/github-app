@@ -3,7 +3,7 @@ name: CI
 
 'on':
   push:
-    branches: [main]
+    branches: [main, 'renovate/**']
   pull_request:
     types: [opened, reopened, synchronize]
 
@@ -63,7 +63,7 @@ jobs:
           GIT_COMMITTER_EMAIL: '118100583+bfra-me[bot]@users.noreply.github.com'
           GIT_COMMITTER_NAME: 'bfra-me[bot]'
           GITHUB_TOKEN: ${{ steps.get-workflow-access-token.outputs.token }}
-      - if: env.DRY_RUN != 'true'
+      - if: github.event_name == 'push' && env.DRY_RUN != 'true'
         run: 'git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:refs/heads/v1'
         env:
           GITHUB_TOKEN: ${{ steps.get-workflow-access-token.outputs.token }}
