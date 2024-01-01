@@ -6,8 +6,8 @@ plugins:
   - '@semantic-release/release-notes-generator'
 
   - - '@semantic-release/git'
-    - assets: ['dist', 'package.json']
-      message: 'chore(release): compiled action for ${nextRelease.version} [skip ci]'
+    - assets: ['dist/index.js']
+      message: 'build(release): compiled action for ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
 
   - - '@semantic-release/github'
     - successComment: false
