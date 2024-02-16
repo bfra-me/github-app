@@ -42,9 +42,9 @@ test('receives issues.opened event', async function () {
       action: 'opened',
       repository: {
         owner: {
-          login: 'probot',
+          login: 'bfra-me',
         },
-        name: 'example-github-action',
+        name: 'github-app',
       },
       issue: {
         number: 1,
