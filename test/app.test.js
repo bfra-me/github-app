@@ -28,7 +28,7 @@ test.before.each(() => {
 test('receives issues.opened event', async function () {
   const mock = nock('https://api.github.com')
     // create new check run
-    .post('/repos/probot/example-github-action/issues/1/comments', (requestBody) => {
+    .post('/repos/bfra-me/github-app/issues/1/comments', (requestBody) => {
       assert.equal(requestBody, {body: 'Hello, World!'});
 
       return true;
