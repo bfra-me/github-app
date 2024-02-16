@@ -1,4 +1,4 @@
-branches: [main]
+branches: [release]
 
 plugins:
   - '@semantic-release/commit-analyzer'
@@ -15,8 +15,6 @@ plugins:
 analyzeCommits:
   releaseRules:
     - type: build
-      release: patch
-    - type: ci
       release: patch
     - type: docs
       release: patch
