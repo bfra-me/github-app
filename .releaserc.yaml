@@ -50,3 +50,5 @@ presetConfig:
       section: 'Reverts'
     - type: chore
       section: 'Miscellaneous Chores'
+    - type: skip
+      hidden: true
