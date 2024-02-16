@@ -8,7 +8,7 @@ name: CI
     types: [opened, reopened, synchronize]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -44,25 +44,47 @@ jobs:
           application_id: ${{ secrets.APPLICATION_ID }}
           application_private_key: ${{ secrets.APPLICATION_PRIVATE_KEY }}
           permissions: 'contents:write, issues:write, pull_requests:write'
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Setup Git user
+        run: |
+          git config --global user.email '118100583+bfra-me[bot]@users.noreply.github.com'
+          git config --global user.name 'bfra-me[bot]'
+      - name: Checkout `release` branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: 0
+          ref: release
           token: ${{ steps.get-workflow-access-token.outputs.token }}
-      - run: corepack enable
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - if: ${{ github.event_name == 'pull_request' }}
+        name: Fetch PR
+        run: git fetch origin +${{ github.sha }}:${{ github.ref }}
+      - id: merge
+        name: Merge `main` into `release`
+        run: |
+          git merge --no-ff -Xtheirs -m 'skip: merge (${{ github.sha }}) [skip release]' ${{ github.sha }}
+          echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+      - name: Setup Node.js
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: pnpm
           node-version-file: package.json
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm build
-      - name: Semantic Release
-        run: pnpm semantic-release --dry-run ${{ env.DRY_RUN }} --ci ${{ env.DRY_RUN != 'true' }}
-        env:
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - if: env.DRY_RUN != 'true'
+        name: Push `release` branch
+        run: git push origin release:release
+      - env:
           GIT_AUTHOR_EMAIL: '118100583+bfra-me[bot]@users.noreply.github.com'
           GIT_AUTHOR_NAME: 'bfra-me[bot]'
           GIT_COMMITTER_EMAIL: '118100583+bfra-me[bot]@users.noreply.github.com'
           GIT_COMMITTER_NAME: 'bfra-me[bot]'
           GITHUB_TOKEN: ${{ steps.get-workflow-access-token.outputs.token }}
+        id: semantic-release
+        name: Semantic Release
+        run: |
+          export GITHUB_REF=refs/heads/release GITHUB_SHA=${{ steps.merge.outputs.commit }}
+          pnpm semantic-release --dry-run ${{ env.DRY_RUN }} --ci ${{ env.DRY_RUN != 'true' }}
       - if: github.event_name == 'push' && env.DRY_RUN != 'true'
         run: 'git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:refs/heads/v1'
         env:
