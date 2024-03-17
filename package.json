@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "description": "GitHub App template repository",
   "private": true,
-  "packageManager": "pnpm@8.15.4",
+  "packageManager": "pnpm@8.15.5",
   "author": "Marcus R. Brown <contact@marcusrbrown.com>",
   "license": "MIT",
   "repository": "github:bfra-me/github-app",
