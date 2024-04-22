@@ -3220,7 +3220,7 @@ packages:
       real-require: 0.2.0
       safe-stable-stringify: 2.4.3
       sonic-boom: 3.8.1
-      thread-stream: 2.4.1
+      thread-stream: 2.6.0
     dev: false
 
   /pkg-conf@2.1.0:
@@ -3962,8 +3962,8 @@ packages:
       any-promise: 1.3.0
     dev: true
 
-  /thread-stream@2.4.1:
-    resolution: {integrity: sha512-d/Ex2iWd1whipbT681JmTINKw0ZwOUBZm7+Gjs64DHuX34mmw8vJL2bFAaNacaW72zYiTJxSHi5abUuOi5nsfg==}
+  /thread-stream@2.6.0:
+    resolution: {integrity: sha512-t4eNiKdGwd1EV6tx76mRbrOqwvkxz+ssOiQXEXw88m4p/Xp6679vg16sf39BAstRjHOiWIqp5+J2ylHk3pU30g==}
     dependencies:
       real-require: 0.2.0
     dev: false
