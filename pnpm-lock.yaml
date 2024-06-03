@@ -9,8 +9,8 @@ dependencies:
     specifier: 3.1.3
     version: 3.1.3
   probot:
-    specifier: 12.3.4
-    version: 12.3.4
+    specifier: 12.4.0
+    version: 12.4.0
 
 devDependencies:
   '@semantic-release/git':
@@ -502,7 +502,7 @@ packages:
     dependencies:
       '@actions/core': 1.10.1
       pino: 8.21.0
-      probot: 12.3.4
+      probot: 12.4.0
       through2: 4.0.2
     transitivePeerDependencies:
       - encoding
@@ -3317,8 +3317,8 @@ packages:
       parse-ms: 4.0.0
     dev: true
 
-  /probot@12.3.4:
-    resolution: {integrity: sha512-XgOqvaX/sL2eGHb2FH1l1ceET1mp30Q6WogzIahOZDjj7cdCOuGsSUYXnr1lQ9zAAoubKh0g/7DH/EvRQ0XqXg==}
+  /probot@12.4.0:
+    resolution: {integrity: sha512-DbW4ME9rzGVwnsFjoWWxKtRvnxPlFaCg726ge1sYHwZ3UzMlcF3B8Qf7MptfhGRyFw8sSCqsbgzb0E5d/BrQEA==}
     engines: {node: '>=10.21'}
     hasBin: true
     dependencies:
