@@ -23,7 +23,7 @@
   "devDependencies": {
     "@semantic-release/git": "10.0.1",
     "@vercel/ncc": "0.38.1",
-    "conventional-changelog-conventionalcommits": "7.0.2",
+    "conventional-changelog-conventionalcommits": "8.0.0",
     "nock": "13.5.4",
     "prettier": "3.3.0",
     "semantic-release": "23.1.1",
