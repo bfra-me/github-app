@@ -61625,7 +61625,7 @@ module.exports = (input, options) => {
 "use strict";
 
 
-const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(87518)
+const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(53133)
 const serializers = __nccwpck_require__(49105)
 const getCallerFile = __nccwpck_require__(49118)
 const startTime = Symbol('startTime')
@@ -62630,7 +62630,7 @@ exports.getLog = void 0;
  * app.log.fatal("Goodbye, cruel world!");
  * ```
  */
-const pino_1 = __nccwpck_require__(87518);
+const pino_1 = __nccwpck_require__(53133);
 const pino_2 = __nccwpck_require__(74835);
 const rebind_log_1 = __nccwpck_require__(65840);
 function getLog(options = {}) {
@@ -70201,7 +70201,7 @@ module.exports = function resolveSync(x, options) {
 
 /***/ }),
 
-/***/ 27897:
+/***/ 28497:
 /***/ ((module) => {
 
 "use strict";
@@ -70218,20 +70218,32 @@ function copyBuffer (cur) {
 
 function rfdc (opts) {
   opts = opts || {}
-
   if (opts.circles) return rfdcCircles(opts)
+
+  const constructorHandlers = new Map()
+  constructorHandlers.set(Date, (o) => new Date(o))
+  constructorHandlers.set(Map, (o, fn) => new Map(cloneArray(Array.from(o), fn)))
+  constructorHandlers.set(Set, (o, fn) => new Set(cloneArray(Array.from(o), fn)))
+  if (opts.constructorHandlers) {
+    for (const handler of opts.constructorHandlers) {
+      constructorHandlers.set(handler[0], handler[1])
+    }
+  }
+
+  let handler = null
+
   return opts.proto ? cloneProto : clone
 
   function cloneArray (a, fn) {
-    var keys = Object.keys(a)
-    var a2 = new Array(keys.length)
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i]
-      var cur = a[k]
+    const keys = Object.keys(a)
+    const a2 = new Array(keys.length)
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i]
+      const cur = a[k]
       if (typeof cur !== 'object' || cur === null) {
         a2[k] = cur
-      } else if (cur instanceof Date) {
-        a2[k] = new Date(cur)
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        a2[k] = handler(cur, fn)
       } else if (ArrayBuffer.isView(cur)) {
         a2[k] = copyBuffer(cur)
       } else {
@@ -70243,22 +70255,18 @@ function rfdc (opts) {
 
   function clone (o) {
     if (typeof o !== 'object' || o === null) return o
-    if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, clone)
-    if (o instanceof Map) return new Map(cloneArray(Array.from(o), clone))
-    if (o instanceof Set) return new Set(cloneArray(Array.from(o), clone))
-    var o2 = {}
-    for (var k in o) {
+    if (o.constructor !== Object && (handler = constructorHandlers.get(o.constructor))) {
+      return handler(o, clone)
+    }
+    const o2 = {}
+    for (const k in o) {
       if (Object.hasOwnProperty.call(o, k) === false) continue
-      var cur = o[k]
+      const cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
         o2[k] = cur
-      } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
-      } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), clone))
-      } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), clone))
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        o2[k] = handler(cur, clone)
       } else if (ArrayBuffer.isView(cur)) {
         o2[k] = copyBuffer(cur)
       } else {
@@ -70270,21 +70278,17 @@ function rfdc (opts) {
 
   function cloneProto (o) {
     if (typeof o !== 'object' || o === null) return o
-    if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, cloneProto)
-    if (o instanceof Map) return new Map(cloneArray(Array.from(o), cloneProto))
-    if (o instanceof Set) return new Set(cloneArray(Array.from(o), cloneProto))
-    var o2 = {}
-    for (var k in o) {
-      var cur = o[k]
+    if (o.constructor !== Object && (handler = constructorHandlers.get(o.constructor))) {
+      return handler(o, cloneProto)
+    }
+    const o2 = {}
+    for (const k in o) {
+      const cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
         o2[k] = cur
-      } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
-      } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), cloneProto))
-      } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), cloneProto))
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        o2[k] = handler(cur, cloneProto)
       } else if (ArrayBuffer.isView(cur)) {
         o2[k] = copyBuffer(cur)
       } else {
@@ -70296,25 +70300,36 @@ function rfdc (opts) {
 }
 
 function rfdcCircles (opts) {
-  var refs = []
-  var refsNew = []
+  const refs = []
+  const refsNew = []
 
+  const constructorHandlers = new Map()
+  constructorHandlers.set(Date, (o) => new Date(o))
+  constructorHandlers.set(Map, (o, fn) => new Map(cloneArray(Array.from(o), fn)))
+  constructorHandlers.set(Set, (o, fn) => new Set(cloneArray(Array.from(o), fn)))
+  if (opts.constructorHandlers) {
+    for (const handler of opts.constructorHandlers) {
+      constructorHandlers.set(handler[0], handler[1])
+    }
+  }
+
+  let handler = null
   return opts.proto ? cloneProto : clone
 
   function cloneArray (a, fn) {
-    var keys = Object.keys(a)
-    var a2 = new Array(keys.length)
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i]
-      var cur = a[k]
+    const keys = Object.keys(a)
+    const a2 = new Array(keys.length)
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i]
+      const cur = a[k]
       if (typeof cur !== 'object' || cur === null) {
         a2[k] = cur
-      } else if (cur instanceof Date) {
-        a2[k] = new Date(cur)
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        a2[k] = handler(cur, fn)
       } else if (ArrayBuffer.isView(cur)) {
         a2[k] = copyBuffer(cur)
       } else {
-        var index = refs.indexOf(cur)
+        const index = refs.indexOf(cur)
         if (index !== -1) {
           a2[k] = refsNew[index]
         } else {
@@ -70327,28 +70342,24 @@ function rfdcCircles (opts) {
 
   function clone (o) {
     if (typeof o !== 'object' || o === null) return o
-    if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, clone)
-    if (o instanceof Map) return new Map(cloneArray(Array.from(o), clone))
-    if (o instanceof Set) return new Set(cloneArray(Array.from(o), clone))
-    var o2 = {}
+    if (o.constructor !== Object && (handler = constructorHandlers.get(o.constructor))) {
+      return handler(o, clone)
+    }
+    const o2 = {}
     refs.push(o)
     refsNew.push(o2)
-    for (var k in o) {
+    for (const k in o) {
       if (Object.hasOwnProperty.call(o, k) === false) continue
-      var cur = o[k]
+      const cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
         o2[k] = cur
-      } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
-      } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), clone))
-      } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), clone))
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        o2[k] = handler(cur, clone)
       } else if (ArrayBuffer.isView(cur)) {
         o2[k] = copyBuffer(cur)
       } else {
-        var i = refs.indexOf(cur)
+        const i = refs.indexOf(cur)
         if (i !== -1) {
           o2[k] = refsNew[i]
         } else {
@@ -70363,27 +70374,23 @@ function rfdcCircles (opts) {
 
   function cloneProto (o) {
     if (typeof o !== 'object' || o === null) return o
-    if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, cloneProto)
-    if (o instanceof Map) return new Map(cloneArray(Array.from(o), cloneProto))
-    if (o instanceof Set) return new Set(cloneArray(Array.from(o), cloneProto))
-    var o2 = {}
+    if (o.constructor !== Object && (handler = constructorHandlers.get(o.constructor))) {
+      return handler(o, cloneProto)
+    }
+    const o2 = {}
     refs.push(o)
     refsNew.push(o2)
-    for (var k in o) {
-      var cur = o[k]
+    for (const k in o) {
+      const cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
         o2[k] = cur
-      } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
-      } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), cloneProto))
-      } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), cloneProto))
+      } else if (cur.constructor !== Object && (handler = constructorHandlers.get(cur.constructor))) {
+        o2[k] = handler(cur, cloneProto)
       } else if (ArrayBuffer.isView(cur)) {
         o2[k] = copyBuffer(cur)
       } else {
-        var i = refs.indexOf(cur)
+        const i = refs.indexOf(cur)
         if (i !== -1) {
           o2[k] = refsNew[i]
         } else {
@@ -76622,22 +76629,22 @@ module.exports = { wait, waitDiff }
 
 /***/ }),
 
-/***/ 64048:
+/***/ 11767:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { version } = __nccwpck_require__(85097)
+const { version } = __nccwpck_require__(29370)
 const { EventEmitter } = __nccwpck_require__(82361)
 const { Worker } = __nccwpck_require__(71267)
 const { join } = __nccwpck_require__(71017)
 const { pathToFileURL } = __nccwpck_require__(57310)
-const { wait } = __nccwpck_require__(41623)
+const { wait } = __nccwpck_require__(14150)
 const {
   WRITE_INDEX,
   READ_INDEX
-} = __nccwpck_require__(72806)
+} = __nccwpck_require__(84918)
 const buffer = __nccwpck_require__(14300)
 const assert = __nccwpck_require__(39491)
 
@@ -77167,7 +77174,7 @@ module.exports = ThreadStream
 
 /***/ }),
 
-/***/ 72806:
+/***/ 84918:
 /***/ ((module) => {
 
 "use strict";
@@ -77184,7 +77191,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 41623:
+/***/ 14150:
 /***/ ((module) => {
 
 "use strict";
@@ -108916,7 +108923,7 @@ module.exports = {
 "use strict";
 
 
-const clone = __nccwpck_require__(27897)({ circles: true })
+const clone = __nccwpck_require__(28497)({ circles: true })
 const dateformat = __nccwpck_require__(29416)
 const stringifySafe = __nccwpck_require__(27730)
 const defaultColorizer = __nccwpck_require__(57393)()
@@ -112278,7 +112285,7 @@ module.exports.pino = pino
 
 /***/ }),
 
-/***/ 91403:
+/***/ 99030:
 /***/ ((module) => {
 
 "use strict";
@@ -112316,7 +112323,7 @@ module.exports = function getCallers () {
 
 /***/ }),
 
-/***/ 29778:
+/***/ 96052:
 /***/ ((module) => {
 
 /**
@@ -112351,7 +112358,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 50661:
+/***/ 45446:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112365,9 +112372,9 @@ const {
   formattersSym,
   hooksSym,
   levelCompSym
-} = __nccwpck_require__(40777)
-const { noop, genLog } = __nccwpck_require__(53777)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(29778)
+} = __nccwpck_require__(46294)
+const { noop, genLog } = __nccwpck_require__(37607)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(96052)
 
 const levelMethods = {
   fatal: (hook) => {
@@ -112600,25 +112607,25 @@ module.exports = {
 
 /***/ }),
 
-/***/ 22410:
+/***/ 98279:
 /***/ ((module) => {
 
 "use strict";
 
 
-module.exports = { version: '9.1.0' }
+module.exports = { version: '9.2.0' }
 
 
 /***/ }),
 
-/***/ 2445:
+/***/ 69845:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const metadata = Symbol.for('pino.metadata')
-const { DEFAULT_LEVELS } = __nccwpck_require__(29778)
+const { DEFAULT_LEVELS } = __nccwpck_require__(96052)
 
 const DEFAULT_INFO_LEVEL = DEFAULT_LEVELS.info
 
@@ -112807,7 +112814,7 @@ module.exports = multistream
 
 /***/ }),
 
-/***/ 1797:
+/***/ 68997:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112841,7 +112848,7 @@ const {
   formatOptsSym,
   stringifiersSym,
   msgPrefixSym
-} = __nccwpck_require__(40777)
+} = __nccwpck_require__(46294)
 const {
   getLevel,
   setLevel,
@@ -112850,17 +112857,17 @@ const {
   initialLsCache,
   genLsCache,
   assertNoLevelCollisions
-} = __nccwpck_require__(50661)
+} = __nccwpck_require__(45446)
 const {
   asChindings,
   asJson,
   buildFormatters,
   stringify
-} = __nccwpck_require__(53777)
+} = __nccwpck_require__(37607)
 const {
   version
-} = __nccwpck_require__(22410)
-const redaction = __nccwpck_require__(48923)
+} = __nccwpck_require__(98279)
+const redaction = __nccwpck_require__(22191)
 
 // note: use of class is satirical
 // https://github.com/pinojs/pino/pull/433#pullrequestreview-127703127
@@ -113047,14 +113054,14 @@ function flush (cb) {
 
 /***/ }),
 
-/***/ 48923:
+/***/ 22191:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const fastRedact = __nccwpck_require__(94472)
-const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(40777)
+const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(46294)
 const { rx, validator } = fastRedact
 
 const validate = validator({
@@ -113173,7 +113180,7 @@ module.exports = redaction
 
 /***/ }),
 
-/***/ 40777:
+/***/ 46294:
 /***/ ((module) => {
 
 "use strict";
@@ -113255,7 +113262,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 87922:
+/***/ 84732:
 /***/ ((module) => {
 
 "use strict";
@@ -113274,7 +113281,7 @@ module.exports = { nullTime, epochTime, unixTime, isoTime }
 
 /***/ }),
 
-/***/ 53777:
+/***/ 37607:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -113303,9 +113310,9 @@ const {
   errorKeySym,
   nestedKeyStrSym,
   msgPrefixSym
-} = __nccwpck_require__(40777)
+} = __nccwpck_require__(46294)
 const { isMainThread } = __nccwpck_require__(71267)
-const transport = __nccwpck_require__(98593)
+const transport = __nccwpck_require__(37770)
 
 function noop () {
 }
@@ -113676,18 +113683,18 @@ module.exports = {
 
 /***/ }),
 
-/***/ 98593:
+/***/ 37770:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { createRequire } = __nccwpck_require__(98188)
-const getCallers = __nccwpck_require__(91403)
+const getCallers = __nccwpck_require__(99030)
 const { join, isAbsolute, sep } = __nccwpck_require__(71017)
 const sleep = __nccwpck_require__(9373)
 const onExit = __nccwpck_require__(10549)
-const ThreadStream = __nccwpck_require__(64048)
+const ThreadStream = __nccwpck_require__(11767)
 
 function setupOnExit (stream) {
   // This is leak free, it does not leave event handlers
@@ -113753,7 +113760,11 @@ function flush (stream) {
 }
 
 function transport (fullOptions) {
-  const { pipeline, targets, levels, dedupe, options = {}, worker = {}, caller = getCallers() } = fullOptions
+  const { pipeline, targets, levels, dedupe, worker = {}, caller = getCallers() } = fullOptions
+
+  const options = {
+    ...fullOptions.options
+  }
 
   // Backwards compatibility
   const callers = typeof caller === 'string' ? [caller] : caller
@@ -113846,7 +113857,7 @@ module.exports = transport
 
 /***/ }),
 
-/***/ 87518:
+/***/ 53133:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -113854,14 +113865,14 @@ module.exports = transport
 /* eslint no-prototype-builtins: 0 */
 const os = __nccwpck_require__(22037)
 const stdSerializers = __nccwpck_require__(49105)
-const caller = __nccwpck_require__(91403)
-const redaction = __nccwpck_require__(48923)
-const time = __nccwpck_require__(87922)
-const proto = __nccwpck_require__(1797)
-const symbols = __nccwpck_require__(40777)
+const caller = __nccwpck_require__(99030)
+const redaction = __nccwpck_require__(22191)
+const time = __nccwpck_require__(84732)
+const proto = __nccwpck_require__(68997)
+const symbols = __nccwpck_require__(46294)
 const { configure } = __nccwpck_require__(33542)
-const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(50661)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(29778)
+const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(45446)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(96052)
 const {
   createArgsNormalizer,
   asChindings,
@@ -113870,8 +113881,8 @@ const {
   stringify,
   normalizeDestFileDescriptor,
   noop
-} = __nccwpck_require__(53777)
-const { version } = __nccwpck_require__(22410)
+} = __nccwpck_require__(37607)
+const { version } = __nccwpck_require__(98279)
 const {
   chindingsSym,
   redactFmtSym,
@@ -114068,8 +114079,8 @@ module.exports.destination = (dest = process.stdout.fd) => {
   }
 }
 
-module.exports.transport = __nccwpck_require__(98593)
-module.exports.multistream = __nccwpck_require__(2445)
+module.exports.transport = __nccwpck_require__(37770)
+module.exports.multistream = __nccwpck_require__(69845)
 
 module.exports.levels = mappings()
 module.exports.stdSerializers = serializers
@@ -115842,11 +115853,11 @@ module.exports = JSON.parse('{"name":"thread-stream","version":"2.7.0","descript
 
 /***/ }),
 
-/***/ 85097:
+/***/ 29370:
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"thread-stream","version":"3.0.2","description":"A streaming way to send data to a Node.js Worker Thread","main":"index.js","types":"index.d.ts","dependencies":{"real-require":"^0.2.0"},"devDependencies":{"@types/node":"^20.1.0","@types/tap":"^15.0.0","@yao-pkg/pkg":"^5.11.5","desm":"^1.3.0","fastbench":"^1.0.1","husky":"^9.0.6","pino-elasticsearch":"^8.0.0","sonic-boom":"^4.0.1","standard":"^17.0.0","tap":"^16.2.0","ts-node":"^10.8.0","typescript":"^5.3.2","why-is-node-running":"^2.2.2"},"scripts":{"build":"tsc --noEmit","test":"standard && npm run build && npm run transpile && tap \\"test/**/*.test.*js\\" && tap --ts test/*.test.*ts","test:ci":"standard && npm run transpile && npm run test:ci:js && npm run test:ci:ts","test:ci:js":"tap --no-check-coverage --timeout=120 --coverage-report=lcovonly \\"test/**/*.test.*js\\"","test:ci:ts":"tap --ts --no-check-coverage --coverage-report=lcovonly \\"test/**/*.test.*ts\\"","test:yarn":"npm run transpile && tap \\"test/**/*.test.js\\" --no-check-coverage","transpile":"sh ./test/ts/transpile.sh","prepare":"husky install"},"standard":{"ignore":["test/ts/**/*"]},"repository":{"type":"git","url":"git+https://github.com/mcollina/thread-stream.git"},"keywords":["worker","thread","threads","stream"],"author":"Matteo Collina <hello@matteocollina.com>","license":"MIT","bugs":{"url":"https://github.com/mcollina/thread-stream/issues"},"homepage":"https://github.com/mcollina/thread-stream#readme"}');
+module.exports = JSON.parse('{"name":"thread-stream","version":"3.1.0","description":"A streaming way to send data to a Node.js Worker Thread","main":"index.js","types":"index.d.ts","dependencies":{"real-require":"^0.2.0"},"devDependencies":{"@types/node":"^20.1.0","@types/tap":"^15.0.0","@yao-pkg/pkg":"^5.11.5","desm":"^1.3.0","fastbench":"^1.0.1","husky":"^9.0.6","pino-elasticsearch":"^8.0.0","sonic-boom":"^4.0.1","standard":"^17.0.0","tap":"^16.2.0","ts-node":"^10.8.0","typescript":"^5.3.2","why-is-node-running":"^2.2.2"},"scripts":{"build":"tsc --noEmit","test":"standard && npm run build && npm run transpile && tap \\"test/**/*.test.*js\\" && tap --ts test/*.test.*ts","test:ci":"standard && npm run transpile && npm run test:ci:js && npm run test:ci:ts","test:ci:js":"tap --no-check-coverage --timeout=120 --coverage-report=lcovonly \\"test/**/*.test.*js\\"","test:ci:ts":"tap --ts --no-check-coverage --coverage-report=lcovonly \\"test/**/*.test.*ts\\"","test:yarn":"npm run transpile && tap \\"test/**/*.test.js\\" --no-check-coverage","transpile":"sh ./test/ts/transpile.sh","prepare":"husky install"},"standard":{"ignore":["test/ts/**/*","test/syntax-error.mjs"]},"repository":{"type":"git","url":"git+https://github.com/mcollina/thread-stream.git"},"keywords":["worker","thread","threads","stream"],"author":"Matteo Collina <hello@matteocollina.com>","license":"MIT","bugs":{"url":"https://github.com/mcollina/thread-stream/issues"},"homepage":"https://github.com/mcollina/thread-stream#readme"}');
 
 /***/ })
 
