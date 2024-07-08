@@ -2235,7 +2235,7 @@ async function getAppAuthentication({
 }
 
 // pkg/dist-src/cache.js
-var import_lru_cache = __nccwpck_require__(77838);
+var import_lru_cache = __nccwpck_require__(84275);
 function getCache() {
   return new import_lru_cache.LRUCache({
     // cache max. 15000 tokens, that will use less than 10mb memory
@@ -61622,7 +61622,7 @@ module.exports = (input, options) => {
 
 /***/ }),
 
-/***/ 83799:
+/***/ 37430:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -61670,7 +61670,7 @@ function pinoLogger (opts, stream) {
 
   function getValidLogLevel (level, defaultValue = 'info') {
     if (level && typeof level === 'string') {
-      const logLevel = level.trim().toLowerCase()
+      const logLevel = level.trim()
       if (validLogLevels.includes(logLevel) === true) {
         return logLevel
       }
@@ -61705,6 +61705,7 @@ function pinoLogger (opts, stream) {
   delete opts.customErroredMessage
 
   const quietReqLogger = !!opts.quietReqLogger
+  const quietResLogger = !!opts.quietResLogger
 
   const logger = wrapChild(opts, theStream)
 
@@ -61775,7 +61776,7 @@ function pinoLogger (opts, stream) {
       fullReqLogger = fullReqLogger.child(customPropBindings)
     }
 
-    const responseLogger = fullReqLogger
+    const responseLogger = quietResLogger ? log : fullReqLogger
     const requestLogger = quietReqLogger ? log : fullReqLogger
 
     if (!res.log) {
@@ -63217,7 +63218,7 @@ exports.ProbotOctokit = core_1.Octokit.plugin(plugin_throttling_1.throttling, pl
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Probot = void 0;
-const lru_cache_1 = __nccwpck_require__(77838);
+const lru_cache_1 = __nccwpck_require__(84275);
 const auth_js_1 = __nccwpck_require__(6425);
 const get_log_js_1 = __nccwpck_require__(25947);
 const get_probot_octokit_with_defaults_js_1 = __nccwpck_require__(64559);
@@ -63454,7 +63455,7 @@ exports.run = run;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLoggingMiddleware = void 0;
 const node_crypto_1 = __nccwpck_require__(6005);
-const pino_http_1 = __nccwpck_require__(83799);
+const pino_http_1 = __nccwpck_require__(37430);
 function getLoggingMiddleware(logger, options) {
     return (0, pino_http_1.pinoHttp)({
         ...options,
@@ -107159,7 +107160,7 @@ exports.suggestSimilar = suggestSimilar;
 
 /***/ }),
 
-/***/ 77838:
+/***/ 84275:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
