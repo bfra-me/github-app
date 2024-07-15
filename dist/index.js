@@ -61468,7 +61468,7 @@ module.exports = (input, options) => {
 "use strict";
 
 
-const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(53133)
+const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(27840)
 const serializers = __nccwpck_require__(49105)
 const getCallerFile = __nccwpck_require__(49118)
 const startTime = Symbol('startTime')
@@ -62467,7 +62467,7 @@ exports.getLog = getLog;
  * app.log.fatal("Goodbye, cruel world!");
  * ```
  */
-const pino_1 = __nccwpck_require__(53133);
+const pino_1 = __nccwpck_require__(27840);
 const pino_2 = __nccwpck_require__(74835);
 const rebind_log_1 = __nccwpck_require__(18368);
 function getLog(options = {}) {
@@ -75791,7 +75791,7 @@ function createWorker (stream, opts) {
   const { filename, workerData } = opts
 
   const bundlerOverrides = '__bundlerPathsOverrides' in globalThis ? globalThis.__bundlerPathsOverrides : {}
-  const toExecute = bundlerOverrides['thread-stream-worker'] || __nccwpck_require__.ab + "worker3.js"
+  const toExecute = bundlerOverrides['thread-stream-worker'] || __nccwpck_require__.ab + "worker2.js"
 
   const worker = new Worker(toExecute, {
     ...opts.workerOpts,
@@ -100772,6 +100772,14 @@ module.exports = require("node:fs");
 
 /***/ }),
 
+/***/ 70612:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:os");
+
+/***/ }),
+
 /***/ 49411:
 /***/ ((module) => {
 
@@ -111491,7 +111499,7 @@ module.exports.pino = pino
 
 /***/ }),
 
-/***/ 99030:
+/***/ 95216:
 /***/ ((module) => {
 
 "use strict";
@@ -111529,7 +111537,7 @@ module.exports = function getCallers () {
 
 /***/ }),
 
-/***/ 96052:
+/***/ 57572:
 /***/ ((module) => {
 
 /**
@@ -111564,7 +111572,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 45446:
+/***/ 50873:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -111578,9 +111586,9 @@ const {
   formattersSym,
   hooksSym,
   levelCompSym
-} = __nccwpck_require__(46294)
-const { noop, genLog } = __nccwpck_require__(37607)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(96052)
+} = __nccwpck_require__(34191)
+const { noop, genLog } = __nccwpck_require__(54306)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(57572)
 
 const levelMethods = {
   fatal: (hook) => {
@@ -111813,25 +111821,25 @@ module.exports = {
 
 /***/ }),
 
-/***/ 98279:
+/***/ 76744:
 /***/ ((module) => {
 
 "use strict";
 
 
-module.exports = { version: '9.2.0' }
+module.exports = { version: '9.3.0' }
 
 
 /***/ }),
 
-/***/ 69845:
+/***/ 91360:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const metadata = Symbol.for('pino.metadata')
-const { DEFAULT_LEVELS } = __nccwpck_require__(96052)
+const { DEFAULT_LEVELS } = __nccwpck_require__(57572)
 
 const DEFAULT_INFO_LEVEL = DEFAULT_LEVELS.info
 
@@ -112020,7 +112028,7 @@ module.exports = multistream
 
 /***/ }),
 
-/***/ 68997:
+/***/ 41392:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112028,7 +112036,7 @@ module.exports = multistream
 
 /* eslint no-prototype-builtins: 0 */
 
-const { EventEmitter } = __nccwpck_require__(82361)
+const { EventEmitter } = __nccwpck_require__(15673)
 const {
   lsCacheSym,
   levelValSym,
@@ -112054,7 +112062,7 @@ const {
   formatOptsSym,
   stringifiersSym,
   msgPrefixSym
-} = __nccwpck_require__(46294)
+} = __nccwpck_require__(34191)
 const {
   getLevel,
   setLevel,
@@ -112063,17 +112071,17 @@ const {
   initialLsCache,
   genLsCache,
   assertNoLevelCollisions
-} = __nccwpck_require__(45446)
+} = __nccwpck_require__(50873)
 const {
   asChindings,
   asJson,
   buildFormatters,
   stringify
-} = __nccwpck_require__(37607)
+} = __nccwpck_require__(54306)
 const {
   version
-} = __nccwpck_require__(98279)
-const redaction = __nccwpck_require__(22191)
+} = __nccwpck_require__(76744)
+const redaction = __nccwpck_require__(45633)
 
 // note: use of class is satirical
 // https://github.com/pinojs/pino/pull/433#pullrequestreview-127703127
@@ -112260,14 +112268,14 @@ function flush (cb) {
 
 /***/ }),
 
-/***/ 22191:
+/***/ 45633:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const fastRedact = __nccwpck_require__(94472)
-const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(46294)
+const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(34191)
 const { rx, validator } = fastRedact
 
 const validate = validator({
@@ -112386,7 +112394,7 @@ module.exports = redaction
 
 /***/ }),
 
-/***/ 46294:
+/***/ 34191:
 /***/ ((module) => {
 
 "use strict";
@@ -112468,7 +112476,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 84732:
+/***/ 7845:
 /***/ ((module) => {
 
 "use strict";
@@ -112487,7 +112495,7 @@ module.exports = { nullTime, epochTime, unixTime, isoTime }
 
 /***/ }),
 
-/***/ 37607:
+/***/ 54306:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112516,9 +112524,9 @@ const {
   errorKeySym,
   nestedKeyStrSym,
   msgPrefixSym
-} = __nccwpck_require__(46294)
+} = __nccwpck_require__(34191)
 const { isMainThread } = __nccwpck_require__(71267)
-const transport = __nccwpck_require__(37770)
+const transport = __nccwpck_require__(62488)
 
 function noop () {
 }
@@ -112889,15 +112897,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 37770:
+/***/ 62488:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { createRequire } = __nccwpck_require__(98188)
-const getCallers = __nccwpck_require__(99030)
-const { join, isAbsolute, sep } = __nccwpck_require__(71017)
+const getCallers = __nccwpck_require__(95216)
+const { join, isAbsolute, sep } = __nccwpck_require__(49411)
 const sleep = __nccwpck_require__(9373)
 const onExit = __nccwpck_require__(10549)
 const ThreadStream = __nccwpck_require__(11767)
@@ -112985,7 +112993,7 @@ function transport (fullOptions) {
   }
 
   if (targets) {
-    target = bundlerOverrides['pino-worker'] || __nccwpck_require__.ab + "worker2.js"
+    target = bundlerOverrides['pino-worker'] || join(__dirname, 'worker.js')
     options.targets = targets.filter(dest => dest.target).map((dest) => {
       return {
         ...dest,
@@ -113002,7 +113010,7 @@ function transport (fullOptions) {
       })
     })
   } else if (pipeline) {
-    target = bundlerOverrides['pino-worker'] || __nccwpck_require__.ab + "worker2.js"
+    target = bundlerOverrides['pino-worker'] || join(__dirname, 'worker.js')
     options.pipelines = [pipeline.map((dest) => {
       return {
         ...dest,
@@ -113031,7 +113039,7 @@ function transport (fullOptions) {
     }
 
     if (origin === 'pino/file') {
-      return __nccwpck_require__.ab + "file1.js"
+      return join(__dirname, '..', 'file.js')
     }
 
     let fixTarget
@@ -113063,22 +113071,22 @@ module.exports = transport
 
 /***/ }),
 
-/***/ 53133:
+/***/ 27840:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-/* eslint no-prototype-builtins: 0 */
-const os = __nccwpck_require__(22037)
+
+const os = __nccwpck_require__(70612)
 const stdSerializers = __nccwpck_require__(49105)
-const caller = __nccwpck_require__(99030)
-const redaction = __nccwpck_require__(22191)
-const time = __nccwpck_require__(84732)
-const proto = __nccwpck_require__(68997)
-const symbols = __nccwpck_require__(46294)
+const caller = __nccwpck_require__(95216)
+const redaction = __nccwpck_require__(45633)
+const time = __nccwpck_require__(7845)
+const proto = __nccwpck_require__(41392)
+const symbols = __nccwpck_require__(34191)
 const { configure } = __nccwpck_require__(33542)
-const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(45446)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(96052)
+const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(50873)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(57572)
 const {
   createArgsNormalizer,
   asChindings,
@@ -113087,8 +113095,8 @@ const {
   stringify,
   normalizeDestFileDescriptor,
   noop
-} = __nccwpck_require__(37607)
-const { version } = __nccwpck_require__(98279)
+} = __nccwpck_require__(54306)
+const { version } = __nccwpck_require__(76744)
 const {
   chindingsSym,
   redactFmtSym,
@@ -113285,8 +113293,8 @@ module.exports.destination = (dest = process.stdout.fd) => {
   }
 }
 
-module.exports.transport = __nccwpck_require__(37770)
-module.exports.multistream = __nccwpck_require__(69845)
+module.exports.transport = __nccwpck_require__(62488)
+module.exports.multistream = __nccwpck_require__(91360)
 
 module.exports.levels = mappings()
 module.exports.stdSerializers = serializers
