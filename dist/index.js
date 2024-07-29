@@ -18447,7 +18447,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const events_1 = __nccwpck_require__(82361);
-const debug_1 = __importDefault(__nccwpck_require__(34472));
+const debug_1 = __importDefault(__nccwpck_require__(34684));
 const promisify_1 = __importDefault(__nccwpck_require__(59853));
 const debug = debug_1.default('agent-base');
 function isAgent(v) {
@@ -27059,7 +27059,7 @@ exports.enable(load());
 
 /***/ }),
 
-/***/ 63777:
+/***/ 39280:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
@@ -27189,6 +27189,8 @@ function useColors() {
 		return false;
 	}
 
+	let m;
+
 	// Is webkit? http://stackoverflow.com/a/16459606/376773
 	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
 	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
@@ -27196,7 +27198,7 @@ function useColors() {
 		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
 		// Is firefox >= v31?
 		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		(typeof navigator !== 'undefined' && navigator.userAgent && (m = navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/)) && parseInt(m[1], 10) >= 31) ||
 		// Double check webkit in userAgent just in case we are in a worker
 		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
 }
@@ -27316,7 +27318,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __nccwpck_require__(69598)(exports);
+module.exports = __nccwpck_require__(80085)(exports);
 
 const {formatters} = module.exports;
 
@@ -27335,7 +27337,7 @@ formatters.j = function (v) {
 
 /***/ }),
 
-/***/ 69598:
+/***/ 80085:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -27616,7 +27618,7 @@ module.exports = setup;
 
 /***/ }),
 
-/***/ 34472:
+/***/ 34684:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
@@ -27625,15 +27627,15 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __nccwpck_require__(63777);
+	module.exports = __nccwpck_require__(39280);
 } else {
-	module.exports = __nccwpck_require__(25916);
+	module.exports = __nccwpck_require__(51240);
 }
 
 
 /***/ }),
 
-/***/ 25916:
+/***/ 51240:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /**
@@ -27875,7 +27877,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __nccwpck_require__(69598)(exports);
+module.exports = __nccwpck_require__(80085)(exports);
 
 const {formatters} = module.exports;
 
@@ -38454,7 +38456,7 @@ const net_1 = __importDefault(__nccwpck_require__(41808));
 const tls_1 = __importDefault(__nccwpck_require__(24404));
 const url_1 = __importDefault(__nccwpck_require__(57310));
 const assert_1 = __importDefault(__nccwpck_require__(39491));
-const debug_1 = __importDefault(__nccwpck_require__(34472));
+const debug_1 = __importDefault(__nccwpck_require__(34684));
 const agent_base_1 = __nccwpck_require__(67365);
 const parse_proxy_response_1 = __importDefault(__nccwpck_require__(2097));
 const debug = debug_1.default('https-proxy-agent:agent');
@@ -38646,7 +38648,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const debug_1 = __importDefault(__nccwpck_require__(34472));
+const debug_1 = __importDefault(__nccwpck_require__(34684));
 const debug = debug_1.default('https-proxy-agent:parse-proxy-response');
 function parseProxyResponse(socket) {
     return new Promise((resolve, reject) => {
@@ -46299,7 +46301,7 @@ exports["default"] = applyMixin;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.genRedactedString = exports.getStringValue = exports.MAX_ARGUMENT_LENGTH = void 0;
-const debug_1 = __nccwpck_require__(34472);
+const debug_1 = __nccwpck_require__(34684);
 const MAX_ARGUMENT_LENGTH = 200;
 exports.MAX_ARGUMENT_LENGTH = MAX_ARGUMENT_LENGTH;
 const NAMESPACE_PREFIX = "ioredis";
@@ -61468,7 +61470,7 @@ module.exports = (input, options) => {
 "use strict";
 
 
-const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(11240)
+const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(92036)
 const serializers = __nccwpck_require__(49105)
 const getCallerFile = __nccwpck_require__(49118)
 const startTime = Symbol('startTime')
@@ -62467,7 +62469,7 @@ exports.getLog = getLog;
  * app.log.fatal("Goodbye, cruel world!");
  * ```
  */
-const pino_1 = __nccwpck_require__(11240);
+const pino_1 = __nccwpck_require__(92036);
 const pino_2 = __nccwpck_require__(74835);
 const rebind_log_1 = __nccwpck_require__(18368);
 function getLog(options = {}) {
@@ -111513,7 +111515,7 @@ module.exports.pino = pino
 
 /***/ }),
 
-/***/ 5347:
+/***/ 23743:
 /***/ ((module) => {
 
 "use strict";
@@ -111551,7 +111553,7 @@ module.exports = function getCallers () {
 
 /***/ }),
 
-/***/ 21159:
+/***/ 8997:
 /***/ ((module) => {
 
 /**
@@ -111586,7 +111588,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 10915:
+/***/ 81813:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -111600,9 +111602,9 @@ const {
   formattersSym,
   hooksSym,
   levelCompSym
-} = __nccwpck_require__(28900)
-const { noop, genLog } = __nccwpck_require__(14430)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(21159)
+} = __nccwpck_require__(33078)
+const { noop, genLog } = __nccwpck_require__(79036)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(8997)
 
 const levelMethods = {
   fatal: (hook) => {
@@ -111835,25 +111837,25 @@ module.exports = {
 
 /***/ }),
 
-/***/ 30299:
+/***/ 66736:
 /***/ ((module) => {
 
 "use strict";
 
 
-module.exports = { version: '9.3.1' }
+module.exports = { version: '9.3.2' }
 
 
 /***/ }),
 
-/***/ 643:
+/***/ 14534:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const metadata = Symbol.for('pino.metadata')
-const { DEFAULT_LEVELS } = __nccwpck_require__(21159)
+const { DEFAULT_LEVELS } = __nccwpck_require__(8997)
 
 const DEFAULT_INFO_LEVEL = DEFAULT_LEVELS.info
 
@@ -112042,7 +112044,7 @@ module.exports = multistream
 
 /***/ }),
 
-/***/ 49401:
+/***/ 12372:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112076,7 +112078,7 @@ const {
   formatOptsSym,
   stringifiersSym,
   msgPrefixSym
-} = __nccwpck_require__(28900)
+} = __nccwpck_require__(33078)
 const {
   getLevel,
   setLevel,
@@ -112085,17 +112087,17 @@ const {
   initialLsCache,
   genLsCache,
   assertNoLevelCollisions
-} = __nccwpck_require__(10915)
+} = __nccwpck_require__(81813)
 const {
   asChindings,
   asJson,
   buildFormatters,
   stringify
-} = __nccwpck_require__(14430)
+} = __nccwpck_require__(79036)
 const {
   version
-} = __nccwpck_require__(30299)
-const redaction = __nccwpck_require__(80253)
+} = __nccwpck_require__(66736)
+const redaction = __nccwpck_require__(39210)
 
 // note: use of class is satirical
 // https://github.com/pinojs/pino/pull/433#pullrequestreview-127703127
@@ -112282,14 +112284,14 @@ function flush (cb) {
 
 /***/ }),
 
-/***/ 80253:
+/***/ 39210:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const fastRedact = __nccwpck_require__(94472)
-const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(28900)
+const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(33078)
 const { rx, validator } = fastRedact
 
 const validate = validator({
@@ -112408,7 +112410,7 @@ module.exports = redaction
 
 /***/ }),
 
-/***/ 28900:
+/***/ 33078:
 /***/ ((module) => {
 
 "use strict";
@@ -112490,7 +112492,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 92912:
+/***/ 63149:
 /***/ ((module) => {
 
 "use strict";
@@ -112509,7 +112511,7 @@ module.exports = { nullTime, epochTime, unixTime, isoTime }
 
 /***/ }),
 
-/***/ 14430:
+/***/ 79036:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112538,9 +112540,9 @@ const {
   errorKeySym,
   nestedKeyStrSym,
   msgPrefixSym
-} = __nccwpck_require__(28900)
+} = __nccwpck_require__(33078)
 const { isMainThread } = __nccwpck_require__(71267)
-const transport = __nccwpck_require__(89760)
+const transport = __nccwpck_require__(15151)
 
 function noop () {
 }
@@ -112911,14 +112913,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 89760:
+/***/ 15151:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { createRequire } = __nccwpck_require__(98188)
-const getCallers = __nccwpck_require__(5347)
+const getCallers = __nccwpck_require__(23743)
 const { join, isAbsolute, sep } = __nccwpck_require__(49411)
 const sleep = __nccwpck_require__(9373)
 const onExit = __nccwpck_require__(10549)
@@ -113085,7 +113087,7 @@ module.exports = transport
 
 /***/ }),
 
-/***/ 11240:
+/***/ 92036:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -113093,14 +113095,14 @@ module.exports = transport
 
 const os = __nccwpck_require__(70612)
 const stdSerializers = __nccwpck_require__(49105)
-const caller = __nccwpck_require__(5347)
-const redaction = __nccwpck_require__(80253)
-const time = __nccwpck_require__(92912)
-const proto = __nccwpck_require__(49401)
-const symbols = __nccwpck_require__(28900)
+const caller = __nccwpck_require__(23743)
+const redaction = __nccwpck_require__(39210)
+const time = __nccwpck_require__(63149)
+const proto = __nccwpck_require__(12372)
+const symbols = __nccwpck_require__(33078)
 const { configure } = __nccwpck_require__(33542)
-const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(10915)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(21159)
+const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(81813)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(8997)
 const {
   createArgsNormalizer,
   asChindings,
@@ -113109,8 +113111,8 @@ const {
   stringify,
   normalizeDestFileDescriptor,
   noop
-} = __nccwpck_require__(14430)
-const { version } = __nccwpck_require__(30299)
+} = __nccwpck_require__(79036)
+const { version } = __nccwpck_require__(66736)
 const {
   chindingsSym,
   redactFmtSym,
@@ -113307,8 +113309,8 @@ module.exports.destination = (dest = process.stdout.fd) => {
   }
 }
 
-module.exports.transport = __nccwpck_require__(89760)
-module.exports.multistream = __nccwpck_require__(643)
+module.exports.transport = __nccwpck_require__(15151)
+module.exports.multistream = __nccwpck_require__(14534)
 
 module.exports.levels = mappings()
 module.exports.stdSerializers = serializers
