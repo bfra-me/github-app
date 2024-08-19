@@ -539,8 +539,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OidcClient = void 0;
-const http_client_1 = __nccwpck_require__(76372);
-const auth_1 = __nccwpck_require__(8603);
+const http_client_1 = __nccwpck_require__(22066);
+const auth_1 = __nccwpck_require__(57433);
 const core_1 = __nccwpck_require__(19093);
 class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
@@ -1009,7 +1009,7 @@ exports.toCommandProperties = toCommandProperties;
 
 /***/ }),
 
-/***/ 8603:
+/***/ 57433:
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -1097,7 +1097,7 @@ exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHand
 
 /***/ }),
 
-/***/ 76372:
+/***/ 22066:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1139,7 +1139,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
 const http = __importStar(__nccwpck_require__(13685));
 const https = __importStar(__nccwpck_require__(95687));
-const pm = __importStar(__nccwpck_require__(62067));
+const pm = __importStar(__nccwpck_require__(47866));
 const tunnel = __importStar(__nccwpck_require__(94225));
 const undici_1 = __nccwpck_require__(37181);
 var HttpCodes;
@@ -1756,7 +1756,7 @@ const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCa
 
 /***/ }),
 
-/***/ 62067:
+/***/ 47866:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -1778,11 +1778,11 @@ function getProxyUrl(reqUrl) {
     })();
     if (proxyVar) {
         try {
-            return new URL(proxyVar);
+            return new DecodedURL(proxyVar);
         }
         catch (_a) {
             if (!proxyVar.startsWith('http://') && !proxyVar.startsWith('https://'))
-                return new URL(`http://${proxyVar}`);
+                return new DecodedURL(`http://${proxyVar}`);
         }
     }
     else {
@@ -1840,6 +1840,19 @@ function isLoopbackAddress(host) {
         hostLower.startsWith('127.') ||
         hostLower.startsWith('[::1]') ||
         hostLower.startsWith('[0:0:0:0:0:0:0:1]'));
+}
+class DecodedURL extends URL {
+    constructor(url, base) {
+        super(url, base);
+        this._decodedUsername = decodeURIComponent(super.username);
+        this._decodedPassword = decodeURIComponent(super.password);
+    }
+    get username() {
+        return this._decodedUsername;
+    }
+    get password() {
+        return this._decodedPassword;
+    }
 }
 //# sourceMappingURL=proxy.js.map
 
