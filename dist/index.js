@@ -539,8 +539,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OidcClient = void 0;
-const http_client_1 = __nccwpck_require__(22066);
-const auth_1 = __nccwpck_require__(57433);
+const http_client_1 = __nccwpck_require__(56634);
+const auth_1 = __nccwpck_require__(72177);
 const core_1 = __nccwpck_require__(19093);
 class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
@@ -1009,7 +1009,7 @@ exports.toCommandProperties = toCommandProperties;
 
 /***/ }),
 
-/***/ 57433:
+/***/ 72177:
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -1097,7 +1097,7 @@ exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHand
 
 /***/ }),
 
-/***/ 22066:
+/***/ 56634:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1139,7 +1139,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
 const http = __importStar(__nccwpck_require__(13685));
 const https = __importStar(__nccwpck_require__(95687));
-const pm = __importStar(__nccwpck_require__(47866));
+const pm = __importStar(__nccwpck_require__(74318));
 const tunnel = __importStar(__nccwpck_require__(94225));
 const undici_1 = __nccwpck_require__(37181);
 var HttpCodes;
@@ -1664,7 +1664,7 @@ class HttpClient {
         }
         const usingSsl = parsedUrl.protocol === 'https:';
         proxyAgent = new undici_1.ProxyAgent(Object.assign({ uri: proxyUrl.href, pipelining: !this._keepAlive ? 0 : 1 }, ((proxyUrl.username || proxyUrl.password) && {
-            token: `${proxyUrl.username}:${proxyUrl.password}`
+            token: `Basic ${Buffer.from(`${proxyUrl.username}:${proxyUrl.password}`).toString('base64')}`
         })));
         this._proxyAgentDispatcher = proxyAgent;
         if (usingSsl && this._ignoreSslError) {
@@ -1756,7 +1756,7 @@ const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCa
 
 /***/ }),
 
-/***/ 47866:
+/***/ 74318:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -62484,7 +62484,7 @@ exports.getLog = getLog;
  */
 const pino_1 = __nccwpck_require__(92036);
 const pino_2 = __nccwpck_require__(74835);
-const rebind_log_js_1 = __nccwpck_require__(68128);
+const rebind_log_js_1 = __nccwpck_require__(38956);
 function getLog(options = {}) {
     const { level, logMessageKey, ...getTransformStreamOptions } = options;
     const pinoOptions = {
@@ -62549,7 +62549,7 @@ function loadPackageJson(filepath = node_path_1.default.join(process.cwd(), "pac
 
 /***/ }),
 
-/***/ 68128:
+/***/ 38956:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -63058,7 +63058,7 @@ const get_webhooks_js_1 = __nccwpck_require__(27080);
 const probot_octokit_js_1 = __nccwpck_require__(86203);
 const version_js_1 = __nccwpck_require__(2707);
 const server_js_1 = __nccwpck_require__(76172);
-const rebind_log_js_1 = __nccwpck_require__(68128);
+const rebind_log_js_1 = __nccwpck_require__(38956);
 class Probot {
     static version = version_js_1.VERSION;
     static defaults(defaults) {
@@ -63344,7 +63344,7 @@ const webhooks_1 = __nccwpck_require__(57832);
 const logging_middleware_js_1 = __nccwpck_require__(32417);
 const webhook_proxy_js_1 = __nccwpck_require__(67363);
 const version_js_1 = __nccwpck_require__(2707);
-const rebind_log_js_1 = __nccwpck_require__(68128);
+const rebind_log_js_1 = __nccwpck_require__(38956);
 // the default path as defined in @octokit/webhooks
 exports.defaultWebhooksPath = "/api/github/webhooks";
 class Server {
@@ -69600,7 +69600,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 /***/ }),
 
-/***/ 33542:
+/***/ 68128:
 /***/ ((module, exports) => {
 
 "use strict";
@@ -69626,7 +69626,7 @@ exports.configure = configure
 module.exports = stringify
 
 // eslint-disable-next-line no-control-regex
-const strEscapeSequencesRegExp = /[\u0000-\u001f\u0022\u005c\ud800-\udfff]|[\ud800-\udbff](?![\udc00-\udfff])|(?:[^\ud800-\udbff]|^)[\udc00-\udfff]/
+const strEscapeSequencesRegExp = /[\u0000-\u001f\u0022\u005c\ud800-\udfff]/
 
 // Escape C0 control characters, double quotes, the backslash and every code
 // unit with a numeric value in the inclusive range 0xD800 to 0xDFFF.
@@ -69638,11 +69638,11 @@ function strEscape (str) {
   return JSON.stringify(str)
 }
 
-function insertSort (array) {
-  // Insertion sort is very efficient for small input sizes but it has a bad
+function sort (array, comparator) {
+  // Insertion sort is very efficient for small input sizes, but it has a bad
   // worst case complexity. Thus, use native array sort for bigger values.
-  if (array.length > 2e2) {
-    return array.sort()
+  if (array.length > 2e2 || comparator) {
+    return array.sort(comparator)
   }
   for (let i = 1; i < array.length; i++) {
     const currentValue = array[i]
@@ -69701,6 +69701,17 @@ function getCircularValueOption (options) {
     throw new TypeError('The "circularValue" argument must be of type string or the value null or undefined')
   }
   return '"[Circular]"'
+}
+
+function getDeterministicOption (options) {
+  let value
+  if (hasOwnProperty.call(options, 'deterministic')) {
+    value = options.deterministic
+    if (typeof value !== 'boolean' && typeof value !== 'function') {
+      throw new TypeError('The "deterministic" argument must be of type boolean or comparator function')
+    }
+  }
+  return value === undefined ? true : value
 }
 
 function getBooleanOption (options, key) {
@@ -69777,7 +69788,8 @@ function configure (options) {
   }
   const circularValue = getCircularValueOption(options)
   const bigint = getBooleanOption(options, 'bigint')
-  const deterministic = getBooleanOption(options, 'deterministic')
+  const deterministic = getDeterministicOption(options)
+  const comparator = typeof deterministic === 'function' ? deterministic : undefined
   const maximumDepth = getPositiveIntegerOption(options, 'maximumDepth')
   const maximumBreadth = getPositiveIntegerOption(options, 'maximumBreadth')
 
@@ -69854,7 +69866,7 @@ function configure (options) {
         }
         const maximumPropertiesToStringify = Math.min(keyLength, maximumBreadth)
         if (deterministic && !isTypedArrayWithEntries(value)) {
-          keys = insertSort(keys)
+          keys = sort(keys, comparator)
         }
         stack.push(value)
         for (let i = 0; i < maximumPropertiesToStringify; i++) {
@@ -70053,7 +70065,7 @@ function configure (options) {
           separator = join
         }
         if (deterministic) {
-          keys = insertSort(keys)
+          keys = sort(keys, comparator)
         }
         stack.push(value)
         for (let i = 0; i < maximumPropertiesToStringify; i++) {
@@ -70115,7 +70127,8 @@ function configure (options) {
 
         let res = ''
 
-        if (Array.isArray(value)) {
+        const hasLength = value.length !== undefined
+        if (hasLength && Array.isArray(value)) {
           if (value.length === 0) {
             return '[]'
           }
@@ -70150,14 +70163,14 @@ function configure (options) {
         }
         let separator = ''
         let maximumPropertiesToStringify = Math.min(keyLength, maximumBreadth)
-        if (isTypedArrayWithEntries(value)) {
+        if (hasLength && isTypedArrayWithEntries(value)) {
           res += stringifyTypedArray(value, ',', maximumBreadth)
           keys = keys.slice(value.length)
           maximumPropertiesToStringify -= value.length
           separator = ','
         }
         if (deterministic) {
-          keys = insertSort(keys)
+          keys = sort(keys, comparator)
         }
         stack.push(value)
         for (let i = 0; i < maximumPropertiesToStringify; i++) {
@@ -111303,7 +111316,7 @@ const redaction = __nccwpck_require__(46835)
 const time = __nccwpck_require__(38771)
 const proto = __nccwpck_require__(70461)
 const symbols = __nccwpck_require__(20264)
-const { configure } = __nccwpck_require__(33542)
+const { configure } = __nccwpck_require__(68128)
 const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(48066)
 const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(49833)
 const {
@@ -113113,7 +113126,7 @@ const redaction = __nccwpck_require__(39210)
 const time = __nccwpck_require__(63149)
 const proto = __nccwpck_require__(12372)
 const symbols = __nccwpck_require__(33078)
-const { configure } = __nccwpck_require__(33542)
+const { configure } = __nccwpck_require__(68128)
 const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(81813)
 const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(8997)
 const {
