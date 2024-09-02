@@ -112547,7 +112547,7 @@ module.exports = { nullTime, epochTime, unixTime, isoTime }
 
 const format = __nccwpck_require__(91974)
 const { mapHttpRequest, mapHttpResponse } = __nccwpck_require__(49105)
-const SonicBoom = __nccwpck_require__(96086)
+const SonicBoom = __nccwpck_require__(92355)
 const onExit = __nccwpck_require__(10549)
 const {
   lsCacheSym,
@@ -114049,7 +114049,7 @@ module.exports = SonicBoom
 
 /***/ }),
 
-/***/ 96086:
+/***/ 92355:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -114070,6 +114070,9 @@ const MAX_WRITE = 16 * 1024
 
 const kContentModeBuffer = 'buffer'
 const kContentModeUtf8 = 'utf8'
+
+const [major, minor] = process.versions.node.split('.').map(Number)
+const kCopyBuffer = major >= 22 && minor >= 7
 
 function openFile (file, sonic) {
   sonic._opening = true
@@ -114150,7 +114153,7 @@ function SonicBoom (opts) {
     return new SonicBoom(opts)
   }
 
-  let { fd, dest, minLength, maxLength, maxWrite, sync, append = true, mkdir, retryEAGAIN, fsync, contentMode, mode } = opts || {}
+  let { fd, dest, minLength, maxLength, maxWrite, periodicFlush, sync, append = true, mkdir, retryEAGAIN, fsync, contentMode, mode } = opts || {}
 
   fd = fd || dest
 
@@ -114169,6 +114172,8 @@ function SonicBoom (opts) {
   this.minLength = minLength || 0
   this.maxLength = maxLength || 0
   this.maxWrite = maxWrite || MAX_WRITE
+  this._periodicFlush = periodicFlush || 0
+  this._periodicFlushTimer = undefined
   this.sync = sync || false
   this.writable = true
   this._fsync = fsync || false
@@ -114297,6 +114302,11 @@ function SonicBoom (opts) {
       this._asyncDrainScheduled = false
     }
   })
+
+  if (this._periodicFlush !== 0) {
+    this._periodicFlushTimer = setInterval(() => this.flush(null), this._periodicFlush)
+    this._periodicFlushTimer.unref()
+  }
 }
 
 /**
@@ -114691,6 +114701,12 @@ function actualWriteBuffer () {
       release(err)
     }
   } else {
+    // fs.write will need to copy string to buffer anyway so
+    // we do it here to avoid the overhead of calculating the buffer size
+    // in releaseWritingBuf.
+    if (kCopyBuffer) {
+      this._writingBuf = Buffer.from(this._writingBuf)
+    }
     fs.write(this.fd, this._writingBuf, release)
   }
 }
@@ -114699,6 +114715,10 @@ function actualClose (sonic) {
   if (sonic.fd === -1) {
     sonic.once('ready', actualClose.bind(null, sonic))
     return
+  }
+
+  if (sonic._periodicFlushTimer !== undefined) {
+    clearInterval(sonic._periodicFlushTimer)
   }
 
   sonic.destroyed = true
