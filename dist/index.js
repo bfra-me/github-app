@@ -9079,7 +9079,7 @@ config.VERSION = VERSION;
 
 /***/ }),
 
-/***/ 74835:
+/***/ 65710:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = { getTransformStream };
@@ -62483,7 +62483,7 @@ exports.getLog = getLog;
  * ```
  */
 const pino_1 = __nccwpck_require__(92036);
-const pino_2 = __nccwpck_require__(74835);
+const pino_2 = __nccwpck_require__(65710);
 const rebind_log_js_1 = __nccwpck_require__(38956);
 function getLog(options = {}) {
     const { level, logMessageKey, ...getTransformStreamOptions } = options;
