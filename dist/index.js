@@ -2169,7 +2169,7 @@ function getExternalKeyNameLength(key) {
 
 /***/ }),
 
-/***/ 51219:
+/***/ 48029:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2570,7 +2570,7 @@ async function hook(state, request, route, parameters) {
     state,
     // @ts-expect-error TBD
     {},
-    request
+    request.defaults({ baseUrl: endpoint.baseUrl })
   );
   endpoint.headers.authorization = `token ${token}`;
   return sendRequestWithRetries(
@@ -2605,7 +2605,7 @@ async function sendRequestWithRetries(state, request, options, createdAt, retrie
 }
 
 // pkg/dist-src/version.js
-var VERSION = "6.1.1";
+var VERSION = "6.1.2";
 
 // pkg/dist-src/index.js
 var import_auth_oauth_user2 = __nccwpck_require__(41380);
@@ -18460,7 +18460,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const events_1 = __nccwpck_require__(82361);
-const debug_1 = __importDefault(__nccwpck_require__(34684));
+const debug_1 = __importDefault(__nccwpck_require__(69329));
 const promisify_1 = __importDefault(__nccwpck_require__(59853));
 const debug = debug_1.default('agent-base');
 function isAgent(v) {
@@ -27072,7 +27072,7 @@ exports.enable(load());
 
 /***/ }),
 
-/***/ 39280:
+/***/ 64602:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
@@ -27331,7 +27331,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __nccwpck_require__(80085)(exports);
+module.exports = __nccwpck_require__(68958)(exports);
 
 const {formatters} = module.exports;
 
@@ -27350,7 +27350,7 @@ formatters.j = function (v) {
 
 /***/ }),
 
-/***/ 80085:
+/***/ 68958:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -27366,7 +27366,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __nccwpck_require__(25717);
+	createDebug.humanize = __nccwpck_require__(20158);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -27631,7 +27631,7 @@ module.exports = setup;
 
 /***/ }),
 
-/***/ 34684:
+/***/ 69329:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
@@ -27640,15 +27640,15 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __nccwpck_require__(39280);
+	module.exports = __nccwpck_require__(64602);
 } else {
-	module.exports = __nccwpck_require__(51240);
+	module.exports = __nccwpck_require__(26193);
 }
 
 
 /***/ }),
 
-/***/ 51240:
+/***/ 26193:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /**
@@ -27890,7 +27890,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __nccwpck_require__(80085)(exports);
+module.exports = __nccwpck_require__(68958)(exports);
 
 const {formatters} = module.exports;
 
@@ -38469,7 +38469,7 @@ const net_1 = __importDefault(__nccwpck_require__(41808));
 const tls_1 = __importDefault(__nccwpck_require__(24404));
 const url_1 = __importDefault(__nccwpck_require__(57310));
 const assert_1 = __importDefault(__nccwpck_require__(39491));
-const debug_1 = __importDefault(__nccwpck_require__(34684));
+const debug_1 = __importDefault(__nccwpck_require__(69329));
 const agent_base_1 = __nccwpck_require__(67365);
 const parse_proxy_response_1 = __importDefault(__nccwpck_require__(2097));
 const debug = debug_1.default('https-proxy-agent:agent');
@@ -38661,7 +38661,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const debug_1 = __importDefault(__nccwpck_require__(34684));
+const debug_1 = __importDefault(__nccwpck_require__(69329));
 const debug = debug_1.default('https-proxy-agent:parse-proxy-response');
 function parseProxyResponse(socket) {
     return new Promise((resolve, reject) => {
@@ -46314,7 +46314,7 @@ exports["default"] = applyMixin;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.genRedactedString = exports.getStringValue = exports.MAX_ARGUMENT_LENGTH = void 0;
-const debug_1 = __nccwpck_require__(34684);
+const debug_1 = __nccwpck_require__(69329);
 const MAX_ARGUMENT_LENGTH = 200;
 exports.MAX_ARGUMENT_LENGTH = MAX_ARGUMENT_LENGTH;
 const NAMESPACE_PREFIX = "ioredis";
@@ -58539,175 +58539,6 @@ function plural(ms, n, name) {
 
 /***/ }),
 
-/***/ 25717:
-/***/ ((module) => {
-
-/**
- * Helpers.
- */
-
-var s = 1000;
-var m = s * 60;
-var h = m * 60;
-var d = h * 24;
-var w = d * 7;
-var y = d * 365.25;
-
-/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} [options]
- * @throws {Error} throw an error if val is not a non-empty string or a number
- * @return {String|Number}
- * @api public
- */
-
-module.exports = function(val, options) {
-  options = options || {};
-  var type = typeof val;
-  if (type === 'string' && val.length > 0) {
-    return parse(val);
-  } else if (type === 'number' && isFinite(val)) {
-    return options.long ? fmtLong(val) : fmtShort(val);
-  }
-  throw new Error(
-    'val is not a non-empty string or a valid number. val=' +
-      JSON.stringify(val)
-  );
-};
-
-/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */
-
-function parse(str) {
-  str = String(str);
-  if (str.length > 100) {
-    return;
-  }
-  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-    str
-  );
-  if (!match) {
-    return;
-  }
-  var n = parseFloat(match[1]);
-  var type = (match[2] || 'ms').toLowerCase();
-  switch (type) {
-    case 'years':
-    case 'year':
-    case 'yrs':
-    case 'yr':
-    case 'y':
-      return n * y;
-    case 'weeks':
-    case 'week':
-    case 'w':
-      return n * w;
-    case 'days':
-    case 'day':
-    case 'd':
-      return n * d;
-    case 'hours':
-    case 'hour':
-    case 'hrs':
-    case 'hr':
-    case 'h':
-      return n * h;
-    case 'minutes':
-    case 'minute':
-    case 'mins':
-    case 'min':
-    case 'm':
-      return n * m;
-    case 'seconds':
-    case 'second':
-    case 'secs':
-    case 'sec':
-    case 's':
-      return n * s;
-    case 'milliseconds':
-    case 'millisecond':
-    case 'msecs':
-    case 'msec':
-    case 'ms':
-      return n;
-    default:
-      return undefined;
-  }
-}
-
-/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtShort(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return Math.round(ms / d) + 'd';
-  }
-  if (msAbs >= h) {
-    return Math.round(ms / h) + 'h';
-  }
-  if (msAbs >= m) {
-    return Math.round(ms / m) + 'm';
-  }
-  if (msAbs >= s) {
-    return Math.round(ms / s) + 's';
-  }
-  return ms + 'ms';
-}
-
-/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtLong(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return plural(ms, msAbs, d, 'day');
-  }
-  if (msAbs >= h) {
-    return plural(ms, msAbs, h, 'hour');
-  }
-  if (msAbs >= m) {
-    return plural(ms, msAbs, m, 'minute');
-  }
-  if (msAbs >= s) {
-    return plural(ms, msAbs, s, 'second');
-  }
-  return ms + ' ms';
-}
-
-/**
- * Pluralization helper.
- */
-
-function plural(ms, msAbs, n, name) {
-  var isPlural = msAbs >= n * 1.5;
-  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
-}
-
-
-/***/ }),
-
 /***/ 20158:
 /***/ ((module) => {
 
@@ -60455,7 +60286,7 @@ async function auth(state, options) {
 
 // pkg/dist-src/get-state.js
 var import_auth_token = __nccwpck_require__(41410);
-var import_auth_app = __nccwpck_require__(51219);
+var import_auth_app = __nccwpck_require__(48029);
 var import_auth_unauthenticated2 = __nccwpck_require__(27249);
 function getState(options) {
   const common = {
@@ -61477,13 +61308,13 @@ module.exports = (input, options) => {
 
 /***/ }),
 
-/***/ 37430:
+/***/ 92160:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(92036)
+const { pino, symbols: { stringifySym, chindingsSym } } = __nccwpck_require__(40373)
 const serializers = __nccwpck_require__(49105)
 const getCallerFile = __nccwpck_require__(49118)
 const startTime = Symbol('startTime')
@@ -62482,7 +62313,7 @@ exports.getLog = getLog;
  * app.log.fatal("Goodbye, cruel world!");
  * ```
  */
-const pino_1 = __nccwpck_require__(92036);
+const pino_1 = __nccwpck_require__(40373);
 const pino_2 = __nccwpck_require__(65710);
 const rebind_log_js_1 = __nccwpck_require__(38956);
 function getLog(options = {}) {
@@ -63286,7 +63117,7 @@ async function run(appFnOrArgv, additionalOptions) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLoggingMiddleware = getLoggingMiddleware;
 const node_crypto_1 = __nccwpck_require__(6005);
-const pino_http_1 = __nccwpck_require__(37430);
+const pino_http_1 = __nccwpck_require__(92160);
 function getLoggingMiddleware(logger, options) {
     return (0, pino_http_1.pinoHttp)({
         ...options,
@@ -111541,7 +111372,7 @@ module.exports.pino = pino
 
 /***/ }),
 
-/***/ 23743:
+/***/ 62097:
 /***/ ((module) => {
 
 "use strict";
@@ -111579,7 +111410,7 @@ module.exports = function getCallers () {
 
 /***/ }),
 
-/***/ 8997:
+/***/ 59274:
 /***/ ((module) => {
 
 /**
@@ -111614,7 +111445,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 81813:
+/***/ 78817:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -111628,9 +111459,9 @@ const {
   formattersSym,
   hooksSym,
   levelCompSym
-} = __nccwpck_require__(33078)
-const { noop, genLog } = __nccwpck_require__(79036)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(8997)
+} = __nccwpck_require__(98829)
+const { noop, genLog } = __nccwpck_require__(36081)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(59274)
 
 const levelMethods = {
   fatal: (hook) => {
@@ -111863,25 +111694,25 @@ module.exports = {
 
 /***/ }),
 
-/***/ 66736:
+/***/ 55314:
 /***/ ((module) => {
 
 "use strict";
 
 
-module.exports = { version: '9.3.2' }
+module.exports = { version: '9.4.0' }
 
 
 /***/ }),
 
-/***/ 14534:
+/***/ 64726:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const metadata = Symbol.for('pino.metadata')
-const { DEFAULT_LEVELS } = __nccwpck_require__(8997)
+const { DEFAULT_LEVELS } = __nccwpck_require__(59274)
 
 const DEFAULT_INFO_LEVEL = DEFAULT_LEVELS.info
 
@@ -112070,7 +111901,7 @@ module.exports = multistream
 
 /***/ }),
 
-/***/ 12372:
+/***/ 63039:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112104,7 +111935,7 @@ const {
   formatOptsSym,
   stringifiersSym,
   msgPrefixSym
-} = __nccwpck_require__(33078)
+} = __nccwpck_require__(98829)
 const {
   getLevel,
   setLevel,
@@ -112113,17 +111944,17 @@ const {
   initialLsCache,
   genLsCache,
   assertNoLevelCollisions
-} = __nccwpck_require__(81813)
+} = __nccwpck_require__(78817)
 const {
   asChindings,
   asJson,
   buildFormatters,
   stringify
-} = __nccwpck_require__(79036)
+} = __nccwpck_require__(36081)
 const {
   version
-} = __nccwpck_require__(66736)
-const redaction = __nccwpck_require__(39210)
+} = __nccwpck_require__(55314)
+const redaction = __nccwpck_require__(11856)
 
 // note: use of class is satirical
 // https://github.com/pinojs/pino/pull/433#pullrequestreview-127703127
@@ -112310,14 +112141,14 @@ function flush (cb) {
 
 /***/ }),
 
-/***/ 39210:
+/***/ 11856:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const fastRedact = __nccwpck_require__(94472)
-const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(33078)
+const { redactFmtSym, wildcardFirstSym } = __nccwpck_require__(98829)
 const { rx, validator } = fastRedact
 
 const validate = validator({
@@ -112436,7 +112267,7 @@ module.exports = redaction
 
 /***/ }),
 
-/***/ 33078:
+/***/ 98829:
 /***/ ((module) => {
 
 "use strict";
@@ -112518,7 +112349,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 63149:
+/***/ 67271:
 /***/ ((module) => {
 
 "use strict";
@@ -112537,7 +112368,7 @@ module.exports = { nullTime, epochTime, unixTime, isoTime }
 
 /***/ }),
 
-/***/ 79036:
+/***/ 36081:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -112566,9 +112397,9 @@ const {
   errorKeySym,
   nestedKeyStrSym,
   msgPrefixSym
-} = __nccwpck_require__(33078)
+} = __nccwpck_require__(98829)
 const { isMainThread } = __nccwpck_require__(71267)
-const transport = __nccwpck_require__(15151)
+const transport = __nccwpck_require__(78587)
 
 function noop () {
 }
@@ -112939,14 +112770,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 15151:
+/***/ 78587:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { createRequire } = __nccwpck_require__(98188)
-const getCallers = __nccwpck_require__(23743)
+const getCallers = __nccwpck_require__(62097)
 const { join, isAbsolute, sep } = __nccwpck_require__(49411)
 const sleep = __nccwpck_require__(9373)
 const onExit = __nccwpck_require__(10549)
@@ -113113,7 +112944,7 @@ module.exports = transport
 
 /***/ }),
 
-/***/ 92036:
+/***/ 40373:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -113121,14 +112952,14 @@ module.exports = transport
 
 const os = __nccwpck_require__(70612)
 const stdSerializers = __nccwpck_require__(49105)
-const caller = __nccwpck_require__(23743)
-const redaction = __nccwpck_require__(39210)
-const time = __nccwpck_require__(63149)
-const proto = __nccwpck_require__(12372)
-const symbols = __nccwpck_require__(33078)
+const caller = __nccwpck_require__(62097)
+const redaction = __nccwpck_require__(11856)
+const time = __nccwpck_require__(67271)
+const proto = __nccwpck_require__(63039)
+const symbols = __nccwpck_require__(98829)
 const { configure } = __nccwpck_require__(68128)
-const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(81813)
-const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(8997)
+const { assertDefaultLevelFound, mappings, genLsCache, genLevelComparison, assertLevelComparison } = __nccwpck_require__(78817)
+const { DEFAULT_LEVELS, SORTING_ORDER } = __nccwpck_require__(59274)
 const {
   createArgsNormalizer,
   asChindings,
@@ -113137,8 +112968,8 @@ const {
   stringify,
   normalizeDestFileDescriptor,
   noop
-} = __nccwpck_require__(79036)
-const { version } = __nccwpck_require__(66736)
+} = __nccwpck_require__(36081)
+const { version } = __nccwpck_require__(55314)
 const {
   chindingsSym,
   redactFmtSym,
@@ -113207,6 +113038,9 @@ const serializers = Object.assign(Object.create(null), stdSerializers)
 function pino (...args) {
   const instance = {}
   const { opts, stream } = normalize(instance, caller(), ...args)
+
+  if (opts.level && typeof opts.level === 'string' && DEFAULT_LEVELS[opts.level.toLowerCase()] !== undefined) opts.level = opts.level.toLowerCase()
+
   const {
     redact,
     crlf,
@@ -113335,8 +113169,8 @@ module.exports.destination = (dest = process.stdout.fd) => {
   }
 }
 
-module.exports.transport = __nccwpck_require__(15151)
-module.exports.multistream = __nccwpck_require__(14534)
+module.exports.transport = __nccwpck_require__(78587)
+module.exports.multistream = __nccwpck_require__(64726)
 
 module.exports.levels = mappings()
 module.exports.stdSerializers = serializers
