@@ -19040,7 +19040,7 @@ function removeHook(state, name, method) {
 
 /***/ }),
 
-/***/ 24921:
+/***/ 65104:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19184,16 +19184,16 @@ function loadParser (parserName) {
   // this uses a switch for static require analysis
   switch (parserName) {
     case 'json':
-      parser = __nccwpck_require__(47379)
+      parser = __nccwpck_require__(45844)
       break
     case 'raw':
-      parser = __nccwpck_require__(98076)
+      parser = __nccwpck_require__(3535)
       break
     case 'text':
-      parser = __nccwpck_require__(49182)
+      parser = __nccwpck_require__(38803)
       break
     case 'urlencoded':
-      parser = __nccwpck_require__(92896)
+      parser = __nccwpck_require__(19562)
       break
   }
 
@@ -19204,7 +19204,7 @@ function loadParser (parserName) {
 
 /***/ }),
 
-/***/ 7109:
+/***/ 38493:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19417,7 +19417,7 @@ function dump (req, callback) {
 
 /***/ }),
 
-/***/ 47379:
+/***/ 45844:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19439,7 +19439,7 @@ var bytes = __nccwpck_require__(51263)
 var contentType = __nccwpck_require__(58858)
 var createError = __nccwpck_require__(53291)
 var debug = __nccwpck_require__(88240)('body-parser:json')
-var read = __nccwpck_require__(7109)
+var read = __nccwpck_require__(38493)
 var typeis = __nccwpck_require__(99221)
 
 /**
@@ -19672,7 +19672,7 @@ function typeChecker (type) {
 
 /***/ }),
 
-/***/ 98076:
+/***/ 3535:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19690,7 +19690,7 @@ function typeChecker (type) {
 
 var bytes = __nccwpck_require__(51263)
 var debug = __nccwpck_require__(88240)('body-parser:raw')
-var read = __nccwpck_require__(7109)
+var read = __nccwpck_require__(38493)
 var typeis = __nccwpck_require__(99221)
 
 /**
@@ -19781,7 +19781,7 @@ function typeChecker (type) {
 
 /***/ }),
 
-/***/ 49182:
+/***/ 38803:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19800,7 +19800,7 @@ function typeChecker (type) {
 var bytes = __nccwpck_require__(51263)
 var contentType = __nccwpck_require__(58858)
 var debug = __nccwpck_require__(88240)('body-parser:text')
-var read = __nccwpck_require__(7109)
+var read = __nccwpck_require__(38493)
 var typeis = __nccwpck_require__(99221)
 
 /**
@@ -19910,7 +19910,7 @@ function typeChecker (type) {
 
 /***/ }),
 
-/***/ 92896:
+/***/ 19562:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -19933,7 +19933,7 @@ var contentType = __nccwpck_require__(58858)
 var createError = __nccwpck_require__(53291)
 var debug = __nccwpck_require__(88240)('body-parser:urlencoded')
 var deprecate = __nccwpck_require__(63450)('body-parser')
-var read = __nccwpck_require__(7109)
+var read = __nccwpck_require__(38493)
 var typeis = __nccwpck_require__(99221)
 
 /**
@@ -19971,6 +19971,9 @@ function urlencoded (options) {
     : opts.limit
   var type = opts.type || 'application/x-www-form-urlencoded'
   var verify = opts.verify || false
+  var depth = typeof opts.depth !== 'number'
+    ? Number(opts.depth || 32)
+    : opts.depth
 
   if (verify !== false && typeof verify !== 'function') {
     throw new TypeError('option verify must be function')
@@ -20034,7 +20037,8 @@ function urlencoded (options) {
       encoding: charset,
       inflate: inflate,
       limit: limit,
-      verify: verify
+      verify: verify,
+      depth: depth
     })
   }
 }
@@ -20049,10 +20053,18 @@ function extendedparser (options) {
   var parameterLimit = options.parameterLimit !== undefined
     ? options.parameterLimit
     : 1000
+
+  var depth = typeof options.depth !== 'number'
+    ? Number(options.depth || 32)
+    : options.depth
   var parse = parser('qs')
 
   if (isNaN(parameterLimit) || parameterLimit < 1) {
     throw new TypeError('option parameterLimit must be a positive number')
+  }
+
+  if (isNaN(depth) || depth < 0) {
+    throw new TypeError('option depth must be a zero or a positive number')
   }
 
   if (isFinite(parameterLimit)) {
@@ -20072,12 +20084,23 @@ function extendedparser (options) {
     var arrayLimit = Math.max(100, paramCount)
 
     debug('parse extended urlencoding')
-    return parse(body, {
-      allowPrototypes: true,
-      arrayLimit: arrayLimit,
-      depth: Infinity,
-      parameterLimit: parameterLimit
-    })
+    try {
+      return parse(body, {
+        allowPrototypes: true,
+        arrayLimit: arrayLimit,
+        depth: depth,
+        strictDepth: true,
+        parameterLimit: parameterLimit
+      })
+    } catch (err) {
+      if (err instanceof RangeError) {
+        throw createError(400, 'The input exceeded the depth', {
+          type: 'querystring.parse.rangeError'
+        })
+      } else {
+        throw err
+      }
+    }
   }
 }
 
@@ -20138,7 +20161,7 @@ function parser (name) {
   // this uses a switch for static require analysis
   switch (name) {
     case 'qs':
-      mod = __nccwpck_require__(62278)
+      mod = __nccwpck_require__(39769)
       break
     case 'querystring':
       mod = __nccwpck_require__(63477)
@@ -30167,6 +30190,74 @@ function encodeUrl (url) {
 
 /***/ }),
 
+/***/ 56705:
+/***/ ((module) => {
+
+"use strict";
+/*!
+ * encodeurl
+ * Copyright(c) 2016 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = encodeUrl
+
+/**
+ * RegExp to match non-URL code points, *after* encoding (i.e. not including "%")
+ * and including invalid escape sequences.
+ * @private
+ */
+
+var ENCODE_CHARS_REGEXP = /(?:[^\x21\x23-\x3B\x3D\x3F-\x5F\x61-\x7A\x7C\x7E]|%(?:[^0-9A-Fa-f]|[0-9A-Fa-f][^0-9A-Fa-f]|$))+/g
+
+/**
+ * RegExp to match unmatched surrogate pair.
+ * @private
+ */
+
+var UNMATCHED_SURROGATE_PAIR_REGEXP = /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/g
+
+/**
+ * String to replace unmatched surrogate pair with.
+ * @private
+ */
+
+var UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2'
+
+/**
+ * Encode a URL to a percent-encoded form, excluding already-encoded sequences.
+ *
+ * This function will take an already-encoded URL and encode all the non-URL
+ * code points. This function will not encode the "%" character unless it is
+ * not part of a valid sequence (`%20` will be left as-is, but `%foo` will
+ * be encoded as `%25foo`).
+ *
+ * This encode is meant to be "safe" and does not throw errors. It will try as
+ * hard as it can to properly encode the given URL, including replacing any raw,
+ * unpaired surrogate pairs with the Unicode replacement character prior to
+ * encoding.
+ *
+ * @param {string} url
+ * @return {string}
+ * @public
+ */
+
+function encodeUrl (url) {
+  return String(url)
+    .replace(UNMATCHED_SURROGATE_PAIR_REGEXP, UNMATCHED_SURROGATE_PAIR_REPLACE)
+    .replace(ENCODE_CHARS_REGEXP, encodeURI)
+}
+
+
+/***/ }),
+
 /***/ 28776:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -30649,7 +30740,7 @@ function stattag (stat) {
 
 /***/ }),
 
-/***/ 85017:
+/***/ 64511:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -30663,12 +30754,12 @@ function stattag (stat) {
 
 
 
-module.exports = __nccwpck_require__(59325);
+module.exports = __nccwpck_require__(12649);
 
 
 /***/ }),
 
-/***/ 37445:
+/***/ 9321:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -30687,17 +30778,17 @@ module.exports = __nccwpck_require__(59325);
  * @private
  */
 
-var finalhandler = __nccwpck_require__(99961);
-var Router = __nccwpck_require__(80408);
+var finalhandler = __nccwpck_require__(70734);
+var Router = __nccwpck_require__(39751);
 var methods = __nccwpck_require__(63635);
-var middleware = __nccwpck_require__(92110);
-var query = __nccwpck_require__(23329);
+var middleware = __nccwpck_require__(21474);
+var query = __nccwpck_require__(88571);
 var debug = __nccwpck_require__(88240)('express:application');
-var View = __nccwpck_require__(71914);
+var View = __nccwpck_require__(96634);
 var http = __nccwpck_require__(13685);
-var compileETag = (__nccwpck_require__(71626).compileETag);
-var compileQueryParser = (__nccwpck_require__(71626).compileQueryParser);
-var compileTrust = (__nccwpck_require__(71626).compileTrust);
+var compileETag = (__nccwpck_require__(20697).compileETag);
+var compileQueryParser = (__nccwpck_require__(20697).compileQueryParser);
+var compileTrust = (__nccwpck_require__(20697).compileTrust);
 var deprecate = __nccwpck_require__(63450)('express');
 var flatten = __nccwpck_require__(15162);
 var merge = __nccwpck_require__(37675);
@@ -31337,7 +31428,7 @@ function tryRender(view, options, callback) {
 
 /***/ }),
 
-/***/ 59325:
+/***/ 12649:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -31355,14 +31446,14 @@ function tryRender(view, options, callback) {
  * Module dependencies.
  */
 
-var bodyParser = __nccwpck_require__(24921)
+var bodyParser = __nccwpck_require__(65104)
 var EventEmitter = (__nccwpck_require__(82361).EventEmitter);
-var mixin = __nccwpck_require__(51955);
-var proto = __nccwpck_require__(37445);
-var Route = __nccwpck_require__(7386);
-var Router = __nccwpck_require__(80408);
-var req = __nccwpck_require__(95898);
-var res = __nccwpck_require__(4352);
+var mixin = __nccwpck_require__(16573);
+var proto = __nccwpck_require__(9321);
+var Route = __nccwpck_require__(73390);
+var Router = __nccwpck_require__(39751);
+var req = __nccwpck_require__(62536);
+var res = __nccwpck_require__(98642);
 
 /**
  * Expose `createApplication()`.
@@ -31419,9 +31510,9 @@ exports.Router = Router;
  */
 
 exports.json = bodyParser.json
-exports.query = __nccwpck_require__(23329);
+exports.query = __nccwpck_require__(88571);
 exports.raw = bodyParser.raw
-exports["static"] = __nccwpck_require__(40352);
+exports["static"] = __nccwpck_require__(11514);
 exports.text = bodyParser.text
 exports.urlencoded = bodyParser.urlencoded
 
@@ -31461,7 +31552,7 @@ removedMiddlewares.forEach(function (name) {
 
 /***/ }),
 
-/***/ 92110:
+/***/ 21474:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -31512,7 +31603,7 @@ exports.init = function(app){
 
 /***/ }),
 
-/***/ 23329:
+/***/ 88571:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -31532,7 +31623,7 @@ exports.init = function(app){
 
 var merge = __nccwpck_require__(37675)
 var parseUrl = __nccwpck_require__(63926);
-var qs = __nccwpck_require__(62278);
+var qs = __nccwpck_require__(39769);
 
 /**
  * @param {Object} options
@@ -31567,7 +31658,7 @@ module.exports = function query(options) {
 
 /***/ }),
 
-/***/ 95898:
+/***/ 62536:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32100,7 +32191,7 @@ function defineGetter(obj, name, getter) {
 
 /***/ }),
 
-/***/ 4352:
+/***/ 98642:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32122,20 +32213,20 @@ var Buffer = (__nccwpck_require__(92262).Buffer)
 var contentDisposition = __nccwpck_require__(78493);
 var createError = __nccwpck_require__(53291)
 var deprecate = __nccwpck_require__(63450)('express');
-var encodeUrl = __nccwpck_require__(53297);
+var encodeUrl = __nccwpck_require__(56705);
 var escapeHtml = __nccwpck_require__(42768);
 var http = __nccwpck_require__(13685);
-var isAbsolute = (__nccwpck_require__(71626).isAbsolute);
+var isAbsolute = (__nccwpck_require__(20697).isAbsolute);
 var onFinished = __nccwpck_require__(73431);
 var path = __nccwpck_require__(71017);
 var statuses = __nccwpck_require__(35285)
 var merge = __nccwpck_require__(37675);
 var sign = (__nccwpck_require__(40005).sign);
-var normalizeType = (__nccwpck_require__(71626).normalizeType);
-var normalizeTypes = (__nccwpck_require__(71626).normalizeTypes);
-var setCharset = (__nccwpck_require__(71626).setCharset);
+var normalizeType = (__nccwpck_require__(20697).normalizeType);
+var normalizeTypes = (__nccwpck_require__(20697).normalizeTypes);
+var setCharset = (__nccwpck_require__(20697).setCharset);
 var cookie = __nccwpck_require__(45100);
-var send = __nccwpck_require__(91775);
+var send = __nccwpck_require__(93417);
 var extname = path.extname;
 var mime = send.mime;
 var resolve = path.resolve;
@@ -32161,7 +32252,6 @@ module.exports = res
  */
 
 var charsetRegExp = /;\s*charset\s*=/;
-var schemaAndHostRegExp = /^(?:[a-zA-Z][a-zA-Z0-9+.-]*:)?\/\/[^\\\/\?]+/;
 
 /**
  * Set status `code`.
@@ -32929,6 +33019,14 @@ res.get = function(field){
  */
 
 res.clearCookie = function clearCookie(name, options) {
+  if (options) {
+    if (options.maxAge) {
+      deprecate('res.clearCookie: Passing "options.maxAge" is deprecated. In v5.0.0 of Express, this option will be ignored, as res.clearCookie will automatically set cookies to expire immediately. Please update your code to omit this option.');
+    }
+    if (options.expires) {
+      deprecate('res.clearCookie: Passing "options.expires" is deprecated. In v5.0.0 of Express, this option will be ignored, as res.clearCookie will automatically set cookies to expire immediately. Please update your code to omit this option.');
+    }
+  }
   var opts = merge({ expires: new Date(1), path: '/' }, options);
 
   return this.cookie(name, '', opts);
@@ -33015,19 +33113,13 @@ res.location = function location(url) {
 
   // "back" is an alias for the referrer
   if (url === 'back') {
+    deprecate('res.location("back"): use res.location(req.get("Referrer") || "/") and refer to https://dub.sh/security-redirect for best practices');
     loc = this.req.get('Referrer') || '/';
   } else {
     loc = String(url);
   }
 
-  var m = schemaAndHostRegExp.exec(loc);
-  var pos = m ? m[0].length + 1 : 0;
-
-  // Only encode after host to avoid invalid encoding which can introduce
-  // vulnerabilities (e.g. `\\` to `%5C`).
-  loc = loc.slice(0, pos) + encodeUrl(loc.slice(pos));
-
-  return this.set('Location', loc);
+  return this.set('Location', encodeUrl(loc));
 };
 
 /**
@@ -33075,7 +33167,7 @@ res.redirect = function redirect(url) {
 
     html: function(){
       var u = escapeHtml(address);
-      body = '<p>' + statuses.message[status] + '. Redirecting to <a href="' + u + '">' + u + '</a></p>'
+      body = '<p>' + statuses.message[status] + '. Redirecting to ' + u + '</p>'
     },
 
     default: function(){
@@ -33286,7 +33378,7 @@ function stringify (value, replacer, spaces, escape) {
 
 /***/ }),
 
-/***/ 80408:
+/***/ 39751:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -33305,8 +33397,8 @@ function stringify (value, replacer, spaces, escape) {
  * @private
  */
 
-var Route = __nccwpck_require__(7386);
-var Layer = __nccwpck_require__(30389);
+var Route = __nccwpck_require__(73390);
+var Layer = __nccwpck_require__(99373);
 var methods = __nccwpck_require__(63635);
 var mixin = __nccwpck_require__(37675);
 var debug = __nccwpck_require__(88240)('express:router');
@@ -33967,7 +34059,7 @@ function wrap(old, fn) {
 
 /***/ }),
 
-/***/ 30389:
+/***/ 99373:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -33986,7 +34078,7 @@ function wrap(old, fn) {
  * @private
  */
 
-var pathRegexp = __nccwpck_require__(74527);
+var pathRegexp = __nccwpck_require__(2100);
 var debug = __nccwpck_require__(88240)('express:router:layer');
 
 /**
@@ -34156,7 +34248,7 @@ function decode_param(val) {
 
 /***/ }),
 
-/***/ 7386:
+/***/ 73390:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -34177,7 +34269,7 @@ function decode_param(val) {
 
 var debug = __nccwpck_require__(88240)('express:router:route');
 var flatten = __nccwpck_require__(15162);
-var Layer = __nccwpck_require__(30389);
+var Layer = __nccwpck_require__(99373);
 var methods = __nccwpck_require__(63635);
 
 /**
@@ -34394,7 +34486,7 @@ methods.forEach(function(method){
 
 /***/ }),
 
-/***/ 71626:
+/***/ 20697:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -34417,10 +34509,10 @@ var contentDisposition = __nccwpck_require__(78493);
 var contentType = __nccwpck_require__(58858);
 var deprecate = __nccwpck_require__(63450)('express');
 var flatten = __nccwpck_require__(15162);
-var mime = (__nccwpck_require__(91775).mime);
+var mime = (__nccwpck_require__(93417).mime);
 var etag = __nccwpck_require__(70317);
 var proxyaddr = __nccwpck_require__(55991);
-var qs = __nccwpck_require__(62278);
+var qs = __nccwpck_require__(39769);
 var querystring = __nccwpck_require__(63477);
 
 /**
@@ -34705,7 +34797,7 @@ function newObject() {
 
 /***/ }),
 
-/***/ 71914:
+/***/ 96634:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35855,7 +35947,7 @@ function replaceGetterValues (replacer) {
 
 /***/ }),
 
-/***/ 99961:
+/***/ 70734:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35873,7 +35965,7 @@ function replaceGetterValues (replacer) {
  */
 
 var debug = __nccwpck_require__(88240)('finalhandler')
-var encodeUrl = __nccwpck_require__(53297)
+var encodeUrl = __nccwpck_require__(56705)
 var escapeHtml = __nccwpck_require__(42768)
 var onFinished = __nccwpck_require__(73431)
 var parseUrl = __nccwpck_require__(63926)
@@ -35986,7 +36078,9 @@ function finalhandler (req, res, options) {
     // cannot actually respond
     if (headersSent(res)) {
       debug('cannot %d after headers sent', status)
-      req.socket.destroy()
+      if (req.socket) {
+        req.socket.destroy()
+      }
       return
     }
 
@@ -36137,7 +36231,10 @@ function send (req, res, status, headers, message) {
 
     // response status
     res.statusCode = status
-    res.statusMessage = statuses.message[status]
+
+    if (req.httpVersionMajor < 2) {
+      res.statusMessage = statuses.message[status]
+    }
 
     // remove any content headers
     res.removeHeader('Content-Encoding')
@@ -57905,7 +58002,7 @@ function splitType(string) {
 
 /***/ }),
 
-/***/ 51955:
+/***/ 16573:
 /***/ ((module) => {
 
 "use strict";
@@ -57942,7 +58039,7 @@ var hasOwnProperty = Object.prototype.hasOwnProperty
  * @public
  */
 
-function merge(dest, src, redefine) {
+function merge (dest, src, redefine) {
   if (!dest) {
     throw new TypeError('argument dest is required')
   }
@@ -57956,9 +58053,9 @@ function merge(dest, src, redefine) {
     redefine = true
   }
 
-  Object.getOwnPropertyNames(src).forEach(function forEachOwnPropertyName(name) {
+  Object.getOwnPropertyNames(src).forEach(function forEachOwnPropertyName (name) {
     if (!redefine && hasOwnProperty.call(dest, name)) {
-      // Skip desriptor
+      // Skip descriptor
       return
     }
 
@@ -61096,19 +61193,19 @@ module.exports.sync = fp => {
 
 /***/ }),
 
-/***/ 74527:
+/***/ 2100:
 /***/ ((module) => {
 
 /**
- * Expose `pathtoRegexp`.
+ * Expose `pathToRegexp`.
  */
 
-module.exports = pathtoRegexp;
+module.exports = pathToRegexp;
 
 /**
  * Match matching groups in a regular expression.
  */
-var MATCHING_GROUP_REGEXP = /\((?!\?)/g;
+var MATCHING_GROUP_REGEXP = /\\.|\((?:\?<(.*?)>)?(?!\?)/g;
 
 /**
  * Normalize the given path string,
@@ -61126,22 +61223,27 @@ var MATCHING_GROUP_REGEXP = /\((?!\?)/g;
  * @api private
  */
 
-function pathtoRegexp(path, keys, options) {
+function pathToRegexp(path, keys, options) {
   options = options || {};
   keys = keys || [];
   var strict = options.strict;
   var end = options.end !== false;
   var flags = options.sensitive ? '' : 'i';
+  var lookahead = options.lookahead !== false;
   var extraOffset = 0;
   var keysOffset = keys.length;
   var i = 0;
   var name = 0;
+  var pos = 0;
+  var backtrack = '';
   var m;
 
   if (path instanceof RegExp) {
     while (m = MATCHING_GROUP_REGEXP.exec(path.source)) {
+      if (m[0][0] === '\\') continue;
+
       keys.push({
-        name: name++,
+        name: m[1] || name++,
         optional: false,
         offset: m.index
       });
@@ -61155,20 +61257,47 @@ function pathtoRegexp(path, keys, options) {
     // the same keys and options instance into every generation to get
     // consistent matching groups before we join the sources together.
     path = path.map(function (value) {
-      return pathtoRegexp(value, keys, options).source;
+      return pathToRegexp(value, keys, options).source;
     });
 
-    return new RegExp('(?:' + path.join('|') + ')', flags);
+    return new RegExp(path.join('|'), flags);
   }
 
-  path = ('^' + path + (strict ? '' : path[path.length - 1] === '/' ? '?' : '/?'))
-    .replace(/\/\(/g, '/(?:')
-    .replace(/([\/\.])/g, '\\$1')
-    .replace(/(\\\/)?(\\\.)?:(\w+)(\(.*?\))?(\*)?(\?)?/g, function (match, slash, format, key, capture, star, optional, offset) {
+  path = path.replace(
+    /\\.|(\/)?(\.)?:(\w+)(\(.*?\))?(\*)?(\?)?|[.*]|\/\(/g,
+    function (match, slash, format, key, capture, star, optional, offset) {
+      pos = offset + match.length;
+
+      if (match[0] === '\\') {
+        backtrack += match;
+        return match;
+      }
+
+      if (match === '.') {
+        backtrack += '\\.';
+        extraOffset += 1;
+        return '\\.';
+      }
+
+      backtrack = slash || format ? '' : path.slice(pos, offset);
+
+      if (match === '*') {
+        extraOffset += 3;
+        return '(.*)';
+      }
+
+      if (match === '/(') {
+        backtrack += '/';
+        extraOffset += 2;
+        return '/(?:';
+      }
+
       slash = slash || '';
-      format = format || '';
-      capture = capture || '([^\\/' + format + ']+?)';
+      format = format ? '\\.' : '';
       optional = optional || '';
+      capture = capture ?
+        capture.replace(/\\.|\*/, function (m) { return m === '*' ? '(.*)' : m; }) :
+        (backtrack ? '((?:(?!/|' + backtrack + ').)+?)' : '([^/' + format + ']+?)');
 
       keys.push({
         name: key,
@@ -61176,41 +61305,20 @@ function pathtoRegexp(path, keys, options) {
         offset: offset + extraOffset
       });
 
-      var result = ''
-        + (optional ? '' : slash)
-        + '(?:'
-        + format + (optional ? slash : '') + capture
-        + (star ? '((?:[\\/' + format + '].+?)?)' : '')
+      var result = '(?:'
+        + format + slash + capture
+        + (star ? '((?:[/' + format + '].+?)?)' : '')
         + ')'
         + optional;
 
       extraOffset += result.length - match.length;
 
       return result;
-    })
-    .replace(/\*/g, function (star, index) {
-      var len = keys.length
-
-      while (len-- > keysOffset && keys[len].offset > index) {
-        keys[len].offset += 3; // Replacement length minus asterisk length.
-      }
-
-      return '(.*)';
     });
 
   // This is a workaround for handling unnamed matching groups.
   while (m = MATCHING_GROUP_REGEXP.exec(path)) {
-    var escapeCount = 0;
-    var index = m.index;
-
-    while (path.charAt(--index) === '\\') {
-      escapeCount++;
-    }
-
-    // It's possible to escape the bracket.
-    if (escapeCount % 2 === 1) {
-      continue;
-    }
+    if (m[0][0] === '\\') continue;
 
     if (keysOffset + i === keys.length || keys[keysOffset + i].offset > m.index) {
       keys.splice(keysOffset + i, 0, {
@@ -61223,10 +61331,16 @@ function pathtoRegexp(path, keys, options) {
     i++;
   }
 
-  // If the path is non-ending, match until the end or a slash.
-  path += (end ? '$' : (path[path.length - 1] === '/' ? '' : '(?=\\/|$)'));
+  path += strict ? '' : path[path.length - 1] === '/' ? '?' : '/?';
 
-  return new RegExp(path, flags);
+  // If the path is non-ending, match until the end or a slash.
+  if (end) {
+    path += '$';
+  } else if (path[path.length - 1] !== '/') {
+    path += lookahead ? '(?=/|$)' : '(?:/|$)';
+  }
+
+  return new RegExp('^' + path, flags);
 };
 
 
@@ -61703,7 +61817,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setupAppFactory = void 0;
 const node_child_process_1 = __nccwpck_require__(17718);
 const querystring_1 = __nccwpck_require__(63477);
-const express_1 = __importDefault(__nccwpck_require__(85017));
+const express_1 = __importDefault(__nccwpck_require__(64511));
 const update_dotenv_1 = __importDefault(__nccwpck_require__(11799));
 const manifest_creation_js_1 = __nccwpck_require__(25362);
 const logging_middleware_js_1 = __nccwpck_require__(32417);
@@ -63170,7 +63284,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Server = exports.defaultWebhooksPath = void 0;
 const node_path_1 = __nccwpck_require__(49411);
-const express_1 = __importStar(__nccwpck_require__(85017));
+const express_1 = __importStar(__nccwpck_require__(64511));
 const webhooks_1 = __nccwpck_require__(57832);
 const logging_middleware_js_1 = __nccwpck_require__(32417);
 const webhook_proxy_js_1 = __nccwpck_require__(67363);
@@ -63861,7 +63975,7 @@ function trustSingle (subnet) {
 
 /***/ }),
 
-/***/ 95550:
+/***/ 72953:
 /***/ ((module) => {
 
 "use strict";
@@ -63892,15 +64006,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 62278:
+/***/ 39769:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var stringify = __nccwpck_require__(4202);
-var parse = __nccwpck_require__(24444);
-var formats = __nccwpck_require__(95550);
+var stringify = __nccwpck_require__(2667);
+var parse = __nccwpck_require__(90121);
+var formats = __nccwpck_require__(72953);
 
 module.exports = {
     formats: formats,
@@ -63911,33 +64025,37 @@ module.exports = {
 
 /***/ }),
 
-/***/ 24444:
+/***/ 90121:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var utils = __nccwpck_require__(71057);
+var utils = __nccwpck_require__(11955);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
 
 var defaults = {
     allowDots: false,
+    allowEmptyArrays: false,
     allowPrototypes: false,
     allowSparse: false,
     arrayLimit: 20,
     charset: 'utf-8',
     charsetSentinel: false,
     comma: false,
+    decodeDotInKeys: false,
     decoder: utils.decode,
     delimiter: '&',
     depth: 5,
+    duplicates: 'combine',
     ignoreQueryPrefix: false,
     interpretNumericEntities: false,
     parameterLimit: 1000,
     parseArrays: true,
     plainObjects: false,
+    strictDepth: false,
     strictNullHandling: false
 };
 
@@ -63966,8 +64084,10 @@ var isoSentinel = 'utf8=%26%2310003%3B'; // encodeURIComponent('&#10003;')
 var charsetSentinel = 'utf8=%E2%9C%93'; // encodeURIComponent('✓')
 
 var parseValues = function parseQueryStringValues(str, options) {
-    var obj = {};
+    var obj = { __proto__: null };
+
     var cleanStr = options.ignoreQueryPrefix ? str.replace(/^\?/, '') : str;
+    cleanStr = cleanStr.replace(/%5B/gi, '[').replace(/%5D/gi, ']');
     var limit = options.parameterLimit === Infinity ? undefined : options.parameterLimit;
     var parts = cleanStr.split(options.delimiter, limit);
     var skipIndex = -1; // Keep track of where the utf8 sentinel was found
@@ -64019,9 +64139,10 @@ var parseValues = function parseQueryStringValues(str, options) {
             val = isArray(val) ? [val] : val;
         }
 
-        if (has.call(obj, key)) {
+        var existing = has.call(obj, key);
+        if (existing && options.duplicates === 'combine') {
             obj[key] = utils.combine(obj[key], val);
-        } else {
+        } else if (!existing || options.duplicates === 'last') {
             obj[key] = val;
         }
     }
@@ -64037,24 +64158,27 @@ var parseObject = function (chain, val, options, valuesParsed) {
         var root = chain[i];
 
         if (root === '[]' && options.parseArrays) {
-            obj = [].concat(leaf);
+            obj = options.allowEmptyArrays && (leaf === '' || (options.strictNullHandling && leaf === null))
+                ? []
+                : [].concat(leaf);
         } else {
             obj = options.plainObjects ? Object.create(null) : {};
             var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
-            var index = parseInt(cleanRoot, 10);
-            if (!options.parseArrays && cleanRoot === '') {
+            var decodedRoot = options.decodeDotInKeys ? cleanRoot.replace(/%2E/g, '.') : cleanRoot;
+            var index = parseInt(decodedRoot, 10);
+            if (!options.parseArrays && decodedRoot === '') {
                 obj = { 0: leaf };
             } else if (
                 !isNaN(index)
-                && root !== cleanRoot
-                && String(index) === cleanRoot
+                && root !== decodedRoot
+                && String(index) === decodedRoot
                 && index >= 0
                 && (options.parseArrays && index <= options.arrayLimit)
             ) {
                 obj = [];
                 obj[index] = leaf;
-            } else if (cleanRoot !== '__proto__') {
-                obj[cleanRoot] = leaf;
+            } else if (decodedRoot !== '__proto__') {
+                obj[decodedRoot] = leaf;
             }
         }
 
@@ -64109,9 +64233,12 @@ var parseKeys = function parseQueryStringKeys(givenKey, val, options, valuesPars
         keys.push(segment[1]);
     }
 
-    // If there's a remainder, just add whatever is left
+    // If there's a remainder, check strictDepth option for throw, else just add whatever is left
 
     if (segment) {
+        if (options.strictDepth === true) {
+            throw new RangeError('Input depth exceeded depth option of ' + options.depth + ' and strictDepth is true');
+        }
         keys.push('[' + key.slice(segment.index) + ']');
     }
 
@@ -64123,7 +64250,15 @@ var normalizeParseOptions = function normalizeParseOptions(opts) {
         return defaults;
     }
 
-    if (opts.decoder !== null && opts.decoder !== undefined && typeof opts.decoder !== 'function') {
+    if (typeof opts.allowEmptyArrays !== 'undefined' && typeof opts.allowEmptyArrays !== 'boolean') {
+        throw new TypeError('`allowEmptyArrays` option can only be `true` or `false`, when provided');
+    }
+
+    if (typeof opts.decodeDotInKeys !== 'undefined' && typeof opts.decodeDotInKeys !== 'boolean') {
+        throw new TypeError('`decodeDotInKeys` option can only be `true` or `false`, when provided');
+    }
+
+    if (opts.decoder !== null && typeof opts.decoder !== 'undefined' && typeof opts.decoder !== 'function') {
         throw new TypeError('Decoder has to be a function.');
     }
 
@@ -64132,23 +64267,35 @@ var normalizeParseOptions = function normalizeParseOptions(opts) {
     }
     var charset = typeof opts.charset === 'undefined' ? defaults.charset : opts.charset;
 
+    var duplicates = typeof opts.duplicates === 'undefined' ? defaults.duplicates : opts.duplicates;
+
+    if (duplicates !== 'combine' && duplicates !== 'first' && duplicates !== 'last') {
+        throw new TypeError('The duplicates option must be either combine, first, or last');
+    }
+
+    var allowDots = typeof opts.allowDots === 'undefined' ? opts.decodeDotInKeys === true ? true : defaults.allowDots : !!opts.allowDots;
+
     return {
-        allowDots: typeof opts.allowDots === 'undefined' ? defaults.allowDots : !!opts.allowDots,
+        allowDots: allowDots,
+        allowEmptyArrays: typeof opts.allowEmptyArrays === 'boolean' ? !!opts.allowEmptyArrays : defaults.allowEmptyArrays,
         allowPrototypes: typeof opts.allowPrototypes === 'boolean' ? opts.allowPrototypes : defaults.allowPrototypes,
         allowSparse: typeof opts.allowSparse === 'boolean' ? opts.allowSparse : defaults.allowSparse,
         arrayLimit: typeof opts.arrayLimit === 'number' ? opts.arrayLimit : defaults.arrayLimit,
         charset: charset,
         charsetSentinel: typeof opts.charsetSentinel === 'boolean' ? opts.charsetSentinel : defaults.charsetSentinel,
         comma: typeof opts.comma === 'boolean' ? opts.comma : defaults.comma,
+        decodeDotInKeys: typeof opts.decodeDotInKeys === 'boolean' ? opts.decodeDotInKeys : defaults.decodeDotInKeys,
         decoder: typeof opts.decoder === 'function' ? opts.decoder : defaults.decoder,
         delimiter: typeof opts.delimiter === 'string' || utils.isRegExp(opts.delimiter) ? opts.delimiter : defaults.delimiter,
         // eslint-disable-next-line no-implicit-coercion, no-extra-parens
         depth: (typeof opts.depth === 'number' || opts.depth === false) ? +opts.depth : defaults.depth,
+        duplicates: duplicates,
         ignoreQueryPrefix: opts.ignoreQueryPrefix === true,
         interpretNumericEntities: typeof opts.interpretNumericEntities === 'boolean' ? opts.interpretNumericEntities : defaults.interpretNumericEntities,
         parameterLimit: typeof opts.parameterLimit === 'number' ? opts.parameterLimit : defaults.parameterLimit,
         parseArrays: opts.parseArrays !== false,
         plainObjects: typeof opts.plainObjects === 'boolean' ? opts.plainObjects : defaults.plainObjects,
+        strictDepth: typeof opts.strictDepth === 'boolean' ? !!opts.strictDepth : defaults.strictDepth,
         strictNullHandling: typeof opts.strictNullHandling === 'boolean' ? opts.strictNullHandling : defaults.strictNullHandling
     };
 };
@@ -64182,15 +64329,15 @@ module.exports = function (str, opts) {
 
 /***/ }),
 
-/***/ 4202:
+/***/ 2667:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 var getSideChannel = __nccwpck_require__(44791);
-var utils = __nccwpck_require__(71057);
-var formats = __nccwpck_require__(95550);
+var utils = __nccwpck_require__(11955);
+var formats = __nccwpck_require__(72953);
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
@@ -64207,7 +64354,6 @@ var arrayPrefixGenerators = {
 };
 
 var isArray = Array.isArray;
-var split = String.prototype.split;
 var push = Array.prototype.push;
 var pushToArray = function (arr, valueOrArray) {
     push.apply(arr, isArray(valueOrArray) ? valueOrArray : [valueOrArray]);
@@ -64219,10 +64365,13 @@ var defaultFormat = formats['default'];
 var defaults = {
     addQueryPrefix: false,
     allowDots: false,
+    allowEmptyArrays: false,
+    arrayFormat: 'indices',
     charset: 'utf-8',
     charsetSentinel: false,
     delimiter: '&',
     encode: true,
+    encodeDotInKeys: false,
     encoder: utils.encode,
     encodeValuesOnly: false,
     format: defaultFormat,
@@ -64251,8 +64400,10 @@ var stringify = function stringify(
     prefix,
     generateArrayPrefix,
     commaRoundTrip,
+    allowEmptyArrays,
     strictNullHandling,
     skipNulls,
+    encodeDotInKeys,
     encoder,
     filter,
     sort,
@@ -64309,14 +64460,6 @@ var stringify = function stringify(
     if (isNonNullishPrimitive(obj) || utils.isBuffer(obj)) {
         if (encoder) {
             var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder, charset, 'key', format);
-            if (generateArrayPrefix === 'comma' && encodeValuesOnly) {
-                var valuesArray = split.call(String(obj), ',');
-                var valuesJoined = '';
-                for (var i = 0; i < valuesArray.length; ++i) {
-                    valuesJoined += (i === 0 ? '' : ',') + formatter(encoder(valuesArray[i], defaults.encoder, charset, 'value', format));
-                }
-                return [formatter(keyValue) + (commaRoundTrip && isArray(obj) && valuesArray.length === 1 ? '[]' : '') + '=' + valuesJoined];
-            }
             return [formatter(keyValue) + '=' + formatter(encoder(obj, defaults.encoder, charset, 'value', format))];
         }
         return [formatter(prefix) + '=' + formatter(String(obj))];
@@ -64331,6 +64474,9 @@ var stringify = function stringify(
     var objKeys;
     if (generateArrayPrefix === 'comma' && isArray(obj)) {
         // we need to join elements in
+        if (encodeValuesOnly && encoder) {
+            obj = utils.maybeMap(obj, encoder);
+        }
         objKeys = [{ value: obj.length > 0 ? obj.join(',') || null : void undefined }];
     } else if (isArray(filter)) {
         objKeys = filter;
@@ -64339,7 +64485,13 @@ var stringify = function stringify(
         objKeys = sort ? keys.sort(sort) : keys;
     }
 
-    var adjustedPrefix = commaRoundTrip && isArray(obj) && obj.length === 1 ? prefix + '[]' : prefix;
+    var encodedPrefix = encodeDotInKeys ? prefix.replace(/\./g, '%2E') : prefix;
+
+    var adjustedPrefix = commaRoundTrip && isArray(obj) && obj.length === 1 ? encodedPrefix + '[]' : encodedPrefix;
+
+    if (allowEmptyArrays && isArray(obj) && obj.length === 0) {
+        return adjustedPrefix + '[]';
+    }
 
     for (var j = 0; j < objKeys.length; ++j) {
         var key = objKeys[j];
@@ -64349,9 +64501,10 @@ var stringify = function stringify(
             continue;
         }
 
+        var encodedKey = allowDots && encodeDotInKeys ? key.replace(/\./g, '%2E') : key;
         var keyPrefix = isArray(obj)
-            ? typeof generateArrayPrefix === 'function' ? generateArrayPrefix(adjustedPrefix, key) : adjustedPrefix
-            : adjustedPrefix + (allowDots ? '.' + key : '[' + key + ']');
+            ? typeof generateArrayPrefix === 'function' ? generateArrayPrefix(adjustedPrefix, encodedKey) : adjustedPrefix
+            : adjustedPrefix + (allowDots ? '.' + encodedKey : '[' + encodedKey + ']');
 
         sideChannel.set(object, step);
         var valueSideChannel = getSideChannel();
@@ -64361,9 +64514,11 @@ var stringify = function stringify(
             keyPrefix,
             generateArrayPrefix,
             commaRoundTrip,
+            allowEmptyArrays,
             strictNullHandling,
             skipNulls,
-            encoder,
+            encodeDotInKeys,
+            generateArrayPrefix === 'comma' && encodeValuesOnly && isArray(obj) ? null : encoder,
             filter,
             sort,
             allowDots,
@@ -64382,6 +64537,14 @@ var stringify = function stringify(
 var normalizeStringifyOptions = function normalizeStringifyOptions(opts) {
     if (!opts) {
         return defaults;
+    }
+
+    if (typeof opts.allowEmptyArrays !== 'undefined' && typeof opts.allowEmptyArrays !== 'boolean') {
+        throw new TypeError('`allowEmptyArrays` option can only be `true` or `false`, when provided');
+    }
+
+    if (typeof opts.encodeDotInKeys !== 'undefined' && typeof opts.encodeDotInKeys !== 'boolean') {
+        throw new TypeError('`encodeDotInKeys` option can only be `true` or `false`, when provided');
     }
 
     if (opts.encoder !== null && typeof opts.encoder !== 'undefined' && typeof opts.encoder !== 'function') {
@@ -64407,13 +64570,32 @@ var normalizeStringifyOptions = function normalizeStringifyOptions(opts) {
         filter = opts.filter;
     }
 
+    var arrayFormat;
+    if (opts.arrayFormat in arrayPrefixGenerators) {
+        arrayFormat = opts.arrayFormat;
+    } else if ('indices' in opts) {
+        arrayFormat = opts.indices ? 'indices' : 'repeat';
+    } else {
+        arrayFormat = defaults.arrayFormat;
+    }
+
+    if ('commaRoundTrip' in opts && typeof opts.commaRoundTrip !== 'boolean') {
+        throw new TypeError('`commaRoundTrip` must be a boolean, or absent');
+    }
+
+    var allowDots = typeof opts.allowDots === 'undefined' ? opts.encodeDotInKeys === true ? true : defaults.allowDots : !!opts.allowDots;
+
     return {
         addQueryPrefix: typeof opts.addQueryPrefix === 'boolean' ? opts.addQueryPrefix : defaults.addQueryPrefix,
-        allowDots: typeof opts.allowDots === 'undefined' ? defaults.allowDots : !!opts.allowDots,
+        allowDots: allowDots,
+        allowEmptyArrays: typeof opts.allowEmptyArrays === 'boolean' ? !!opts.allowEmptyArrays : defaults.allowEmptyArrays,
+        arrayFormat: arrayFormat,
         charset: charset,
         charsetSentinel: typeof opts.charsetSentinel === 'boolean' ? opts.charsetSentinel : defaults.charsetSentinel,
+        commaRoundTrip: opts.commaRoundTrip,
         delimiter: typeof opts.delimiter === 'undefined' ? defaults.delimiter : opts.delimiter,
         encode: typeof opts.encode === 'boolean' ? opts.encode : defaults.encode,
+        encodeDotInKeys: typeof opts.encodeDotInKeys === 'boolean' ? opts.encodeDotInKeys : defaults.encodeDotInKeys,
         encoder: typeof opts.encoder === 'function' ? opts.encoder : defaults.encoder,
         encodeValuesOnly: typeof opts.encodeValuesOnly === 'boolean' ? opts.encodeValuesOnly : defaults.encodeValuesOnly,
         filter: filter,
@@ -64447,20 +64629,8 @@ module.exports = function (object, opts) {
         return '';
     }
 
-    var arrayFormat;
-    if (opts && opts.arrayFormat in arrayPrefixGenerators) {
-        arrayFormat = opts.arrayFormat;
-    } else if (opts && 'indices' in opts) {
-        arrayFormat = opts.indices ? 'indices' : 'repeat';
-    } else {
-        arrayFormat = 'indices';
-    }
-
-    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
-    if (opts && 'commaRoundTrip' in opts && typeof opts.commaRoundTrip !== 'boolean') {
-        throw new TypeError('`commaRoundTrip` must be a boolean, or absent');
-    }
-    var commaRoundTrip = generateArrayPrefix === 'comma' && opts && opts.commaRoundTrip;
+    var generateArrayPrefix = arrayPrefixGenerators[options.arrayFormat];
+    var commaRoundTrip = generateArrayPrefix === 'comma' && options.commaRoundTrip;
 
     if (!objKeys) {
         objKeys = Object.keys(obj);
@@ -64482,8 +64652,10 @@ module.exports = function (object, opts) {
             key,
             generateArrayPrefix,
             commaRoundTrip,
+            options.allowEmptyArrays,
             options.strictNullHandling,
             options.skipNulls,
+            options.encodeDotInKeys,
             options.encode ? options.encoder : null,
             options.filter,
             options.sort,
@@ -64516,13 +64688,13 @@ module.exports = function (object, opts) {
 
 /***/ }),
 
-/***/ 71057:
+/***/ 11955:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var formats = __nccwpck_require__(95550);
+var formats = __nccwpck_require__(72953);
 
 var has = Object.prototype.hasOwnProperty;
 var isArray = Array.isArray;
@@ -64644,6 +64816,10 @@ var decode = function (str, decoder, charset) {
     }
 };
 
+var limit = 1024;
+
+/* eslint operator-linebreak: [2, "before"] */
+
 var encode = function encode(str, defaultEncoder, charset, kind, format) {
     // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
     // It has been adapted here for stricter adherence to RFC 3986
@@ -64665,45 +64841,54 @@ var encode = function encode(str, defaultEncoder, charset, kind, format) {
     }
 
     var out = '';
-    for (var i = 0; i < string.length; ++i) {
-        var c = string.charCodeAt(i);
+    for (var j = 0; j < string.length; j += limit) {
+        var segment = string.length >= limit ? string.slice(j, j + limit) : string;
+        var arr = [];
 
-        if (
-            c === 0x2D // -
-            || c === 0x2E // .
-            || c === 0x5F // _
-            || c === 0x7E // ~
-            || (c >= 0x30 && c <= 0x39) // 0-9
-            || (c >= 0x41 && c <= 0x5A) // a-z
-            || (c >= 0x61 && c <= 0x7A) // A-Z
-            || (format === formats.RFC1738 && (c === 0x28 || c === 0x29)) // ( )
-        ) {
-            out += string.charAt(i);
-            continue;
+        for (var i = 0; i < segment.length; ++i) {
+            var c = segment.charCodeAt(i);
+            if (
+                c === 0x2D // -
+                || c === 0x2E // .
+                || c === 0x5F // _
+                || c === 0x7E // ~
+                || (c >= 0x30 && c <= 0x39) // 0-9
+                || (c >= 0x41 && c <= 0x5A) // a-z
+                || (c >= 0x61 && c <= 0x7A) // A-Z
+                || (format === formats.RFC1738 && (c === 0x28 || c === 0x29)) // ( )
+            ) {
+                arr[arr.length] = segment.charAt(i);
+                continue;
+            }
+
+            if (c < 0x80) {
+                arr[arr.length] = hexTable[c];
+                continue;
+            }
+
+            if (c < 0x800) {
+                arr[arr.length] = hexTable[0xC0 | (c >> 6)]
+                    + hexTable[0x80 | (c & 0x3F)];
+                continue;
+            }
+
+            if (c < 0xD800 || c >= 0xE000) {
+                arr[arr.length] = hexTable[0xE0 | (c >> 12)]
+                    + hexTable[0x80 | ((c >> 6) & 0x3F)]
+                    + hexTable[0x80 | (c & 0x3F)];
+                continue;
+            }
+
+            i += 1;
+            c = 0x10000 + (((c & 0x3FF) << 10) | (segment.charCodeAt(i) & 0x3FF));
+
+            arr[arr.length] = hexTable[0xF0 | (c >> 18)]
+                + hexTable[0x80 | ((c >> 12) & 0x3F)]
+                + hexTable[0x80 | ((c >> 6) & 0x3F)]
+                + hexTable[0x80 | (c & 0x3F)];
         }
 
-        if (c < 0x80) {
-            out = out + hexTable[c];
-            continue;
-        }
-
-        if (c < 0x800) {
-            out = out + (hexTable[0xC0 | (c >> 6)] + hexTable[0x80 | (c & 0x3F)]);
-            continue;
-        }
-
-        if (c < 0xD800 || c >= 0xE000) {
-            out = out + (hexTable[0xE0 | (c >> 12)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]);
-            continue;
-        }
-
-        i += 1;
-        c = 0x10000 + (((c & 0x3FF) << 10) | (string.charCodeAt(i) & 0x3FF));
-        /* eslint operator-linebreak: [2, "before"] */
-        out += hexTable[0xF0 | (c >> 18)]
-            + hexTable[0x80 | ((c >> 12) & 0x3F)]
-            + hexTable[0x80 | ((c >> 6) & 0x3F)]
-            + hexTable[0x80 | (c & 0x3F)];
+        out += arr.join('');
     }
 
     return out;
@@ -72698,7 +72883,7 @@ module.exports = validRange
 
 /***/ }),
 
-/***/ 91775:
+/***/ 93417:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -73186,8 +73371,7 @@ SendStream.prototype.redirect = function redirect (path) {
   }
 
   var loc = encodeUrl(collapseLeadingSlashes(this.path + '/'))
-  var doc = createHtmlDocument('Redirecting', 'Redirecting to <a href="' + escapeHtml(loc) + '">' +
-    escapeHtml(loc) + '</a>')
+  var doc = createHtmlDocument('Redirecting', 'Redirecting to ' + escapeHtml(loc))
 
   // redirect
   res.statusCode = 301
@@ -73849,7 +74033,7 @@ function setHeaders (res, headers) {
 
 /***/ }),
 
-/***/ 40352:
+/***/ 11514:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -73868,11 +74052,11 @@ function setHeaders (res, headers) {
  * @private
  */
 
-var encodeUrl = __nccwpck_require__(53297)
+var encodeUrl = __nccwpck_require__(56705)
 var escapeHtml = __nccwpck_require__(42768)
 var parseUrl = __nccwpck_require__(63926)
 var resolve = (__nccwpck_require__(71017).resolve)
-var send = __nccwpck_require__(91775)
+var send = __nccwpck_require__(93417)
 var url = __nccwpck_require__(57310)
 
 /**
@@ -74050,8 +74234,7 @@ function createRedirectDirectoryListener () {
 
     // reformat the URL
     var loc = encodeUrl(url.format(originalUrl))
-    var doc = createHtmlDocument('Redirecting', 'Redirecting to <a href="' + escapeHtml(loc) + '">' +
-      escapeHtml(loc) + '</a>')
+    var doc = createHtmlDocument('Redirecting', 'Redirecting to ' + escapeHtml(loc))
 
     // send redirect response
     res.statusCode = 301
