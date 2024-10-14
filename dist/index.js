@@ -27485,7 +27485,7 @@ function tryDecode(str, decode) {
 
 /***/ }),
 
-/***/ 1995:
+/***/ 22975:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -27514,14 +27514,66 @@ exports.serialize = serialize;
 var __toString = Object.prototype.toString
 
 /**
- * RegExp to match field-content in RFC 7230 sec 3.2
+ * RegExp to match cookie-name in RFC 6265 sec 4.1.1
+ * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
+ * which has been replaced by the token definition in RFC 7230 appendix B.
  *
- * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
- * field-vchar   = VCHAR / obs-text
- * obs-text      = %x80-FF
+ * cookie-name       = token
+ * token             = 1*tchar
+ * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
+ *                     "*" / "+" / "-" / "." / "^" / "_" /
+ *                     "`" / "|" / "~" / DIGIT / ALPHA
  */
 
-var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+var cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
+/**
+ * RegExp to match cookie-value in RFC 6265 sec 4.1.1
+ *
+ * cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
+ * cookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E
+ *                     ; US-ASCII characters excluding CTLs,
+ *                     ; whitespace DQUOTE, comma, semicolon,
+ *                     ; and backslash
+ */
+
+var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
+
+/**
+ * RegExp to match domain-value in RFC 6265 sec 4.1.1
+ *
+ * domain-value      = <subdomain>
+ *                     ; defined in [RFC1034], Section 3.5, as
+ *                     ; enhanced by [RFC1123], Section 2.1
+ * <subdomain>       = <label> | <subdomain> "." <label>
+ * <label>           = <let-dig> [ [ <ldh-str> ] <let-dig> ]
+ *                     Labels must be 63 characters or less.
+ *                     'let-dig' not 'letter' in the first char, per RFC1123
+ * <ldh-str>         = <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+ * <let-dig-hyp>     = <let-dig> | "-"
+ * <let-dig>         = <letter> | <digit>
+ * <letter>          = any one of the 52 alphabetic characters A through Z in
+ *                     upper case and a through z in lower case
+ * <digit>           = any one of the ten digits 0 through 9
+ *
+ * Keep support for leading dot: https://github.com/jshttp/cookie/issues/173
+ *
+ * > (Note that a leading %x2E ("."), if present, is ignored even though that
+ * character is not permitted, but a trailing %x2E ("."), if present, will
+ * cause the user agent to ignore the attribute.)
+ */
+
+var domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+
+/**
+ * RegExp to match path-value in RFC 6265 sec 4.1.1
+ *
+ * path-value        = <any CHAR except CTLs or ";">
+ * CHAR              = %x01-7F
+ *                     ; defined in RFC 5234 appendix B.1
+ */
+
+var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
 /**
  * Parse a cookie header.
@@ -27530,107 +27582,128 @@ var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
  * The object has the various cookies as keys(names) => values
  *
  * @param {string} str
- * @param {object} [options]
+ * @param {object} [opt]
  * @return {object}
  * @public
  */
 
-function parse(str, options) {
+function parse(str, opt) {
   if (typeof str !== 'string') {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
-  var opt = options || {};
-  var dec = opt.decode || decode;
+  var obj = {};
+  var len = str.length;
+  // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
+  if (len < 2) return obj;
 
-  var index = 0
-  while (index < str.length) {
-    var eqIdx = str.indexOf('=', index)
+  var dec = (opt && opt.decode) || decode;
+  var index = 0;
+  var eqIdx = 0;
+  var endIdx = 0;
 
-    // no more cookie pairs
-    if (eqIdx === -1) {
-      break
-    }
+  do {
+    eqIdx = str.indexOf('=', index);
+    if (eqIdx === -1) break; // No more cookie pairs.
 
-    var endIdx = str.indexOf(';', index)
+    endIdx = str.indexOf(';', index);
 
     if (endIdx === -1) {
-      endIdx = str.length
-    } else if (endIdx < eqIdx) {
+      endIdx = len;
+    } else if (eqIdx > endIdx) {
       // backtrack on prior semicolon
-      index = str.lastIndexOf(';', eqIdx - 1) + 1
-      continue
+      index = str.lastIndexOf(';', eqIdx - 1) + 1;
+      continue;
     }
 
-    var key = str.slice(index, eqIdx).trim()
+    var keyStartIdx = startIndex(str, index, eqIdx);
+    var keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
+    var key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
-    if (undefined === obj[key]) {
-      var val = str.slice(eqIdx + 1, endIdx).trim()
+    if (!obj.hasOwnProperty(key)) {
+      var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
+      var valEndIdx = endIndex(str, endIdx, valStartIdx);
 
-      // quoted values
-      if (val.charCodeAt(0) === 0x22) {
-        val = val.slice(1, -1)
+      if (str.charCodeAt(valStartIdx) === 0x22 /* " */ && str.charCodeAt(valEndIdx - 1) === 0x22 /* " */) {
+        valStartIdx++;
+        valEndIdx--;
       }
 
+      var val = str.slice(valStartIdx, valEndIdx);
       obj[key] = tryDecode(val, dec);
     }
 
     index = endIdx + 1
-  }
+  } while (index < len);
 
   return obj;
+}
+
+function startIndex(str, index, max) {
+  do {
+    var code = str.charCodeAt(index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
+  } while (++index < max);
+  return max;
+}
+
+function endIndex(str, index, min) {
+  while (index > min) {
+    var code = str.charCodeAt(--index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
+  }
+  return min;
 }
 
 /**
  * Serialize data into a cookie header.
  *
- * Serialize the a name value pair into a cookie string suitable for
- * http headers. An optional options object specified cookie parameters.
+ * Serialize a name value pair into a cookie string suitable for
+ * http headers. An optional options object specifies cookie parameters.
  *
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
  *
  * @param {string} name
  * @param {string} val
- * @param {object} [options]
+ * @param {object} [opt]
  * @return {string}
  * @public
  */
 
-function serialize(name, val, options) {
-  var opt = options || {};
-  var enc = opt.encode || encode;
+function serialize(name, val, opt) {
+  var enc = (opt && opt.encode) || encodeURIComponent;
 
   if (typeof enc !== 'function') {
     throw new TypeError('option encode is invalid');
   }
 
-  if (!fieldContentRegExp.test(name)) {
+  if (!cookieNameRegExp.test(name)) {
     throw new TypeError('argument name is invalid');
   }
 
   var value = enc(val);
 
-  if (value && !fieldContentRegExp.test(value)) {
+  if (!cookieValueRegExp.test(value)) {
     throw new TypeError('argument val is invalid');
   }
 
   var str = name + '=' + value;
+  if (!opt) return str;
 
   if (null != opt.maxAge) {
-    var maxAge = opt.maxAge - 0;
+    var maxAge = Math.floor(opt.maxAge);
 
-    if (isNaN(maxAge) || !isFinite(maxAge)) {
+    if (!isFinite(maxAge)) {
       throw new TypeError('option maxAge is invalid')
     }
 
-    str += '; Max-Age=' + Math.floor(maxAge);
+    str += '; Max-Age=' + maxAge;
   }
 
   if (opt.domain) {
-    if (!fieldContentRegExp.test(opt.domain)) {
+    if (!domainValueRegExp.test(opt.domain)) {
       throw new TypeError('option domain is invalid');
     }
 
@@ -27638,7 +27711,7 @@ function serialize(name, val, options) {
   }
 
   if (opt.path) {
-    if (!fieldContentRegExp.test(opt.path)) {
+    if (!pathValueRegExp.test(opt.path)) {
       throw new TypeError('option path is invalid');
     }
 
@@ -27669,8 +27742,7 @@ function serialize(name, val, options) {
 
   if (opt.priority) {
     var priority = typeof opt.priority === 'string'
-      ? opt.priority.toLowerCase()
-      : opt.priority
+      ? opt.priority.toLowerCase() : opt.priority;
 
     switch (priority) {
       case 'low':
@@ -27726,17 +27798,6 @@ function decode (str) {
 }
 
 /**
- * URL-encode value.
- *
- * @param {string} val
- * @returns {string}
- */
-
-function encode (val) {
-  return encodeURIComponent(val)
-}
-
-/**
  * Determine if value is a Date.
  *
  * @param {*} val
@@ -27744,8 +27805,7 @@ function encode (val) {
  */
 
 function isDate (val) {
-  return __toString.call(val) === '[object Date]' ||
-    val instanceof Date
+  return __toString.call(val) === '[object Date]';
 }
 
 /**
@@ -32093,7 +32153,7 @@ function stattag (stat) {
 
 /***/ }),
 
-/***/ 68216:
+/***/ 10121:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32107,12 +32167,12 @@ function stattag (stat) {
 
 
 
-module.exports = __nccwpck_require__(34912);
+module.exports = __nccwpck_require__(76657);
 
 
 /***/ }),
 
-/***/ 84890:
+/***/ 65095:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32132,16 +32192,16 @@ module.exports = __nccwpck_require__(34912);
  */
 
 var finalhandler = __nccwpck_require__(1136);
-var Router = __nccwpck_require__(98888);
+var Router = __nccwpck_require__(85055);
 var methods = __nccwpck_require__(84283);
-var middleware = __nccwpck_require__(1039);
-var query = __nccwpck_require__(56985);
+var middleware = __nccwpck_require__(95986);
+var query = __nccwpck_require__(90030);
 var debug = __nccwpck_require__(66515)('express:application');
-var View = __nccwpck_require__(23243);
+var View = __nccwpck_require__(53800);
 var http = __nccwpck_require__(58611);
-var compileETag = (__nccwpck_require__(6813).compileETag);
-var compileQueryParser = (__nccwpck_require__(6813).compileQueryParser);
-var compileTrust = (__nccwpck_require__(6813).compileTrust);
+var compileETag = (__nccwpck_require__(21596).compileETag);
+var compileQueryParser = (__nccwpck_require__(21596).compileQueryParser);
+var compileTrust = (__nccwpck_require__(21596).compileTrust);
 var deprecate = __nccwpck_require__(77267)('express');
 var flatten = __nccwpck_require__(35698);
 var merge = __nccwpck_require__(31657);
@@ -32781,7 +32841,7 @@ function tryRender(view, options, callback) {
 
 /***/ }),
 
-/***/ 34912:
+/***/ 76657:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32802,11 +32862,11 @@ function tryRender(view, options, callback) {
 var bodyParser = __nccwpck_require__(40129)
 var EventEmitter = (__nccwpck_require__(24434).EventEmitter);
 var mixin = __nccwpck_require__(60489);
-var proto = __nccwpck_require__(84890);
-var Route = __nccwpck_require__(79049);
-var Router = __nccwpck_require__(98888);
-var req = __nccwpck_require__(24825);
-var res = __nccwpck_require__(75453);
+var proto = __nccwpck_require__(65095);
+var Route = __nccwpck_require__(67178);
+var Router = __nccwpck_require__(85055);
+var req = __nccwpck_require__(83412);
+var res = __nccwpck_require__(73606);
 
 /**
  * Expose `createApplication()`.
@@ -32863,7 +32923,7 @@ exports.Router = Router;
  */
 
 exports.json = bodyParser.json
-exports.query = __nccwpck_require__(56985);
+exports.query = __nccwpck_require__(90030);
 exports.raw = bodyParser.raw
 exports["static"] = __nccwpck_require__(65687);
 exports.text = bodyParser.text
@@ -32905,7 +32965,7 @@ removedMiddlewares.forEach(function (name) {
 
 /***/ }),
 
-/***/ 1039:
+/***/ 95986:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -32956,7 +33016,7 @@ exports.init = function(app){
 
 /***/ }),
 
-/***/ 56985:
+/***/ 90030:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -33011,7 +33071,7 @@ module.exports = function query(options) {
 
 /***/ }),
 
-/***/ 24825:
+/***/ 83412:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -33544,7 +33604,7 @@ function defineGetter(obj, name, getter) {
 
 /***/ }),
 
-/***/ 75453:
+/***/ 73606:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -33569,16 +33629,16 @@ var deprecate = __nccwpck_require__(77267)('express');
 var encodeUrl = __nccwpck_require__(31449);
 var escapeHtml = __nccwpck_require__(3385);
 var http = __nccwpck_require__(58611);
-var isAbsolute = (__nccwpck_require__(6813).isAbsolute);
+var isAbsolute = (__nccwpck_require__(21596).isAbsolute);
 var onFinished = __nccwpck_require__(96922);
 var path = __nccwpck_require__(16928);
 var statuses = __nccwpck_require__(53748)
 var merge = __nccwpck_require__(31657);
 var sign = (__nccwpck_require__(93628).sign);
-var normalizeType = (__nccwpck_require__(6813).normalizeType);
-var normalizeTypes = (__nccwpck_require__(6813).normalizeTypes);
-var setCharset = (__nccwpck_require__(6813).setCharset);
-var cookie = __nccwpck_require__(1995);
+var normalizeType = (__nccwpck_require__(21596).normalizeType);
+var normalizeTypes = (__nccwpck_require__(21596).normalizeTypes);
+var setCharset = (__nccwpck_require__(21596).setCharset);
+var cookie = __nccwpck_require__(22975);
 var send = __nccwpck_require__(15549);
 var extname = path.extname;
 var mime = send.mime;
@@ -34731,7 +34791,7 @@ function stringify (value, replacer, spaces, escape) {
 
 /***/ }),
 
-/***/ 98888:
+/***/ 85055:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -34750,8 +34810,8 @@ function stringify (value, replacer, spaces, escape) {
  * @private
  */
 
-var Route = __nccwpck_require__(79049);
-var Layer = __nccwpck_require__(81825);
+var Route = __nccwpck_require__(67178);
+var Layer = __nccwpck_require__(38210);
 var methods = __nccwpck_require__(84283);
 var mixin = __nccwpck_require__(31657);
 var debug = __nccwpck_require__(66515)('express:router');
@@ -35412,7 +35472,7 @@ function wrap(old, fn) {
 
 /***/ }),
 
-/***/ 81825:
+/***/ 38210:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35601,7 +35661,7 @@ function decode_param(val) {
 
 /***/ }),
 
-/***/ 79049:
+/***/ 67178:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35622,7 +35682,7 @@ function decode_param(val) {
 
 var debug = __nccwpck_require__(66515)('express:router:route');
 var flatten = __nccwpck_require__(35698);
-var Layer = __nccwpck_require__(81825);
+var Layer = __nccwpck_require__(38210);
 var methods = __nccwpck_require__(84283);
 
 /**
@@ -35839,7 +35899,7 @@ methods.forEach(function(method){
 
 /***/ }),
 
-/***/ 6813:
+/***/ 21596:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -36150,7 +36210,7 @@ function newObject() {
 
 /***/ }),
 
-/***/ 23243:
+/***/ 53800:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -63170,7 +63230,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setupAppFactory = void 0;
 const node_child_process_1 = __nccwpck_require__(31421);
 const querystring_1 = __nccwpck_require__(83480);
-const express_1 = __importDefault(__nccwpck_require__(68216));
+const express_1 = __importDefault(__nccwpck_require__(10121));
 const update_dotenv_1 = __importDefault(__nccwpck_require__(58583));
 const manifest_creation_js_1 = __nccwpck_require__(80043);
 const logging_middleware_js_1 = __nccwpck_require__(70158);
@@ -64637,7 +64697,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Server = exports.defaultWebhooksPath = void 0;
 const node_path_1 = __nccwpck_require__(76760);
-const express_1 = __importStar(__nccwpck_require__(68216));
+const express_1 = __importStar(__nccwpck_require__(10121));
 const webhooks_1 = __nccwpck_require__(79064);
 const logging_middleware_js_1 = __nccwpck_require__(70158);
 const webhook_proxy_js_1 = __nccwpck_require__(95348);
