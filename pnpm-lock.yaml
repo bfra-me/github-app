@@ -19,8 +19,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(semantic-release@24.2.0)
       '@vercel/ncc':
-        specifier: 0.38.2
-        version: 0.38.2
+        specifier: 0.38.3
+        version: 0.38.3
       conventional-changelog-conventionalcommits:
         specifier: 8.0.0
         version: 8.0.0
@@ -380,8 +380,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@vercel/ncc@0.38.2':
-    resolution: {integrity: sha512-3yel3jaxUg9pHBv4+KeC9qlbdZPug+UMtUOlhvpDYCMSgcNSrS2Hv1LoqMsOV7hf2lYscx+BESfJOIla1WsmMQ==}
+  '@vercel/ncc@0.38.3':
+    resolution: {integrity: sha512-rnK6hJBS6mwc+Bkab+PGPs9OiS0i/3kdTO+CkI8V0/VrW3vmz7O2Pxjw/owOlmo6PKEIxRSeZKv/kuL9itnpYA==}
     hasBin: true
 
   '@wolfy1339/lru-cache@11.0.2-patch.1':
@@ -2515,7 +2515,7 @@ snapshots:
       '@types/node': 22.9.0
       '@types/send': 0.17.4
 
-  '@vercel/ncc@0.38.2': {}
+  '@vercel/ncc@0.38.3': {}
 
   '@wolfy1339/lru-cache@11.0.2-patch.1': {}
 
