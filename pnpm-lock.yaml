@@ -12,8 +12,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       probot:
-        specifier: 13.3.10
-        version: 13.3.10
+        specifier: 13.4.0
+        version: 13.4.0
     devDependencies:
       '@semantic-release/git':
         specifier: 10.0.1
@@ -1583,8 +1583,8 @@ packages:
     resolution: {integrity: sha512-o1piW0n3tgKIKCwk2vpM/vOV13zjJzvP37Ioze54YlTHE06m4tjEbzg9WsKkvTuyYln2DHjo5pY4qrZGI0otpw==}
     engines: {node: '>=18'}
 
-  probot@13.3.10:
-    resolution: {integrity: sha512-C9XyVTHbNqEpoVTYBY8V4k3P1mM0JYwXoHV008i34cexQyWtvggX+IU2eJ2ZvIPXqLiig7H626gOxNgXlUUkjg==}
+  probot@13.4.0:
+    resolution: {integrity: sha512-W+6KHMXVZtOo0bPw1RwyQS74AqExY87t675w42l/FZSZAu8gF7vAyFw7fIaBfwbHwdvzW0ysSg2xo391oy6PJw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2312,7 +2312,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 8.21.0
-      probot: 13.3.10
+      probot: 13.4.0
       through2: 4.0.2
     transitivePeerDependencies:
       - supports-color
@@ -3631,7 +3631,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@13.3.10:
+  probot@13.4.0:
     dependencies:
       '@octokit/core': 5.2.0
       '@octokit/plugin-enterprise-compatibility': 4.1.0
