@@ -1,6 +1,13 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: ['github>bfra-me/renovate-config#v3.5.2', 'github>bfra-me/renovate-config:internal.json5#v3.5.2'],
+  extends: [
+    'github>bfra-me/renovate-config#v3',
+    'github>bfra-me/renovate-config:internal.json5#v3',
+    'github>sanity-io/renovate-config:semantic-commit-type',
+    'security:openssf-scorecard',
+    'npm:unpublishSafe',
+  ],
+  automergeType: 'pr',
   packageRules: [
     {
       matchPackageNames: ['@types/node', 'node', 'nodejs/node'],
@@ -10,15 +17,26 @@
       matchPackageNames: ['npm'],
       constraintsFiltering: 'strict',
     },
+    {
+      matchDepNames: ['python'],
+      allowedVersions: '<=3.12',
+    },
+    {
+      description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
+      matchDatasources: ['github-tags'],
+      matchPackageNames: ['@bfra.me/**', 'bfra-me/**'],
+      updatePinnedDependencies: false,
+    },
+    {
+      description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
+      matchDatasources: ['github-tags'],
+      matchPackageNames: ['@bfra.me/**', 'bfra-me/**'],
+      matchUpdateTypes: ['major'],
+      updatePinnedDependencies: true,
+    },
   ],
   postUpgradeTasks: {
-    commands: [
-      'npm install -g pnpm@9.14.2',
-      'pnpm install --frozen-lockfile --ignore-scripts',
-      'git checkout -- .npmrc',
-      'pnpm run build',
-      'pnpm run format',
-    ],
+    commands: ['pnpm bootstrap', 'pnpm fix', 'pnpm build', 'pnpm format'],
     executionMode: 'branch',
   },
 }

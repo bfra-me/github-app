@@ -1,35 +1,58 @@
 {
   "name": "github-app",
   "version": "0.0.0-development",
-  "description": "GitHub App template repository",
   "private": true,
-  "packageManager": "pnpm@9.14.2",
-  "author": "Marcus R. Brown <contact@marcusrbrown.com>",
-  "license": "MIT",
+  "description": "GitHub App template repository",
   "repository": "github:bfra-me/github-app",
-  "engines": {
-    "node": "^16.20.0 || >=18"
-  },
+  "license": "MIT",
+  "author": "Marcus R. Brown <contact@marcusrbrown.com>",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "node test/app.test.js || true",
-    "build": "ncc build index.js -o dist",
+    "bootstrap": "pnpm install --ignore-scripts --prefer-frozen-lockfile --prefer-offline --loglevel error",
+    "build": "tsup",
     "check-format": "prettier --check .",
-    "format": "prettier --write ."
+    "fix": "pnpm run lint --fix",
+    "format": "prettier --write .",
+    "lint": "eslint --flag unstable_ts_config .",
+    "test": "node test/app.test.js || true"
   },
+  "prettier": "@bfra.me/prettier-config/120-proof",
   "dependencies": {
     "@probot/adapter-github-actions": "4.0.0",
     "probot": "13.4.0"
   },
   "devDependencies": {
+    "@bfra.me/eslint-config": "0.4.7",
+    "@bfra.me/prettier-config": "0.9.4",
     "@semantic-release/git": "10.0.1",
-    "@vercel/ncc": "0.38.3",
+    "@swc/core": "1.9.3",
+    "@vitest/eslint-plugin": "1.1.10",
     "conventional-changelog-conventionalcommits": "8.0.0",
+    "eslint-plugin-no-only-tests": "3.3.0",
+    "jiti": "2.4.0",
     "nock": "13.5.6",
     "prettier": "3.3.3",
     "semantic-release": "24.2.0",
+    "tsup": "8.3.5",
     "uvu": "0.5.6"
   },
-  "jest": {
-    "testEnvironment": "node"
+  "packageManager": "pnpm@9.14.2",
+  "engines": {
+    "node": "^16.20.0 || >=18"
+  },
+  "tsup": {
+    "banner": {
+      "js": "import {createRequire} from 'node:module';const require=createRequire(import.meta.url);"
+    },
+    "clean": true,
+    "entry": [
+      "index.js"
+    ],
+    "format": "esm",
+    "noExternal": [
+      "@probot/adapter-github-actions",
+      "probot"
+    ]
   }
 }
