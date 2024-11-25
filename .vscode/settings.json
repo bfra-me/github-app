@@ -1,6 +1,10 @@
 {
     "cSpell.words": ["bfra", "conventionalcommits", "probot"],
 
+    "eslint.options": {
+        "flags": ["unstable_ts_config"]
+    },
+
     "search.exclude": {
         "**/dist": true,
         "**/node_modules": true

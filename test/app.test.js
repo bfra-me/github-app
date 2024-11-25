@@ -1,18 +1,18 @@
-const {suite} = require('uvu');
-const assert = require('uvu/assert');
+import {suite} from 'uvu'
+import * as assert from 'uvu/assert'
 
-const nock = require('nock');
-nock.disableNetConnect();
+import nock from 'nock'
+import {Probot, ProbotOctokit} from 'probot'
+
+import app from '../app.js'
+nock.disableNetConnect()
 
 // disable Probot logs
-process.env.LOG_LEVEL = 'fatal';
-const {Probot, ProbotOctokit} = require('probot');
-
-const app = require('../app');
+process.env.LOG_LEVEL = 'fatal'
 
 /** @type {import('probot').Probot */
-let probot;
-const test = suite('app');
+let probot
+const test = suite('app')
 test.before.each(() => {
   probot = new Probot({
     id: 1,
@@ -21,19 +21,19 @@ test.before.each(() => {
       throttle: {enabled: false},
       retry: {enabled: false},
     }),
-  });
-  probot.load(app);
-});
+  })
+  probot.load(app)
+})
 
 test('receives issues.opened event', async function () {
   const mock = nock('https://api.github.com')
     // create new check run
-    .post('/repos/bfra-me/github-app/issues/1/comments', (requestBody) => {
-      assert.equal(requestBody, {body: 'Hello, World!'});
+    .post('/repos/bfra-me/github-app/issues/1/comments', requestBody => {
+      assert.equal(requestBody, {body: 'Hello, World!'})
 
-      return true;
+      return true
     })
-    .reply(201, {});
+    .reply(201, {})
 
   await probot.receive({
     name: 'issues',
@@ -50,9 +50,9 @@ test('receives issues.opened event', async function () {
         number: 1,
       },
     },
-  });
+  })
 
-  assert.equal(mock.activeMocks(), []);
-});
+  assert.equal(mock.activeMocks(), [])
+})
 
-test.run();
+test.run()

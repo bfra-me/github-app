@@ -1,9 +1,14 @@
 ---
 name: GitHub App
+
 'on':
   issues:
     types:
       - opened
+
+permissions:
+  contents: read
+
 jobs:
   issuesOpened:
     name: Issues opened
