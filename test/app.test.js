@@ -1,8 +1,8 @@
-import {suite} from 'uvu'
-import * as assert from 'uvu/assert'
-
 import nock from 'nock'
 import {Probot, ProbotOctokit} from 'probot'
+
+import {suite} from 'uvu'
+import * as assert from 'uvu/assert'
 
 import app from '../app.js'
 nock.disableNetConnect()
