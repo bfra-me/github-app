@@ -27,7 +27,7 @@
     "@bfra.me/prettier-config": "0.13.3",
     "@semantic-release/git": "10.0.1",
     "@swc/core": "1.9.3",
-    "@vitest/eslint-plugin": "1.1.13",
+    "@vitest/eslint-plugin": "1.1.14",
     "conventional-changelog-conventionalcommits": "8.0.0",
     "eslint-plugin-no-only-tests": "3.3.0",
     "jiti": "2.4.1",
