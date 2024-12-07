@@ -20,7 +20,7 @@ importers:
         version: 0.7.1(@typescript-eslint/eslint-plugin@8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.7.2))(eslint@9.16.0(jiti@2.4.1))(typescript@5.7.2))(@vitest/eslint-plugin@1.1.14(@typescript-eslint/utils@8.16.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.7.2))(eslint@9.16.0(jiti@2.4.1))(typescript@5.7.2))(eslint-plugin-no-only-tests@3.3.0)(eslint@9.16.0(jiti@2.4.1))(typescript@5.7.2)
       '@bfra.me/prettier-config':
         specifier: 0.13.3
-        version: 0.13.3(prettier@3.4.1)
+        version: 0.13.3(prettier@3.4.2)
       '@semantic-release/git':
         specifier: 10.0.1
         version: 10.0.1(semantic-release@24.2.0(typescript@5.7.2))
@@ -43,8 +43,8 @@ importers:
         specifier: 13.5.6
         version: 13.5.6
       prettier:
-        specifier: 3.4.1
-        version: 3.4.1
+        specifier: 3.4.2
+        version: 3.4.2
       semantic-release:
         specifier: 24.2.0
         version: 24.2.0(typescript@5.7.2)
@@ -2525,8 +2525,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.4.1:
-    resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
+  prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -3206,14 +3206,14 @@ snapshots:
       - supports-color
       - typescript
 
-  '@bfra.me/prettier-config@0.13.3(prettier@3.4.1)':
+  '@bfra.me/prettier-config@0.13.3(prettier@3.4.2)':
     dependencies:
-      '@bfra.me/prettier-plugins': 0.5.5(prettier@3.4.1)
-      prettier: 3.4.1
+      '@bfra.me/prettier-plugins': 0.5.5(prettier@3.4.2)
+      prettier: 3.4.2
 
-  '@bfra.me/prettier-plugins@0.5.5(prettier@3.4.1)':
+  '@bfra.me/prettier-plugins@0.5.5(prettier@3.4.2)':
     dependencies:
-      prettier: 3.4.1
+      prettier: 3.4.2
       sort-package-json: 2.12.0
 
   '@colors/colors@1.5.0':
@@ -5562,7 +5562,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.4.1: {}
+  prettier@3.4.2: {}
 
   pretty-ms@9.2.0:
     dependencies:
