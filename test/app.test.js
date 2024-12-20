@@ -1,3 +1,4 @@
+import process from 'node:process'
 import nock from 'nock'
 import {Probot, ProbotOctokit} from 'probot'
 
