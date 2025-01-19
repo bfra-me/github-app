@@ -11,7 +11,7 @@
   packageRules: [
     {
       matchPackageNames: ['@types/node', 'node', 'nodejs/node'],
-      allowedVersions: '>=18',
+      allowedVersions: '>=20',
     },
     {
       matchPackageNames: ['npm'],
@@ -19,7 +19,7 @@
     },
     {
       matchDepNames: ['python'],
-      allowedVersions: '<=3.12',
+      allowedVersions: '<=3.13',
     },
     {
       description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
