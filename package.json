@@ -20,7 +20,7 @@
   "prettier": "@bfra.me/prettier-config/120-proof",
   "dependencies": {
     "@probot/adapter-github-actions": "4.0.0",
-    "probot": "13.4.2"
+    "probot": "13.4.3"
   },
   "devDependencies": {
     "@bfra.me/eslint-config": "0.16.4",
