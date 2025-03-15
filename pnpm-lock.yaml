@@ -12,8 +12,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       probot:
-        specifier: 13.4.3
-        version: 13.4.3
+        specifier: 13.4.4
+        version: 13.4.4
     devDependencies:
       '@bfra.me/eslint-config':
         specifier: 0.16.5
@@ -623,17 +623,17 @@ packages:
     peerDependencies:
       '@octokit/core': '>=6'
 
-  '@octokit/plugin-paginate-rest@9.2.2':
-    resolution: {integrity: sha512-u3KYkGF7GcZnSD/3UP0S7K5XUFT2FkOQdcfXZGZQPGv3lm4F2Xbf71lvjldr8c1H3nNbF+33cLEkWYbokGWqiQ==}
+  '@octokit/plugin-paginate-rest@11.4.4-cjs.2':
+    resolution: {integrity: sha512-2dK6z8fhs8lla5PaOTgqfCGBxgAv/le+EhPs27KklPhm1bKObpu6lXzwfUEQ16ajXzqNrKMujsFyo9K2eaoISw==}
     engines: {node: '>= 18'}
     peerDependencies:
       '@octokit/core': '5'
 
-  '@octokit/plugin-rest-endpoint-methods@10.4.1':
-    resolution: {integrity: sha512-xV1b+ceKV9KytQe3zCVqjg+8GTGfDYwaT1ATU5isiUyVtlVAO3HNdzpS4sr4GBx4hxQ46s7ITtZrAsxG22+rVg==}
+  '@octokit/plugin-rest-endpoint-methods@13.3.2-cjs.1':
+    resolution: {integrity: sha512-VUjIjOOvF2oELQmiFpWA1aOPdawpyaCUqcEBc/UOUnj3Xp6DJGrJ1+bjUIIDzdHjnFNO6q57ODMfdEZnoBkCwQ==}
     engines: {node: '>= 18'}
     peerDependencies:
-      '@octokit/core': '5'
+      '@octokit/core': ^5
 
   '@octokit/plugin-retry@6.1.0':
     resolution: {integrity: sha512-WrO3bvq4E1Xh1r2mT9w6SDFg01gFmP81nIG77+p/MqW1JeXXgL++6umim3t6x0Zj5pZm3rXAN+0HEjmmdhIRig==}
@@ -3415,8 +3415,8 @@ packages:
     resolution: {integrity: sha512-4yf0QO/sllf/1zbZWYnvWw3NxCQwLXKzIj0G849LSufP15BXKM0rbD2Z3wVnkMfjdn/CB0Dpp444gYAACdsplg==}
     engines: {node: '>=18'}
 
-  probot@13.4.3:
-    resolution: {integrity: sha512-Vr14ET5JwXQcXDsztLFIGzQHzU2Wl7ZWg8B6dhvBRRd1wFwnBGfJISm7NqZRpM1vQCn6QDNSRKGo6RYnloWz/A==}
+  probot@13.4.4:
+    resolution: {integrity: sha512-2f/Vqho0rQpTppx4mfuyB1k2xAuAd/qpJaEp7gLjZ6rBr804KiCey6tcGzSBYt/S6O5umdbqQLpfVyh2RsdpyQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4703,15 +4703,15 @@ snapshots:
       '@octokit/core': 6.1.4
       '@octokit/types': 13.8.0
 
-  '@octokit/plugin-paginate-rest@9.2.2(@octokit/core@5.2.0)':
+  '@octokit/plugin-paginate-rest@11.4.4-cjs.2(@octokit/core@5.2.0)':
     dependencies:
       '@octokit/core': 5.2.0
-      '@octokit/types': 12.6.0
+      '@octokit/types': 13.8.0
 
-  '@octokit/plugin-rest-endpoint-methods@10.4.1(@octokit/core@5.2.0)':
+  '@octokit/plugin-rest-endpoint-methods@13.3.2-cjs.1(@octokit/core@5.2.0)':
     dependencies:
       '@octokit/core': 5.2.0
-      '@octokit/types': 12.6.0
+      '@octokit/types': 13.8.0
 
   '@octokit/plugin-retry@6.1.0(@octokit/core@5.2.0)':
     dependencies:
@@ -5105,7 +5105,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 8.21.0
-      probot: 13.4.3
+      probot: 13.4.4
       through2: 4.0.2
     transitivePeerDependencies:
       - supports-color
@@ -7846,12 +7846,12 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@13.4.3:
+  probot@13.4.4:
     dependencies:
       '@octokit/core': 5.2.0
       '@octokit/plugin-enterprise-compatibility': 4.1.0
-      '@octokit/plugin-paginate-rest': 9.2.2(@octokit/core@5.2.0)
-      '@octokit/plugin-rest-endpoint-methods': 10.4.1(@octokit/core@5.2.0)
+      '@octokit/plugin-paginate-rest': 11.4.4-cjs.2(@octokit/core@5.2.0)
+      '@octokit/plugin-rest-endpoint-methods': 13.3.2-cjs.1(@octokit/core@5.2.0)
       '@octokit/plugin-retry': 6.1.0(@octokit/core@5.2.0)
       '@octokit/plugin-throttling': 8.2.0(@octokit/core@5.2.0)
       '@octokit/request': 8.4.1
