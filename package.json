@@ -10,12 +10,15 @@
   "main": "dist/index.js",
   "scripts": {
     "bootstrap": "pnpm install --prefer-offline --loglevel error",
-    "build": "tsup",
+    "build": "NODE_ENV=production tsup",
     "check-format": "prettier --check .",
     "fix": "pnpm run lint --fix",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "test": "node test/app.test.js || true"
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "prettier": "@bfra.me/prettier-config/120-proof",
   "dependencies": {
@@ -25,8 +28,11 @@
   "devDependencies": {
     "@bfra.me/eslint-config": "0.16.5",
     "@bfra.me/prettier-config": "0.15.2",
+    "@octokit/webhooks": "^12.1.2",
+    "@octokit/webhooks-types": "^7.4.0",
     "@semantic-release/git": "10.0.1",
     "@swc/core": "1.11.4",
+    "@types/node": "^20.11.30",
     "@vitest/eslint-plugin": "1.1.36",
     "conventional-changelog-conventionalcommits": "8.0.0",
     "eslint-config-prettier": "10.0.2",
@@ -37,24 +43,11 @@
     "prettier": "3.5.2",
     "semantic-release": "24.2.3",
     "tsup": "8.4.0",
-    "uvu": "0.5.6"
+    "typescript": "^5.4.3",
+    "vitest": "^1.2.2"
   },
   "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": "^16.20.0 || >=18"
-  },
-  "tsup": {
-    "banner": {
-      "js": "import {createRequire} from 'node:module';const require=createRequire(import.meta.url);"
-    },
-    "clean": true,
-    "entry": [
-      "index.js"
-    ],
-    "format": "esm",
-    "noExternal": [
-      "@probot/adapter-github-actions",
-      "probot"
-    ]
   }
 }
