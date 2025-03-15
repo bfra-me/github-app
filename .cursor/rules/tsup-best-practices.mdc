@@ -1,0 +1,10 @@
+---
+description: Best practices for using tsup as a bundler
+globs: package.json, tsup.config.ts, **/*.{ts,js}
+alwaysApply: false
+---
+
+- Use the `clean` option to remove old build artifacts
+- Specify `entry` points for better control over bundling
+- Utilize `format` option to target specific module systems (e.g., ESM)
+- Leverage `noExternal` for including dependencies in the bundle
