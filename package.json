@@ -39,7 +39,7 @@
     "tsup": "8.4.0",
     "uvu": "0.5.6"
   },
-  "packageManager": "pnpm@9.15.6",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": "^16.20.0 || >=18"
   },
