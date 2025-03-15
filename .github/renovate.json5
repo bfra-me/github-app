@@ -8,6 +8,7 @@
     'npm:unpublishSafe',
   ],
   automergeType: 'pr',
+  ignorePresets: ['mergeConfidence:age-confidence-badges', 'mergeConfidence:all-badges'],
   packageRules: [
     {
       matchPackageNames: ['@types/node', 'node', 'nodejs/node'],
@@ -20,6 +21,24 @@
     {
       matchDepNames: ['python'],
       allowedVersions: '<=3.13',
+    },
+    {
+      description: 'Schedule the update frequency of SWC packages to once every two weeks.',
+      matchPackageNames: ['@swc/**'],
+      schedule: ['every 2 weeks on Sunday at 00:00'],
+    },
+    {
+      description: 'Show Merge Confidence, OpenSSF Scorecard, and GitHub Search badges for Renovate dependencies.',
+      matchDatasources: ['go', 'maven', 'npm', 'nuget', 'packagist', 'pypi', 'rubygems'],
+      matchUpdateTypes: ['pin', 'patch', 'minor', 'major'],
+      prBodyColumns: ['Package', 'Change', 'Age', 'Confidence', 'GitHub'],
+    },
+    {
+      description: 'Show Merge Confidence, OpenSSF Scorecard, and GitHub Search badges for Renovate dependencies.',
+      matchDatasources: ['go', 'maven', 'npm', 'nuget', 'packagist', 'pypi', 'rubygems'],
+      matchUpdateTypes: ['pin', 'patch', 'minor', 'major'],
+      matchSourceUrls: ['https://github.com/**'],
+      prBodyColumns: ['Package', 'Change', 'Age', 'Confidence', 'OpenSSF', 'GitHub'],
     },
     {
       description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
@@ -38,5 +57,8 @@
   postUpgradeTasks: {
     commands: ['pnpm bootstrap', 'pnpm fix', 'pnpm build', 'pnpm format'],
     executionMode: 'branch',
+  },
+  prBodyDefinitions: {
+    GitHub: '[![GitHub Code Search for "{{{depName}}}"](https://img.shields.io/badge/code_search-{{{replace "-" "--" depName}}}-2671E5.svg?logo=github)](https://github.com/search?q=repo:{{{encodeURIComponent repository}}}+NOT+path:/package(-lock)%3F%5C.json%7Cyarn%5C.lock%7Cpnpm-lock%5C.yaml/+{{{encodeURIComponent depName}}})',
   },
 }
