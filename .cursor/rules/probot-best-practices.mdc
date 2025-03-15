@@ -1,0 +1,10 @@
+---
+description: Best practices for using Probot in GitHub Apps
+globs: **/*.{ts,js}
+alwaysApply: false
+---
+
+- Use `context` object to access GitHub API and event data
+- Implement error handling and logging for robustness
+- Use `probot.settings` for configuration management
+- Keep webhooks secure with proper validation

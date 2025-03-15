@@ -1,0 +1,10 @@
+---
+description: Best practices for using Semantic Release for automated versioning
+globs: **/semantic-release.config.js, **/.releaserc.yaml
+alwaysApply: false
+---
+
+- Configure commit message formats to trigger correct release types
+- Use plugins like `@semantic-release/git` for automated changelog updates
+- Set up CI/CD pipelines to run Semantic Release on successful builds
+- Regularly review and update release notes for accuracy

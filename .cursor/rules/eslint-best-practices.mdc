@@ -1,0 +1,11 @@
+---
+description: Best practices for using ESLint in your project
+globs: **/*.{ts,js}
+alwaysApply: false
+---
+
+- Use `@bfra.me/eslint-config` to leverage shared config presets
+- Extend recommended configurations for consistency
+- Use plugins like `@vitest/eslint-plugin` for test-specific rules
+- Implement custom rules for project-specific coding standards
+- Regularly run `eslint --fix` to automatically correct minor issues
