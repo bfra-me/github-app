@@ -1,0 +1,14 @@
+# Auto-Approve Bot Configuration
+botUsernames:
+  - bfra-me[bot]
+  - dependabot[bot]
+  - renovate[bot]
+approvalTriggers:
+  - '**Automerge**: Enabled'
+requirePassingChecks: true
+requiredChecks:
+  - ci
+  - release
+excludeLabels:
+  - do-not-merge
+  - wip
