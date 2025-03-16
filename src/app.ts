@@ -1,4 +1,4 @@
-import * as nodeProcess from 'node:process'
+import process from 'node:process'
 import {type CheckRunEvent, type PullRequestEvent, type PullRequestReviewEvent} from '@octokit/webhooks-types'
 import {type Context, type Probot} from 'probot'
 import {loadConfig} from './config.js'
@@ -162,7 +162,7 @@ async function hasExcludedLabels(context: Context<'pull_request' | 'pull_request
 function isOurBot(context: Context, login: string): boolean {
   try {
     // Get the current bot login - using environment variable instead of payload
-    const appLogin = nodeProcess.env.APP_LOGIN
+    const appLogin = process.env.APP_LOGIN
     return appLogin ? login === appLogin : false
   } catch (error) {
     context.log.error({error}, 'Error checking if user is our bot')
