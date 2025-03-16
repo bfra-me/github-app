@@ -1,9 +1,18 @@
 ---
-name: GitHub App as a GitHub Action
-description: 'GitHub App as a GitHub Action [Template]'
+name: Auto-Approve Bot
+description: Automatically approve pull requests from configured bots with specific triggers
 branding:
-  icon: gift
-  color: orange
+  icon: check-circle
+  color: green
+inputs:
+  github-token:
+    description: GitHub token with permissions to approve pull requests
+    required: true
+    default: ${{ github.token }}
+  config-path:
+    description: Path to the configuration file
+    required: false
+    default: .github/auto-approve.yml
 runs:
   using: node20
   main: dist/index.js
