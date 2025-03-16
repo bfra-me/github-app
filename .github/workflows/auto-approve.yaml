@@ -17,10 +17,10 @@ permissions:
 
 jobs:
   auto-approve:
+    name: Auto-approve
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'human-approver' }} # Avoid approval loops
     steps:
       - id: get-workflow-access-token
         name: Get Workflow Access Token
