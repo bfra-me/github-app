@@ -36,7 +36,7 @@ jobs:
           token: ${{ steps.get-workflow-access-token.outputs.token }}
 
       - name: Auto-approve PR
-        uses: .
+        uses: ./
         with:
           github-token: ${{ steps.get-workflow-access-token.outputs.token }}
           config-path: .github/auto-approve.yml
