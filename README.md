@@ -99,6 +99,7 @@ You can deploy this app as a GitHub App on platforms like Vercel:
    - Pull request review
    - Check run
 4. Deploy to a serverless platform like Vercel:
+
    ```bash
    # Install Vercel CLI
    npm i -g vercel
