@@ -45,7 +45,7 @@
     "semantic-release": "24.2.3",
     "tsup": "8.4.0",
     "typescript": "^5.4.3",
-    "vitest": "^1.2.2"
+    "vitest": "^3.0.0"
   },
   "packageManager": "pnpm@10.6.5",
   "engines": {
