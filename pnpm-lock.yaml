@@ -22,8 +22,8 @@ importers:
         specifier: 0.15.3
         version: 0.15.3(prettier@3.5.3)
       '@octokit/webhooks':
-        specifier: ^12.1.2
-        version: 12.3.1
+        specifier: ^13.0.0
+        version: 13.7.5
       '@octokit/webhooks-types':
         specifier: ^7.4.0
         version: 7.6.1
@@ -621,6 +621,9 @@ packages:
   '@octokit/openapi-types@24.2.0':
     resolution: {integrity: sha512-9sIH3nSUttelJSXUrmGzl7QUBFul0/mB8HRYl3fOlgHbIWG+WnYDXU3v/2zMtAvuzZ/ed00Ei6on975FhBfzrg==}
 
+  '@octokit/openapi-webhooks-types@10.3.0':
+    resolution: {integrity: sha512-Dog+FB4pvsfcGZ9CFyYwb7I6K4QkzCDuN0H3hh5Nr9mMQ4wbBceqUKyJNKN2A0SQ6j4UU3CYNuvfoX9mQlhLUQ==}
+
   '@octokit/plugin-enterprise-compatibility@4.1.0':
     resolution: {integrity: sha512-a8QehVu9Iy4k+m2XgG2rrF4m9vhlRIaefOMr0yJzgQCt4KpiTj5mZVrzSwagyOovkJdD0yDolQazBQZqPWTFSQ==}
     engines: {node: '>= 18'}
@@ -693,11 +696,19 @@ packages:
     resolution: {integrity: sha512-zoQyKw8h9STNPqtm28UGOYFE7O6D4Il8VJwhAtMHFt2C4L0VQT1qGKLeefUOqHNs1mNRYSadVv7x0z8U2yyeWQ==}
     engines: {node: '>= 18'}
 
+  '@octokit/webhooks-methods@5.1.1':
+    resolution: {integrity: sha512-NGlEHZDseJTCj8TMMFehzwa9g7On4KJMPVHDSrHxCQumL6uSQR8wIkP/qesv52fXqV1BPf4pTxwtS31ldAt9Xg==}
+    engines: {node: '>= 18'}
+
   '@octokit/webhooks-types@7.6.1':
     resolution: {integrity: sha512-S8u2cJzklBC0FgTwWVLaM8tMrDuDMVE4xiTK4EYXM9GntyvrdbSoxqDQa+Fh57CCNApyIpyeqPhhFEmHPfrXgw==}
 
   '@octokit/webhooks@12.3.1':
     resolution: {integrity: sha512-BVwtWE3rRXB9IugmQTfKspqjNa8q+ab73ddkV9k1Zok3XbuOxJUi4lTYk5zBZDhfWb/Y2H+RO9Iggm25gsqeow==}
+    engines: {node: '>= 18'}
+
+  '@octokit/webhooks@13.7.5':
+    resolution: {integrity: sha512-qmmu4cfKmm58RWyDPUDoI7ls9JWw88qbqPzEi+TDBaSirHQPsixxdPU4OjPDcnDnjee7JXv525yv4qNN3BRlyg==}
     engines: {node: '>= 18'}
 
   '@opentelemetry/api-logs@0.53.0':
@@ -4720,6 +4731,8 @@ snapshots:
 
   '@octokit/openapi-types@24.2.0': {}
 
+  '@octokit/openapi-webhooks-types@10.3.0': {}
+
   '@octokit/plugin-enterprise-compatibility@4.1.0':
     dependencies:
       '@octokit/request-error': 5.1.1
@@ -4801,6 +4814,8 @@ snapshots:
 
   '@octokit/webhooks-methods@4.1.0': {}
 
+  '@octokit/webhooks-methods@5.1.1': {}
+
   '@octokit/webhooks-types@7.6.1': {}
 
   '@octokit/webhooks@12.3.1':
@@ -4809,6 +4824,12 @@ snapshots:
       '@octokit/webhooks-methods': 4.1.0
       '@octokit/webhooks-types': 7.6.1
       aggregate-error: 3.1.0
+
+  '@octokit/webhooks@13.7.5':
+    dependencies:
+      '@octokit/openapi-webhooks-types': 10.3.0
+      '@octokit/request-error': 6.1.7
+      '@octokit/webhooks-methods': 5.1.1
 
   '@opentelemetry/api-logs@0.53.0':
     dependencies:
