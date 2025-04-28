@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@probot/adapter-github-actions':
-        specifier: 4.0.1
-        version: 4.0.1
+        specifier: 4.0.3
+        version: 4.0.3
       probot:
         specifier: 13.4.5
         version: 13.4.5
@@ -839,8 +839,8 @@ packages:
   '@prisma/instrumentation@5.22.0':
     resolution: {integrity: sha512-LxccF392NN37ISGxIurUljZSh1YWnphO34V5a0+T7FVQG2u9bhAXRTJpgmQ3483woVhkraQZFF7cbRrpbw/F4Q==}
 
-  '@probot/adapter-github-actions@4.0.1':
-    resolution: {integrity: sha512-aFqmxgjXCAHcbVe3auaOazzZnw9fEhNFsP4/lPVU1s7FWzQbSEgTtnjiT6KOD5By0kLr+MwoCjaIcjoOrhbCMA==}
+  '@probot/adapter-github-actions@4.0.3':
+    resolution: {integrity: sha512-kC4Ux65jqQePe/vLQwjq+dcDR7nCH2JGIEnCt2ld7IRGfSpL8mZSInPb/k0lzF5OCZZsyMz7zSCU9YwDvfMlEQ==}
 
   '@probot/get-private-key@1.1.2':
     resolution: {integrity: sha512-yVgyCdTyooGX6+czDLkJahEcwgBWZsKH9xbjvjDNVFjY3QtiI/tHRiB3zjgJCQMZehXxv2CFHZQSpWRXdr6CeQ==}
@@ -4967,7 +4967,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@probot/adapter-github-actions@4.0.1':
+  '@probot/adapter-github-actions@4.0.3':
     dependencies:
       '@actions/core': 1.11.1
       pino: 9.6.0
