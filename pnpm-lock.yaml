@@ -23,7 +23,7 @@ importers:
         version: 0.15.4(prettier@3.5.3)
       '@octokit/webhooks':
         specifier: ^13.0.0
-        version: 13.8.3
+        version: 13.9.0
       '@octokit/webhooks-types':
         specifier: ^7.4.0
         version: 7.6.1
@@ -583,8 +583,8 @@ packages:
     resolution: {integrity: sha512-BVwtWE3rRXB9IugmQTfKspqjNa8q+ab73ddkV9k1Zok3XbuOxJUi4lTYk5zBZDhfWb/Y2H+RO9Iggm25gsqeow==}
     engines: {node: '>= 18'}
 
-  '@octokit/webhooks@13.8.3':
-    resolution: {integrity: sha512-BAbh56HPe+OGrpl7PLrgTTnImep+fjrDiuFMl4D3tQOAQaqZxW0bTtsAcSmusBvw8WY7GYSjNV8vkvpAwazKgg==}
+  '@octokit/webhooks@13.9.0':
+    resolution: {integrity: sha512-5Kva+/Gi7c+39d0/0MM/v/5RCZuwqm75fUD+t7Es3Iz/adui54GnjfNmJpkkPkXGC+5IWnEvgqwY6gstK/JlUQ==}
     engines: {node: '>= 18'}
 
   '@open-draft/deferred-promise@2.2.0':
@@ -4676,7 +4676,7 @@ snapshots:
       '@octokit/webhooks-types': 7.6.1
       aggregate-error: 3.1.0
 
-  '@octokit/webhooks@13.8.3':
+  '@octokit/webhooks@13.9.0':
     dependencies:
       '@octokit/openapi-webhooks-types': 11.0.0
       '@octokit/request-error': 6.1.8
