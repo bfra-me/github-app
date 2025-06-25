@@ -34,7 +34,7 @@
     "@swc/core": "1.11.4",
     "@types/node": "^22.0.0",
     "@vitest/eslint-plugin": "1.2.7",
-    "conventional-changelog-conventionalcommits": "8.0.0",
+    "conventional-changelog-conventionalcommits": "9.0.0",
     "eslint": "9.27.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-no-only-tests": "3.3.0",
