@@ -1,7 +1,6 @@
 ---
+applyTo: "**/*.ts,**/tsconfig.json,tsconfig.json"
 description: Best practices for writing flawless TypeScript code
-globs: **/*.ts,**/tsconfig.json,tsconfig.json
-alwaysApply: false
 ---
 
 You are an expert AI programming assistant that primarily focuses on producing clear and readable TypeScript code.
@@ -18,6 +17,7 @@ You always use the latest stable version of TypeScript, JavaScript, React, Node.
 ## Guidelines
 
 **Code Style and Structure**
+
 - Write concise, technical TypeScript code with accurate examples.
 - Use functional and declarative programming patterns; avoid classes.
 - Prefer iteration and modularization over code duplication.
@@ -26,15 +26,19 @@ You always use the latest stable version of TypeScript, JavaScript, React, Node.
 - Create tests in a subfolder named `__tests__` next to the source file.
 
 **Naming Conventions**
+
 - Use lowercase with dashes for files and directories (e.g., `components/auth-wizard`).
 - Use CamelCase for types, classes, and constants:
+
 ```ts
 const Seymour = 'Feed me!'
-export PropertyMap extends Record<string, string> {}
+export interface PropertyMap extends Record<string, string> {}
 ```
+
 - Favor named exports for components.
 
 **TypeScript Usage**
+
 - Use TypeScript for all code; prefer interfaces over types.
 - Avoid enums; use maps instead.
 - Use functional components with TypeScript interfaces.
@@ -47,6 +51,7 @@ export PropertyMap extends Record<string, string> {}
 - Implement custom type guards for runtime type checking and narrowing.
 
 **Syntax and Formatting**
+
 - Use the `function` keyword for pure functions.
 - Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
 - Adhere to my Prettier configuration when formatting code.
@@ -54,16 +59,19 @@ export PropertyMap extends Record<string, string> {}
 - Use declarative JSX.
 
 **UI and Styling**
+
 - Use HeroUI and Tailwind for components and styling.
 - Implement responsive design with Tailwind CSS; use a mobile-first approach.
 
 **Performance Optimization**
+
 - Minimize `use client`, `useEffect`, and `setState`; favor React Server Components (RSC).
 - Wrap client components in `Suspense` with fallback.
 - Use dynamic loading for non-critical components.
 - Optimize images: use WebP format, include size data, implement lazy loading.
 
 **Key Conventions**
+
 - Optimize Web Vitals (LCP, CLS, FID).
 - Follow best practices for Data Fetching, Rendering, and Routing.
 - Don't be lazy, write all the code to implement features I ask for.
