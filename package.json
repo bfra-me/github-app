@@ -48,6 +48,11 @@
     "vitest": "^3.0.0"
   },
   "packageManager": "pnpm@10.12.1",
+  "pnpm": {
+    "overrides": {
+      "jiti": "<2.2.0"
+    }
+  },
   "engines": {
     "node": "^16.20.0 || >=18"
   }

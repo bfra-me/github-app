@@ -1,0 +1,303 @@
+---
+applyTo: "**/*.{js,ts,jsx,tsx}"
+description: This rule provides a comprehensive guide to best practices for developing Probot applications, covering code organization, performance, security, testing, and common pitfalls. Adhering to these guidelines ensures robust, maintainable, and secure GitHub Apps.
+---
+
+# Probot Comprehensive Best Practices
+
+This document outlines best practices for developing Probot applications. Following these guidelines helps ensure your GitHub Apps are robust, maintainable, secure, and performant.
+
+## 1. Code Organization and Structure
+
+### Directory Structure
+
+Adopt a clear and consistent directory structure to enhance maintainability and collaboration.
+
+```
+my-probot-app/
+├── .github/workflows/  # GitHub Actions workflows (CI/CD)
+├── .env              # Environment variables (APP_ID, PRIVATE_KEY, WEBHOOK_SECRET)
+├── src/              # Source code
+│   ├── index.ts        # Main entry point
+│   ├── app.ts          # Core application logic
+│   ├── handlers/       # Event handlers (e.g., issues.opened, pull_request.merged)
+│   │   ├── issues.ts
+│   │   ├── pull_request.ts
+│   │   └── ...
+│   ├── utils/          # Utility functions and shared logic
+│   │   ├── octokit.ts  # Octokit client configuration
+│   │   ├── logging.ts  # Custom logging
+│   │   └── ...
+│   ├── models/         # Data models (if applicable)
+│   │   ├── issue.ts
+│   │   └── ...
+│   ├── middleware/     # Custom middleware for Probot's HTTP server (if needed)
+│   │   └── ...
+├── test/             # Tests
+│   ├── index.test.ts   # Tests for the main application
+│   ├── handlers/       # Tests for event handlers
+│   │   ├── issues.test.ts
+│   │   ├── pull_request.test.ts
+│   │   └── ...
+│   └── utils/          # Tests for utility functions
+│       ├── octokit.test.ts
+│       └── ...
+├── package.json      # Project dependencies and scripts
+├── package-lock.json # Lock file for dependencies
+├── tsconfig.json     # TypeScript configuration
+├── README.md         # Project documentation
+```
+
+### File Naming Conventions
+
+- Use descriptive and consistent file names.
+- Prefer `camelCase` for JavaScript/TypeScript variables and functions.
+- Use `PascalCase` for class names and React components.
+- Suffix files with `.ts` for TypeScript and `.js` for JavaScript.
+- Use `.test.ts` or `.spec.ts` for test files.
+- Use `index.ts` or `index.js` for entry points.
+
+### Module Organization
+
+- Organize code into logical modules based on functionality.
+- Use ES modules (`import`/`export`) for modularity.
+- Keep modules small and focused.
+- Avoid circular dependencies.
+- Consider using a dependency injection framework if your app grows significantly.
+
+### Component Architecture
+
+- For complex Probot apps, consider a component-based architecture, especially if you're managing state or UI elements (though Probot apps are typically backend focused).
+- Break down the application into reusable components.
+- Use a clear interface for each component.
+- Employ a state management solution (e.g., Redux, Zustand) if necessary.
+
+### Code Splitting
+
+- While Probot apps often run server-side, consider code splitting if your app's bundle size becomes a concern. Dynamic imports can help load modules on demand.
+- Split event handlers into separate modules to reduce the initial load time.
+
+## 2. Common Patterns and Anti-patterns
+
+### Design Patterns
+
+- **Observer Pattern:** Probot's event handling mechanism itself is an example of the observer pattern.
+- **Strategy Pattern:** Use this to handle different types of events or actions based on configuration or context.
+- **Middleware Pattern:** Implement middleware for request processing, authentication, or logging.
+
+### Recommended Approaches
+
+- **Configuration:** Use environment variables for configuration (API keys, secrets, feature flags).
+- **Logging:** Implement comprehensive logging for debugging and monitoring.
+- **Error Handling:** Use `try...catch` blocks and error handling middleware.
+- **Asynchronous Operations:** Use `async/await` for asynchronous operations.
+- **Octokit:** Leverage the Octokit library for interacting with the GitHub API.
+
+### Anti-patterns
+
+- **Global State:** Avoid using global variables for storing application state. Use a dedicated state management solution instead.
+- **Tight Coupling:** Avoid tightly coupling modules together. Use interfaces and dependency injection to promote loose coupling.
+- **Ignoring Errors:** Never ignore errors. Always log them or handle them appropriately.
+- **Blocking Operations:** Avoid performing blocking operations in the main event loop. Use worker threads or queues for long-running tasks.
+- **Over-Complicating Event Handlers:** Keep event handlers focused and delegate complex logic to separate modules.
+
+### State Management
+
+- Most Probot apps are stateless, relying on the GitHub API for persistence.
+- If you need to manage state, consider:
+  - Using a database (e.g., MongoDB, PostgreSQL).
+  - Storing state in GitHub's own data structures (e.g., issue labels, commit statuses).
+  - Employing an in-memory cache for frequently accessed data.
+
+### Error Handling
+
+- Implement robust error handling using `try...catch` blocks.
+- Log errors with sufficient context for debugging.
+- Use error handling middleware to catch unhandled exceptions.
+- Consider using a service like Sentry for error tracking.
+- Handle rate limits gracefully using Octokit's rate limit API.
+
+## 3. Performance Considerations
+
+### Optimization Techniques
+
+- **Caching:** Cache frequently accessed data to reduce API calls.
+- **Throttling:** Implement throttling to prevent abuse and avoid rate limits.
+- **Efficient Queries:** Optimize GitHub API queries to minimize the amount of data transferred.
+- **Webhooks:** Use webhooks to react to events in real-time instead of polling the API.
+- **Concurrency:** Use concurrency (e.g., `Promise.all`) to perform multiple API calls in parallel.
+
+### Memory Management
+
+- Be mindful of memory usage, especially when processing large payloads.
+- Avoid creating unnecessary objects.
+- Use garbage collection effectively.
+- Monitor memory usage using tools like `node --inspect` or `heapdump`.
+
+### Rendering Optimization
+
+- Probot apps are typically backend focused and don't involve rendering complex UIs. This section may not be directly relevant.
+- If your Probot app generates HTML content (e.g., for commit statuses), optimize the rendering process.
+- Use caching to avoid re-rendering the same content multiple times.
+
+### Bundle Size Optimization
+
+- Use a bundler (e.g., Webpack, Parcel, esbuild) to optimize the bundle size.
+- Remove unused dependencies.
+- Minify and compress the code.
+- Use code splitting to load modules on demand.
+
+### Lazy Loading
+
+- Lazy load modules that are not immediately needed.
+- Use dynamic imports to load modules on demand.
+
+## 4. Security Best Practices
+
+### Common Vulnerabilities
+
+- **Cross-Site Scripting (XSS):** Prevent XSS by escaping user input.
+- **SQL Injection:** Prevent SQL injection by using parameterized queries.
+- **Command Injection:** Prevent command injection by avoiding the execution of arbitrary commands.
+- **Authentication Bypass:** Implement secure authentication and authorization mechanisms.
+- **Rate Limiting Issues:** Enforce rate limits to prevent abuse.
+
+### Input Validation
+
+- Validate all user input to prevent malicious data from entering the system.
+- Use a validation library (e.g., Joi, validator.js) to simplify the validation process.
+- Sanitize user input to remove potentially harmful characters.
+
+### Authentication and Authorization
+
+- Use environment variables to store sensitive information like API keys and secrets.
+- Implement authentication to verify the identity of users or applications.
+- Use JSON Web Tokens (JWT) for authentication.
+- Implement authorization to control access to resources.
+- Use GitHub's permissions model to grant access to specific repositories or organizations.
+
+### Data Protection
+
+- Encrypt sensitive data at rest and in transit.
+- Use HTTPS for all communication.
+- Store secrets securely using a secrets management system.
+- Regularly audit your code for security vulnerabilities.
+
+### Secure API Communication
+
+- Use HTTPS for all API communication.
+- Verify the authenticity of API responses.
+- Use API keys or access tokens for authentication.
+- Implement rate limiting to prevent abuse.
+
+## 5. Testing Approaches
+
+### Unit Testing
+
+- Write unit tests for individual components and functions.
+- Use a testing framework (e.g., Jest, Mocha, Jasmine).
+- Mock dependencies to isolate the unit under test.
+- Test edge cases and error conditions.
+- Aim for high code coverage.
+
+### Integration Testing
+
+- Write integration tests to verify the interaction between different components.
+- Test the integration with the GitHub API.
+- Use a testing environment that mimics the production environment.
+
+### End-to-End Testing
+
+- Write end-to-end tests to verify the overall functionality of the application.
+- Use a testing framework (e.g., Cypress, Puppeteer) to automate the tests.
+- Test the application from the user's perspective.
+
+### Test Organization
+
+- Organize tests into separate directories based on the component or module being tested.
+- Use descriptive test names.
+- Keep tests small and focused.
+- Run tests automatically on every commit.
+
+### Mocking and Stubbing
+
+- Use mocking and stubbing to isolate units of code during testing.
+- Mock the GitHub API to avoid making real API calls during testing.
+- Use a mocking library (e.g., Jest's `jest.fn()`, Sinon.js) to simplify the mocking process.
+
+## 6. Common Pitfalls and Gotchas
+
+### Frequent Mistakes
+
+- **Incorrectly Configuring Webhooks:** Ensure the webhook URL, secret, and events are correctly configured in the GitHub App settings.
+- **Ignoring Rate Limits:** Handle rate limit errors gracefully to avoid being blocked by the GitHub API.
+- **Not Handling Edge Cases:** Test your app thoroughly to identify and handle edge cases.
+- **Using Synchronous Operations:** Avoid synchronous operations that can block the main event loop.
+- **Leaking Secrets:** Never commit secrets to version control. Use environment variables instead.
+
+### Edge Cases
+
+- **Deleted Repositories:** Handle the case where a repository has been deleted.
+- **Renamed Branches:** Handle the case where a branch has been renamed.
+- **Forked Repositories:** Be aware of the differences between forked and non-forked repositories.
+- **GitHub API Errors:** Handle different types of GitHub API errors (e.g., authentication errors, resource not found errors).
+- **Installation Events:** Handle `installation` and `installation_repositories` events correctly to manage app installations and uninstalls.
+
+### Version-Specific Issues
+
+- Refer to the Probot release notes for any version-specific issues or breaking changes.
+- Keep your dependencies up to date.
+
+### Compatibility Concerns
+
+- Ensure compatibility between Probot and other technologies being used (e.g., Node.js, databases, testing frameworks).
+- Test your app with different versions of Node.js to ensure compatibility.
+
+### Debugging
+
+- Use logging to track the execution flow and identify errors.
+- Use a debugger to step through the code and inspect variables.
+- Use GitHub's webhook delivery logs to inspect webhook payloads and responses.
+- Use `smee.io` to proxy webhooks to your local development environment.
+- Enable verbose logging by setting the `LOG_LEVEL` environment variable to `trace`.
+
+## 7. Tooling and Environment
+
+### Recommended Tools
+
+- **Node.js:** Use a recent version of Node.js (v18 or later).
+- **npm/Yarn/pnpm:** Use a package manager to manage dependencies.
+- **TypeScript:** Use TypeScript for type safety and improved code organization.
+- **Editor:** Use a code editor like Visual Studio Code, Sublime Text, or Atom.
+- **Debugger:** Use a debugger like Node.js Inspector or Chrome DevTools.
+- **Testing Framework:** Use a testing framework like Jest, Mocha, or Jasmine.
+- **Linter:** Use a linter like ESLint to enforce code style and prevent errors.
+- **Formatter:** Use a formatter like Prettier to automatically format code.
+- **Bundler:** Use a bundler like Webpack, Parcel, or esbuild to optimize the bundle size.
+
+### Build Configuration
+
+- Use a build tool (e.g., npm scripts, Gulp, Grunt) to automate the build process.
+- Configure the build process to compile TypeScript code, run linters and formatters, and bundle the code.
+- Use environment variables to configure the build process.
+
+### Linting and Formatting
+
+- Use ESLint and Prettier to enforce consistent code style.
+- Configure ESLint and Prettier to automatically fix code style issues.
+- Integrate ESLint and Prettier with your code editor.
+
+### Deployment
+
+- Deploy your Probot app to a hosting platform like Heroku, AWS Lambda, Google Cloud Functions, or a virtual private server (VPS).
+- Configure the deployment process to automatically build and deploy the code.
+- Use environment variables to configure the deployment environment.
+- Monitor your app's performance and health using monitoring tools.
+
+### CI/CD Integration
+
+- Use a CI/CD platform (e.g., GitHub Actions, Travis CI, CircleCI) to automate the build, test, and deployment process.
+- Configure the CI/CD pipeline to run linters and formatters, run tests, and deploy the code to the hosting platform.
+- Use environment variables to configure the CI/CD pipeline.
+
+By adhering to these best practices, you can create robust, maintainable, and secure Probot applications that effectively automate and improve your GitHub workflows.
