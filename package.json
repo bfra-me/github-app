@@ -47,7 +47,7 @@
     "typescript": "^5.4.3",
     "vitest": "^3.0.0"
   },
-  "packageManager": "pnpm@10.12.2",
+  "packageManager": "pnpm@10.12.3",
   "pnpm": {
     "overrides": {
       "jiti": "<2.2.0"
