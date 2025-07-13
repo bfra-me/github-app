@@ -26,7 +26,7 @@ importers:
         version: 0.15.5(prettier@3.6.2)
       '@octokit/webhooks':
         specifier: ^14.0.0
-        version: 14.1.0
+        version: 14.1.1
       '@octokit/webhooks-types':
         specifier: ^7.4.0
         version: 7.6.1
@@ -585,12 +585,12 @@ packages:
   '@octokit/webhooks-types@7.6.1':
     resolution: {integrity: sha512-S8u2cJzklBC0FgTwWVLaM8tMrDuDMVE4xiTK4EYXM9GntyvrdbSoxqDQa+Fh57CCNApyIpyeqPhhFEmHPfrXgw==}
 
-  '@octokit/webhooks@12.3.1':
-    resolution: {integrity: sha512-BVwtWE3rRXB9IugmQTfKspqjNa8q+ab73ddkV9k1Zok3XbuOxJUi4lTYk5zBZDhfWb/Y2H+RO9Iggm25gsqeow==}
+  '@octokit/webhooks@12.3.2':
+    resolution: {integrity: sha512-exj1MzVXoP7xnAcAB3jZ97pTvVPkQF9y6GA/dvYC47HV7vLv+24XRS6b/v/XnyikpEuvMhugEXdGtAlU086WkQ==}
     engines: {node: '>= 18'}
 
-  '@octokit/webhooks@14.1.0':
-    resolution: {integrity: sha512-X6zFa01TR6yLvgTepABozuQRAs7sDIr+M+Msk6z9RVH77RW8Lu06Q4FcH1tXVpTXR13BBrmN1Wez7LDofj46UQ==}
+  '@octokit/webhooks@14.1.1':
+    resolution: {integrity: sha512-4kN/yPhcZEP+X7iMMuBTk+dD4ZGOpU57F7kHKrFlD2SSY/Sxh01t79oVn4npchLdPIXvLKrQw0uBXhmEaiZAdw==}
     engines: {node: '>= 20'}
 
   '@open-draft/deferred-promise@2.2.0':
@@ -4732,14 +4732,14 @@ snapshots:
 
   '@octokit/webhooks-types@7.6.1': {}
 
-  '@octokit/webhooks@12.3.1':
+  '@octokit/webhooks@12.3.2':
     dependencies:
       '@octokit/request-error': 5.1.1
       '@octokit/webhooks-methods': 4.1.0
       '@octokit/webhooks-types': 7.6.1
       aggregate-error: 3.1.0
 
-  '@octokit/webhooks@14.1.0':
+  '@octokit/webhooks@14.1.1':
     dependencies:
       '@octokit/openapi-webhooks-types': 12.0.3
       '@octokit/request-error': 7.0.0
@@ -7839,7 +7839,7 @@ snapshots:
       '@octokit/plugin-throttling': 8.2.0(@octokit/core@5.2.1)
       '@octokit/request': 8.4.1
       '@octokit/types': 12.6.0
-      '@octokit/webhooks': 12.3.1
+      '@octokit/webhooks': 12.3.2
       '@probot/get-private-key': 1.2.1
       '@probot/octokit-plugin-config': 2.0.1(@octokit/core@5.2.1)
       '@probot/pino': 3.0.0
