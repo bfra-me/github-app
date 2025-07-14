@@ -15,8 +15,8 @@ importers:
         specifier: 4.0.3
         version: 4.0.3
       probot:
-        specifier: 13.4.6
-        version: 13.4.6
+        specifier: 13.4.7
+        version: 13.4.7
     devDependencies:
       '@bfra.me/eslint-config':
         specifier: 0.24.0
@@ -3419,8 +3419,8 @@ packages:
     resolution: {integrity: sha512-4yf0QO/sllf/1zbZWYnvWw3NxCQwLXKzIj0G849LSufP15BXKM0rbD2Z3wVnkMfjdn/CB0Dpp444gYAACdsplg==}
     engines: {node: '>=18'}
 
-  probot@13.4.6:
-    resolution: {integrity: sha512-z51QWFSn4DX2a4DnHMJlF3ycGi2CXBFcn796aW/DtvFTd+bheQAwma34KPSKAeybAREaEd35mAocQm37x9OyoQ==}
+  probot@13.4.7:
+    resolution: {integrity: sha512-/NjxDJ/c/TXLeNs0TRpmYQ825sDQFc/BFJl2vgId2GX/rwS8HcD1dUWpMowvugEWcA6nCgMGJPNSFwKv5B4TZw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -5085,7 +5085,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 9.7.0
-      probot: 13.4.6
+      probot: 13.4.7
       through2: 4.0.2
     transitivePeerDependencies:
       - supports-color
@@ -7839,7 +7839,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@13.4.6:
+  probot@13.4.7:
     dependencies:
       '@octokit/core': 5.2.2
       '@octokit/plugin-enterprise-compatibility': 4.1.0
