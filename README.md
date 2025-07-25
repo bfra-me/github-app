@@ -5,7 +5,7 @@
 </h3>
 
 <p align="center">
-  <a href="https://github.com/bfra-me/github-app/actions?query=workflow%3Aci" title="Search GitHub Actions for CI workflow runs" ><img alt="GitHub Workflow CI Status" src="https://img.shields.io/github/actions/workflow/status/bfra-me/github-app/ci.yaml?branch=main&style=for-the-badge&logo=github%20actions&logoColor=white&label=ci"></a>
+  <a href="https://github.com/bfra-me/github-app/actions?query=workflow%3Amain" title="Search GitHub Actions for Main workflow runs" ><img alt="Main GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/bfra-me/github-app/main.yaml?branch=main&style=for-the-badge&logo=github%20actions&logoColor=white&label=build"></a>
 </p>
 
 A GitHub App built with Probot that automatically approves pull requests from specific bots with configured trigger phrases. Perfect for handling Renovate, Dependabot or other automated PRs that can be safely merged without manual review.
