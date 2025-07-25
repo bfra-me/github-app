@@ -8,3 +8,8 @@ config:
     allowed_elements: [a, h3, img, p]
   # first-line-heading/first-line-h1
   MD041: false
+
+globs:
+  - '!.cursorrules'
+  - '!.cursor/rules/**'
+  - '!.github/copilot-instructions.md'
