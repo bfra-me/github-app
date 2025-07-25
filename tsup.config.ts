@@ -7,6 +7,11 @@ export default defineConfig({
   },
   clean: true,
   entry: ['src/index.ts'],
+  esbuildOptions(options) {
+    options.alias = {
+      '@octokit/webhooks-types': '@octokit/webhooks-types/schema.d.ts',
+    }
+  },
   format: 'esm',
   noExternal: ['@probot/adapter-github-actions', 'probot'],
   sourcemap: true,
