@@ -20,18 +20,6 @@
       matchPackageNames: ['@swc/**'],
       schedule: ['every 2 weeks on Sunday at 00:00'],
     },
-    {
-      description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
-      matchPackageNames: ['@bfra.me/**', 'bfra-me/**'],
-      updatePinnedDependencies: false,
-    },
-    {
-      description: 'Enable SemVer digest pinning of @bfra-me GitHub actions, reusable workflows, and Renovate config presets.',
-      matchPackageNames: ['@bfra.me/**', 'bfra-me/**'],
-      matchUpdateTypes: ['major'],
-      dependencyDashboardApproval: false,
-      updatePinnedDependencies: true,
-    },
   ],
   postUpgradeTasks: {
     commands: ['pnpm bootstrap', 'pnpm fix', 'pnpm build'],
