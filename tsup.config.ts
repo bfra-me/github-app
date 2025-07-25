@@ -7,6 +7,7 @@ export default defineConfig({
   },
   clean: true,
   entry: ['src/index.ts'],
+  external: ['@octokit/webhooks-types'],
   format: 'esm',
   noExternal: ['@probot/adapter-github-actions', 'probot'],
   sourcemap: true,
