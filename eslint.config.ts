@@ -1,11 +1,9 @@
-import {defineConfig, type Config} from '@bfra.me/eslint-config'
+import {defineConfig} from '@bfra.me/eslint-config'
 
-const config: ReturnType<typeof defineConfig> = defineConfig({
-  name: '@bfra.me/.github',
+export default defineConfig({
+  name: '@bfra.me/github-app',
   ignores: ['**/dist/**', '**/node_modules/**'],
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
 })
-
-export default config as Config
