@@ -5,5 +5,10 @@ shamefullyHoist: true
 shellEmulator: true
 strictPeerDependencies: true
 
+onlyBuiltDependencies:
+  - '@swc/core'
+  - esbuild
+  - unrs-resolver
+
 overrides:
   jiti: <2.2.0

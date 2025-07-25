@@ -9,7 +9,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "bootstrap": "pnpm install --prefer-offline --loglevel error",
+    "bootstrap": "pnpm install --prefer-offline --loglevel warn",
     "build": "NODE_ENV=production tsup",
     "check-format": "prettier --check .",
     "fix": "pnpm run lint --fix",
