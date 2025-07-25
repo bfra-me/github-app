@@ -1,0 +1,9 @@
+autoInstallPeers: true
+dedupePeerDependents: true
+savePrefix: ''
+shamefullyHoist: true
+shellEmulator: true
+strictPeerDependencies: true
+
+overrides:
+  jiti: <2.2.0
