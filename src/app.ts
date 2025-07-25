@@ -162,6 +162,7 @@ async function hasExcludedLabels(context: Context<'pull_request' | 'pull_request
 function isOurBot(context: Context, login: string): boolean {
   try {
     // Get the current bot login - using environment variable instead of payload
+    // @ts-expect-error process.env.APP_LOGIN is not defined in the Node.js types
     const appLogin = process.env.APP_LOGIN
     return appLogin ? login === appLogin : false
   } catch (error) {

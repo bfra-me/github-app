@@ -1,4 +1,5 @@
 {
+  "extends": "@bfra.me/tsconfig",
   "compilerOptions": {
     "target": "ES2022",
     "module": "Node16",
