@@ -1,0 +1,44 @@
+# github-app
+
+> A GitHub App and Action that automatically approves pull requests from trusted bots using configurable triggers and checks. Designed for safe, automated merging of dependency updates and similar PRs.
+
+This repository provides a template for building and deploying a GitHub App (or Action) that auto-approves PRs from bots like Renovate and Dependabot, with flexible configuration and robust CI/CD support.
+
+## Documentation
+
+- [Main README](README.md): Project overview, features, configuration, and usage instructions
+- [License](LICENSE.md): MIT license for this repository
+- [Action Metadata](action.yaml): GitHub Action definition and usage
+
+## Specifications
+
+- [Auto-Approve Bot Configuration](.github/auto-approve.yml): Example configuration for bot behavior and approval rules
+- [GitHub Workflow: Auto-Approve](.github/workflows/auto-approve.yaml): Workflow for running the auto-approve action
+- [GitHub Workflow: Main](.github/workflows/main.yaml): Main CI/CD workflow for linting, testing, and release
+- [GitHub Workflow: Renovate](.github/workflows/renovate.yaml): Workflow for dependency updates
+- [GitHub Workflow: Update Repo Settings](.github/workflows/update-repo-settings.yaml): Workflow to sync repository settings
+- [Repository Settings](.github/settings.yml): Default repository settings and branch protection
+- [Renovate Config](.github/renovate.json5): Dependency update rules and scheduling
+
+## Examples
+
+- [Test: Auto-Approval](test/auto-approval.test.ts): Example tests for the auto-approval logic
+
+## Configuration
+
+- [ESLint Config](eslint.config.ts): Linting rules and ignores
+- [TypeScript Config](tsconfig.json): TypeScript compiler options
+- [Tsup Config](tsup.config.ts): Build configuration for bundling
+- [Vitest Config](vitest.config.ts): Test runner configuration
+- [PNPM Workspace](pnpm-workspace.yaml): Monorepo/workspace settings
+- [Release Config](.releaserc.yaml): Semantic release configuration
+- [Tool Versions](.tool-versions): Required tool versions for development
+- [EditorConfig](.editorconfig): Editor settings for consistent formatting
+- [Markdownlint Config](.markdownlint-cli2.yaml): Markdown linting rules
+
+## Optional
+
+- [Source: App Logic](src/app.ts): Main application logic for the auto-approval bot
+- [Source: Config Loader](src/config.ts): Loads and validates bot configuration
+- [Source: Types](src/types.ts): Type definitions for configuration and bot logic
+- [Source: Entrypoint](src/index.ts): Entrypoint for running as a GitHub Action
