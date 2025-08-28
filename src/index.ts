@@ -6,4 +6,4 @@ import app from './app.js'
 // @ts-expect-error INPUT_GITHUB_TOKEN is not defined in the Node.js types
 process.env.INPUT_GITHUB_TOKEN ??= process.env.GITHUB_TOKEN ?? process.env['INPUT_GITHUB-TOKEN']
 
-run(app)
+await run(app)
