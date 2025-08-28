@@ -32,7 +32,7 @@ async function isValidBot(context: Context<'pull_request' | 'pull_request_review
 async function hasApprovalTrigger(context: Context<'pull_request' | 'pull_request_review'>): Promise<boolean> {
   try {
     const config = await loadConfig(context)
-    const prBody = (context.payload as PullRequestEvent).pull_request?.body || ''
+    const prBody = (context.payload as PullRequestEvent).pull_request?.body ?? ''
 
     // Check if any configured trigger is present in the PR body
     return config.approvalTriggers.some(trigger => prBody.includes(trigger))
@@ -67,7 +67,7 @@ async function haveChecksPassed(
       ref = context.payload.check_run.head_sha
     }
 
-    if (!ref) {
+    if (ref == null || ref.trim() === '') {
       context.log.warn('No head SHA found in payload')
       return false
     }
@@ -128,13 +128,14 @@ async function hasExcludedLabels(context: Context<'pull_request' | 'pull_request
     // Get the labels from the payload if available
     let labels: string[] = []
 
-    if ('pull_request' in context.payload && context.payload.pull_request?.labels) {
-      labels = context.payload.pull_request.labels.map((label: any) => label.name)
+    if ('pull_request' in context.payload && context.payload.pull_request?.labels.length > 0) {
+      labels = context.payload.pull_request.labels.map(label => label.name)
     } else {
       // If no labels in payload, fetch them
       const prNumber = 'pull_request' in context.payload ? context.payload.pull_request?.number : undefined
 
-      if (!prNumber) {
+      // Explicitly handle null/undefined/NaN/zero/negative values
+      if (prNumber == null || Number.isNaN(prNumber) || prNumber <= 0) {
         return false
       }
 
@@ -163,7 +164,7 @@ function isOurBot(context: Context, login: string): boolean {
   try {
     // Get the current bot login - using environment variable instead of payload
     // @ts-expect-error process.env.APP_LOGIN is not defined in the Node.js types
-    const appLogin = process.env.APP_LOGIN
+    const appLogin = process.env.APP_LOGIN ?? ''
     return appLogin ? login === appLogin : false
   } catch (error) {
     context.log.error({error}, 'Error checking if user is our bot')
@@ -181,10 +182,10 @@ async function approvePR(
   try {
     // Use the provided pull number or try to get it from the payload
     const prNumber =
-      pullNumber || ('pull_request' in context.payload ? context.payload.pull_request?.number : undefined)
+      pullNumber ?? ('pull_request' in context.payload ? context.payload.pull_request?.number : undefined)
 
-    if (!prNumber) {
-      context.log.warn('No pull request number found in payload')
+    if (prNumber == null || prNumber <= 0 || Number.isNaN(prNumber)) {
+      context.log.warn('No valid pull request number found in payload')
       return false
     }
 
@@ -246,7 +247,7 @@ export default (app: Probot): void => {
   // Handle check runs that complete
   app.on('check_run.completed', async context => {
     const checkRunEvent = context.payload as CheckRunEvent
-    const pullRequests = checkRunEvent.check_run.pull_requests || []
+    const pullRequests = checkRunEvent.check_run.pull_requests
 
     if (pullRequests.length === 0) {
       return

@@ -47,8 +47,8 @@ describe('Auto-approval bot', () => {
 
   it('approves pull requests from configured bots with the right trigger', async () => {
     // Mock the handler function
-    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: any) =>
-      call[0].includes('pull_request.opened'),
+    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: unknown) =>
+      String((call as any)[0]).includes('pull_request.opened'),
     )
     const openPrHandler = handler?.[1]
 
@@ -107,8 +107,8 @@ describe('Auto-approval bot', () => {
 
   it('does not approve if the PR has an excluded label', async () => {
     // Mock the handler function
-    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: any) =>
-      call[0].includes('pull_request.opened'),
+    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: unknown) =>
+      String((call as any)[0]).includes('pull_request.opened'),
     )
     const openPrHandler = handler?.[1]
 
@@ -161,8 +161,8 @@ describe('Auto-approval bot', () => {
 
   it('only checks specific required checks when configured', async () => {
     // Mock the handler function
-    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: any) =>
-      call[0].includes('pull_request.opened'),
+    const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find((call: unknown) =>
+      String((call as any)[0]).includes('pull_request.opened'),
     )
     const openPrHandler = handler?.[1]
 
@@ -225,7 +225,7 @@ describe('Auto-approval bot', () => {
   it('re-approves when a review is dismissed', async () => {
     // Mock the handler function
     const handler = (probot.on as ReturnType<typeof vi.fn>).mock.calls.find(
-      (call: any) => call[0] === 'pull_request_review.dismissed',
+      (call: unknown) => String((call as any)[0]) === 'pull_request_review.dismissed',
     )
     const reviewDismissedHandler = handler?.[1]
 
