@@ -1,6 +1,6 @@
+import type {CheckRunEvent, PullRequestEvent, PullRequestReviewEvent} from '@octokit/webhooks-types'
+import type {Context, Probot} from 'probot'
 import process from 'node:process'
-import {type CheckRunEvent, type PullRequestEvent, type PullRequestReviewEvent} from '@octokit/webhooks-types'
-import {type Context, type Probot} from 'probot'
 import {loadConfig} from './config.js'
 
 // Constants for approval event
