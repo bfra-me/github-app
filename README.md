@@ -131,8 +131,8 @@ pnpm run typecheck
 # Linting
 pnpm run lint
 
-# Format code
-pnpm run format
+# Fix and format code
+pnpm run fix
 ```
 
 ## License
