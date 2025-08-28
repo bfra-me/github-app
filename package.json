@@ -11,10 +11,8 @@
   "scripts": {
     "bootstrap": "pnpm install --prefer-offline --loglevel warn",
     "build": "NODE_ENV=production tsup",
-    "check-format": "prettier --check .",
-    "fix": "pnpm run lint --fix",
-    "format": "prettier --write .",
-    "lint": "eslint .",
+    "fix": "eslint --fix",
+    "lint": "eslint",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
