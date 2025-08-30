@@ -79,15 +79,17 @@ describe('Auto-approval bot', () => {
         excludeLabels: [],
       }),
       octokit: {
-        checks: {
-          listForRef: vi.fn().mockResolvedValue({
-            data: {
-              check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
-            },
-          }),
-        },
-        pulls: {
-          createReview: vi.fn().mockResolvedValue({}),
+        rest: {
+          checks: {
+            listForRef: vi.fn().mockResolvedValue({
+              data: {
+                check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
+              },
+            }),
+          },
+          pulls: {
+            createReview: vi.fn().mockResolvedValue({}),
+          },
         },
       },
     }
@@ -96,7 +98,7 @@ describe('Auto-approval bot', () => {
     await openPrHandler(context)
 
     // Verify the approval call was made
-    expect(context.octokit.pulls.createReview).toHaveBeenCalledWith({
+    expect(context.octokit.rest.pulls.createReview).toHaveBeenCalledWith({
       owner: 'test-owner',
       repo: 'test-repo',
       pull_number: 1,
@@ -139,15 +141,17 @@ describe('Auto-approval bot', () => {
         excludeLabels: ['do-not-merge'],
       }),
       octokit: {
-        checks: {
-          listForRef: vi.fn().mockResolvedValue({
-            data: {
-              check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
-            },
-          }),
-        },
-        pulls: {
-          createReview: vi.fn().mockResolvedValue({}),
+        rest: {
+          checks: {
+            listForRef: vi.fn().mockResolvedValue({
+              data: {
+                check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
+              },
+            }),
+          },
+          pulls: {
+            createReview: vi.fn().mockResolvedValue({}),
+          },
         },
       },
     }
@@ -156,7 +160,7 @@ describe('Auto-approval bot', () => {
     await openPrHandler(context)
 
     // Verify the approval call was NOT made
-    expect(context.octokit.pulls.createReview).not.toHaveBeenCalled()
+    expect(context.octokit.rest.pulls.createReview).not.toHaveBeenCalled()
   })
 
   it('only checks specific required checks when configured', async () => {
@@ -193,18 +197,20 @@ describe('Auto-approval bot', () => {
         excludeLabels: [],
       }),
       octokit: {
-        checks: {
-          listForRef: vi.fn().mockResolvedValue({
-            data: {
-              check_runs: [
-                {name: 'required-check', status: 'completed', conclusion: 'success'},
-                {name: 'other-check', status: 'completed', conclusion: 'failure'},
-              ],
-            },
-          }),
-        },
-        pulls: {
-          createReview: vi.fn().mockResolvedValue({}),
+        rest: {
+          checks: {
+            listForRef: vi.fn().mockResolvedValue({
+              data: {
+                check_runs: [
+                  {name: 'required-check', status: 'completed', conclusion: 'success'},
+                  {name: 'other-check', status: 'completed', conclusion: 'failure'},
+                ],
+              },
+            }),
+          },
+          pulls: {
+            createReview: vi.fn().mockResolvedValue({}),
+          },
         },
       },
     }
@@ -213,7 +219,7 @@ describe('Auto-approval bot', () => {
     await openPrHandler(context)
 
     // Verify the approval call was made
-    expect(context.octokit.pulls.createReview).toHaveBeenCalledWith({
+    expect(context.octokit.rest.pulls.createReview).toHaveBeenCalledWith({
       owner: 'test-owner',
       repo: 'test-repo',
       pull_number: 1,
@@ -258,15 +264,17 @@ describe('Auto-approval bot', () => {
         excludeLabels: [],
       }),
       octokit: {
-        checks: {
-          listForRef: vi.fn().mockResolvedValue({
-            data: {
-              check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
-            },
-          }),
-        },
-        pulls: {
-          createReview: vi.fn().mockResolvedValue({}),
+        rest: {
+          checks: {
+            listForRef: vi.fn().mockResolvedValue({
+              data: {
+                check_runs: [{name: 'test-check', status: 'completed', conclusion: 'success'}],
+              },
+            }),
+          },
+          pulls: {
+            createReview: vi.fn().mockResolvedValue({}),
+          },
         },
       },
     }
@@ -275,7 +283,7 @@ describe('Auto-approval bot', () => {
     await reviewDismissedHandler(context)
 
     // Verify the approval call was made
-    expect(context.octokit.pulls.createReview).toHaveBeenCalledWith({
+    expect(context.octokit.rest.pulls.createReview).toHaveBeenCalledWith({
       owner: 'test-owner',
       repo: 'test-repo',
       pull_number: 1,
