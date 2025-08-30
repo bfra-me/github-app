@@ -13,7 +13,7 @@ export default defineConfig({
     }
   },
   format: 'esm',
-  noExternal: ['@probot/adapter-github-actions'],
+  noExternal: ['@probot/adapter-github-actions', 'probot'],
   sourcemap: true,
   watch: process.argv.includes('--watch'),
   minify: process.env.NODE_ENV === 'production',
