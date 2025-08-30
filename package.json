@@ -11,6 +11,7 @@
   "scripts": {
     "bootstrap": "pnpm install --prefer-offline --loglevel warn",
     "build": "pnpm check-types && NODE_ENV=production tsup",
+    "start": "pnpm build && probot run dist/index.js",
     "fix": "eslint --fix",
     "lint": "eslint",
     "dev": "tsup --watch",
