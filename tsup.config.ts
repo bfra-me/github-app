@@ -3,7 +3,7 @@ import {defineConfig} from 'tsup'
 
 export default defineConfig({
   banner: {
-    js: "import {createRequire} from 'node:module';const require=createRequire(import.meta.url);",
+    js: "if (typeof require === 'undefined') {const {createRequire} = await import('node:module');globalThis.require=createRequire(import.meta.url);}",
   },
   clean: true,
   entry: ['src/index.ts'],
@@ -13,7 +13,7 @@ export default defineConfig({
     }
   },
   format: 'esm',
-  noExternal: ['@probot/adapter-github-actions', 'probot'],
+  noExternal: ['@probot/adapter-github-actions'],
   sourcemap: true,
   watch: process.argv.includes('--watch'),
   minify: process.env.NODE_ENV === 'production',
