@@ -1,4 +1,4 @@
-import type {CheckRunEvent, PullRequestEvent, PullRequestReviewEvent} from '@octokit/webhooks-types'
+import type {CheckRunCompletedEvent, PullRequestEvent, PullRequestReviewEvent} from '@octokit/webhooks-types'
 import type {Context, Probot} from 'probot'
 import process from 'node:process'
 import {loadConfig} from './config.js'
@@ -14,7 +14,7 @@ async function isValidBot(context: Context<'pull_request' | 'pull_request_review
     const config = await loadConfig(context)
     const senderLogin = context.payload.sender?.login
 
-    if (!senderLogin) {
+    if (senderLogin == null || senderLogin.trim() === '') {
       context.log.warn('No sender login found in payload')
       return false
     }
@@ -72,7 +72,7 @@ async function haveChecksPassed(
       return false
     }
 
-    const {data: checkRuns} = await context.octokit.checks.listForRef({
+    const {data: checkRuns} = await context.octokit.rest.checks.listForRef({
       owner,
       repo,
       ref,
@@ -139,7 +139,7 @@ async function hasExcludedLabels(context: Context<'pull_request' | 'pull_request
         return false
       }
 
-      const {data: prData} = await context.octokit.pulls.get({
+      const {data: prData} = await context.octokit.rest.pulls.get({
         ...context.repo(),
         pull_number: prNumber,
       })
@@ -163,7 +163,6 @@ async function hasExcludedLabels(context: Context<'pull_request' | 'pull_request
 function isOurBot(context: Context, login: string): boolean {
   try {
     // Get the current bot login - using environment variable instead of payload
-    // @ts-expect-error process.env.APP_LOGIN is not defined in the Node.js types
     const appLogin = process.env.APP_LOGIN ?? ''
     return appLogin ? login === appLogin : false
   } catch (error) {
@@ -189,7 +188,7 @@ async function approvePR(
       return false
     }
 
-    await context.octokit.pulls.createReview({
+    await context.octokit.rest.pulls.createReview({
       ...context.repo(),
       pull_number: prNumber,
       event: APPROVE,
@@ -246,7 +245,7 @@ export default (app: Probot): void => {
 
   // Handle check runs that complete
   app.on('check_run.completed', async context => {
-    const checkRunEvent = context.payload as CheckRunEvent
+    const checkRunEvent = context.payload as CheckRunCompletedEvent
     const pullRequests = checkRunEvent.check_run.pull_requests
 
     if (pullRequests.length === 0) {
@@ -256,7 +255,7 @@ export default (app: Probot): void => {
     for (const pr of pullRequests) {
       try {
         // Get the full PR data
-        const {data: pullRequest} = await context.octokit.pulls.get({
+        const {data: pullRequest} = await context.octokit.rest.pulls.get({
           ...context.repo(),
           pull_number: pr.number,
         })
@@ -264,9 +263,9 @@ export default (app: Probot): void => {
         // Create a PR context with the PR data - this is a workaround to reuse the auth
         const prContext = Object.create(context) as Context<'pull_request'>
         prContext.payload = {
-          ...context.payload,
+          ...prContext.payload,
           pull_request: pullRequest,
-        } as unknown as PullRequestEvent
+        } as typeof prContext.payload
 
         // Auto-approve if from valid bot and has approval trigger
         if ((await isValidBot(prContext)) && (await hasApprovalTrigger(prContext))) {

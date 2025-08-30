@@ -126,7 +126,7 @@ pnpm run build
 pnpm test
 
 # Type checking
-pnpm run typecheck
+pnpm run check-types
 
 # Linting
 pnpm run lint
