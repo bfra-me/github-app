@@ -35,8 +35,8 @@ jobs:
           persist-credentials: false
           token: ${{ steps.get-workflow-access-token.outputs.token }}
 
-      - name: Auto-approve PR
-        uses: ./
-        with:
-          github-token: ${{ steps.get-workflow-access-token.outputs.token }}
-          config-path: .github/auto-approve.yml
+      # - name: Auto-approve PR
+      #   uses: ./
+      #   with:
+      #     github-token: ${{ steps.get-workflow-access-token.outputs.token }}
+      #     config-path: .github/auto-approve.yml

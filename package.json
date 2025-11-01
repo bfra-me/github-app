@@ -10,18 +10,19 @@
   "main": "dist/index.js",
   "scripts": {
     "bootstrap": "pnpm install --prefer-offline --loglevel warn",
-    "build": "NODE_ENV=production tsup",
+    "build": "pnpm check-types && NODE_ENV=production tsup",
+    "start": "pnpm build && probot run dist/index.js",
     "fix": "eslint --fix",
     "lint": "eslint",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "check-types": "tsc --noEmit"
   },
   "prettier": "@bfra.me/prettier-config/120-proof",
   "dependencies": {
-    "@probot/adapter-github-actions": "4.0.3",
-    "probot": "13.4.7"
+    "@probot/adapter-github-actions": "5.0.1",
+    "probot": "14.0.2"
   },
   "devDependencies": {
     "@bfra.me/eslint-config": "0.35.2",
