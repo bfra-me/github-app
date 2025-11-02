@@ -31,7 +31,7 @@
     "@octokit/webhooks": "^14.0.0",
     "@octokit/webhooks-types": "^7.4.0",
     "@semantic-release/git": "10.0.1",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@vitest/eslint-plugin": "1.4.0",
     "conventional-changelog-conventionalcommits": "9.1.0",
     "eslint": "9.39.0",
