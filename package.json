@@ -42,7 +42,7 @@
     "nock": "14.0.10",
     "prettier": "3.6.2",
     "semantic-release": "25.0.2",
-    "tsup": "8.5.0",
+    "tsup": "8.5.1",
     "typescript": "5.9.3",
     "vitest": "4.0.8"
   },
