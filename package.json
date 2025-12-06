@@ -40,7 +40,7 @@
     "eslint-plugin-prettier": "5.5.4",
     "jiti": "2.6.1",
     "nock": "14.0.10",
-    "prettier": "3.7.3",
+    "prettier": "3.7.4",
     "semantic-release": "25.0.2",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
