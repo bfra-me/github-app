@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       - name: Setup pnpm
-        uses: pnpm/action-setup@3a0024f0665291c8c6c9957134b033a5e639e837
+        uses: pnpm/action-setup@ee7b8711bd8dd0954f5783b045bb929cd6db2764
         with:
           run_install: false
       - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
@@ -73,7 +73,7 @@ jobs:
           git merge --no-ff -Xtheirs -m 'skip: merge (${{ github.sha }}) [skip release]' ${{ github.sha }}
           echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
       - name: Setup pnpm
-        uses: pnpm/action-setup@3a0024f0665291c8c6c9957134b033a5e639e837
+        uses: pnpm/action-setup@ee7b8711bd8dd0954f5783b045bb929cd6db2764
         with:
           run_install: false
       - name: Setup Node.js
