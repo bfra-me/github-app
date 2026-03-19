@@ -12,8 +12,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1
       probot:
-        specifier: 14.2.4
-        version: 14.2.4
+        specifier: 14.3.0
+        version: 14.3.0
     devDependencies:
       '@bfra.me/eslint-config':
         specifier: 0.50.1
@@ -1545,10 +1545,6 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dotenv@17.3.1:
-    resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
-    engines: {node: '>=12'}
-
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
 
@@ -2934,8 +2930,8 @@ packages:
     resolution: {integrity: sha512-gjVS5hOP+M3wMm5nmNOucbIrqudzs9v/57bWRHQWLYklXqoXKrVfYW2W9+glfGsqtPgpiz5WwyEEB+ksXIx3gQ==}
     engines: {node: '>=18'}
 
-  probot@14.2.4:
-    resolution: {integrity: sha512-m8wPRj/24Mt8k/q0FL38IICyGpKPAkS5nMcgpJNlIcX6UbczFDYR3luqBzfuaM/u+4hmHacE+7Hdw9Vf8czxtg==}
+  probot@14.3.0:
+    resolution: {integrity: sha512-Rmc3KLeARfREgunRKeayQr7yH9JHwFi5GP9doqFRNzGdCZ29rXjNJaoeRHu7cVlp4ulg77kkYu4DMdI68wZKEQ==}
     engines: {node: ^20.18.1 || >= 22}
     hasBin: true
 
@@ -4149,7 +4145,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 10.3.1
-      probot: 14.2.4
+      probot: 14.3.0
       through2: 4.0.2
 
   '@probot/get-private-key@2.1.1': {}
@@ -5014,8 +5010,6 @@ snapshots:
   dot-prop@5.3.0:
     dependencies:
       is-obj: 2.0.0
-
-  dotenv@17.3.1: {}
 
   duplexer2@0.1.4:
     dependencies:
@@ -6520,7 +6514,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@14.2.4:
+  probot@14.3.0:
     dependencies:
       '@octokit/core': 7.0.6
       '@octokit/plugin-enterprise-compatibility': 6.0.3
@@ -6536,7 +6530,6 @@ snapshots:
       '@probot/pino': 5.0.1
       bottleneck: 2.19.5
       deepmerge: 4.3.1
-      dotenv: 17.3.1
       import-meta-resolve: 4.2.0
       npx-import-light: 1.0.0
       octokit-auth-probot: 4.2.2(@octokit/core@7.0.6)
