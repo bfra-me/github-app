@@ -12,8 +12,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1
       probot:
-        specifier: 14.3.0
-        version: 14.3.0
+        specifier: 14.3.1
+        version: 14.3.1
     devDependencies:
       '@bfra.me/eslint-config':
         specifier: 0.50.1
@@ -2930,8 +2930,8 @@ packages:
     resolution: {integrity: sha512-gjVS5hOP+M3wMm5nmNOucbIrqudzs9v/57bWRHQWLYklXqoXKrVfYW2W9+glfGsqtPgpiz5WwyEEB+ksXIx3gQ==}
     engines: {node: '>=18'}
 
-  probot@14.3.0:
-    resolution: {integrity: sha512-Rmc3KLeARfREgunRKeayQr7yH9JHwFi5GP9doqFRNzGdCZ29rXjNJaoeRHu7cVlp4ulg77kkYu4DMdI68wZKEQ==}
+  probot@14.3.1:
+    resolution: {integrity: sha512-OSMsfDkr9LNpdJ+yRC98/B4TaZC6EJBgS3OcG8bBQDoo5jKbXLoh97x7mQdkPAJJHR2bEEcsUsTcumHgpT787g==}
     engines: {node: ^20.18.1 || >= 22}
     hasBin: true
 
@@ -4145,7 +4145,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 10.3.1
-      probot: 14.3.0
+      probot: 14.3.1
       through2: 4.0.2
 
   '@probot/get-private-key@2.1.1': {}
@@ -6514,7 +6514,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@14.3.0:
+  probot@14.3.1:
     dependencies:
       '@octokit/core': 7.0.6
       '@octokit/plugin-enterprise-compatibility': 6.0.3
