@@ -21,7 +21,7 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Setup pnpm
         uses: pnpm/action-setup@6e7bdbda5fe05107efc88b23b7ed00aa05f84ca0
         with:
@@ -59,7 +59,7 @@ jobs:
           git config --global user.email '118100583+bfra-me[bot]@users.noreply.github.com'
           git config --global user.name 'bfra-me[bot]'
       - name: Checkout `release` branch
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: 0
           ref: release
