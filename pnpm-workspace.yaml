@@ -11,3 +11,4 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - '@bfra.me/eslint-config@0.51.2'
+  - '@bfra.me/prettier-config@0.16.10'
