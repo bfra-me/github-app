@@ -12,8 +12,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1
       probot:
-        specifier: 14.3.2
-        version: 14.3.2
+        specifier: 14.3.3
+        version: 14.3.3
     devDependencies:
       '@bfra.me/eslint-config':
         specifier: 0.54.0
@@ -414,6 +414,9 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
+  '@fastify/deepmerge@3.2.4':
+    resolution: {integrity: sha512-kc8GQq5gX9RRhw0rov3DMrN8wS8yRlxJRdDzsYwwdBV/wazuVgc/1K7CKL90tlvu3RlHan6Y0R0aE3nJtBz2eQ==}
+
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
     engines: {node: '>=18.18.0'}
@@ -534,20 +537,20 @@ packages:
     resolution: {integrity: sha512-CmLJklw7eOAFhKpK0L2lCdHzCJXXnsq+zPLvQ6ys2qEB2pxdkPo6meqj73FxbNScaYz0OOPIpSZfJqx/vovLEQ==}
     engines: {node: '>= 20'}
 
-  '@octokit/plugin-paginate-rest@14.0.0':
-    resolution: {integrity: sha512-fNVRE7ufJiAA3XUrha2omTA39M6IXIc6GIZLvlbsm8QOQCYvpq/LkMNGyFlB1d8hTDzsAXa3OKtybdMAYsV/fw==}
-    engines: {node: '>= 20'}
-    peerDependencies:
-      '@octokit/core': '>=6'
-
   '@octokit/plugin-paginate-rest@15.0.0':
     resolution: {integrity: sha512-lw9A9YL5s4VPj+VEx8uMxaxQm2YTgrPDkrLEuZuu18R8TK3oPcXF4K6t52nx6xn1RcogZC9i188sAr/4XYJaQQ==}
     engines: {node: '>= 20'}
     peerDependencies:
       '@octokit/core': '>=6'
 
-  '@octokit/plugin-rest-endpoint-methods@17.0.0':
-    resolution: {integrity: sha512-B5yCyIlOJFPqUUeiD0cnBJwWJO8lkJs5d8+ze9QDP6SvfiXSz1BF+91+0MeI1d2yxgOhU/O+CvtiZ9jSkHhFAw==}
+  '@octokit/plugin-paginate-rest@16.0.0':
+    resolution: {integrity: sha512-7RtUeGZypAK4EA4LrjTCnsLALNOoUcYh5vOnCNXpdIQVTQCPh4OFu7324iPqAls3KGgVnZktKUnNKZCOKyHrlA==}
+    engines: {node: '>= 20'}
+    peerDependencies:
+      '@octokit/core': '>=6'
+
+  '@octokit/plugin-rest-endpoint-methods@18.0.0':
+    resolution: {integrity: sha512-1wM02pQTHEarWYij0Bb4gu8X8fBy2FJdI4HMTSFDxtYLbOkJErGVx5ywmM6jeS8tOmC0iCiRLrn6YsSIecUeOQ==}
     engines: {node: '>= 20'}
     peerDependencies:
       '@octokit/core': '>=6'
@@ -1578,10 +1581,6 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
-
-  deepmerge@4.3.1:
-    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
-    engines: {node: '>=0.10.0'}
 
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
@@ -3013,8 +3012,8 @@ packages:
     resolution: {integrity: sha512-HzMy3Geq23nVALD/M2LliU+F+M+gVNsvkQWWqeBZ8HDiCgzo6YPJ/Omrmtq24EFrIsk0a3EkQGEd7bDOo+IhGA==}
     engines: {node: '>=18'}
 
-  probot@14.3.2:
-    resolution: {integrity: sha512-Bprr2KwlVF4Jpb6bnIcfadA4Dtns8nDJxSEEPNy3FhRrtHUYxZGiczReG5Vo6M7t4iS8Kcvek7CDUTTXgkaSBw==}
+  probot@14.3.3:
+    resolution: {integrity: sha512-o6wOFRPWy0fPuthcZcjGrzudBQmh6Zx1ShhO7PnzuV0XwteiqML0VUWSIRh4iVPASN5tsJSiD8mr3hlK1vTMSg==}
     engines: {node: ^20.18.1 || >= 22}
     hasBin: true
 
@@ -4046,6 +4045,8 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
+  '@fastify/deepmerge@3.2.4': {}
+
   '@humanfs/core@0.19.2':
     dependencies:
       '@humanfs/types': 0.15.0
@@ -4187,20 +4188,20 @@ snapshots:
       '@octokit/request-error': 7.1.2
       '@octokit/types': 16.0.0
 
-  '@octokit/plugin-paginate-rest@14.0.0(@octokit/core@7.0.8)':
-    dependencies:
-      '@octokit/core': 7.0.8
-      '@octokit/types': 16.0.0
-
   '@octokit/plugin-paginate-rest@15.0.0(@octokit/core@7.0.8)':
     dependencies:
       '@octokit/core': 7.0.8
       '@octokit/types': 17.0.0
 
-  '@octokit/plugin-rest-endpoint-methods@17.0.0(@octokit/core@7.0.8)':
+  '@octokit/plugin-paginate-rest@16.0.0(@octokit/core@7.0.8)':
     dependencies:
       '@octokit/core': 7.0.8
-      '@octokit/types': 16.0.0
+      '@octokit/types': 18.0.0
+
+  '@octokit/plugin-rest-endpoint-methods@18.0.0(@octokit/core@7.0.8)':
+    dependencies:
+      '@octokit/core': 7.0.8
+      '@octokit/types': 17.0.0
 
   '@octokit/plugin-retry@8.1.1(@octokit/core@7.0.8)':
     dependencies:
@@ -4283,7 +4284,7 @@ snapshots:
     dependencies:
       '@actions/core': 1.11.1
       pino: 10.4.0
-      probot: 14.3.2
+      probot: 14.3.3
       through2: 4.0.2
 
   '@probot/get-private-key@2.1.1': {}
@@ -5126,8 +5127,6 @@ snapshots:
   deep-extend@0.6.0: {}
 
   deep-is@0.1.4: {}
-
-  deepmerge@4.3.1: {}
 
   dequal@2.0.3: {}
 
@@ -6690,22 +6689,22 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  probot@14.3.2:
+  probot@14.3.3:
     dependencies:
+      '@fastify/deepmerge': 3.2.4
       '@octokit/core': 7.0.8
       '@octokit/plugin-enterprise-compatibility': 6.0.3
-      '@octokit/plugin-paginate-rest': 14.0.0(@octokit/core@7.0.8)
-      '@octokit/plugin-rest-endpoint-methods': 17.0.0(@octokit/core@7.0.8)
+      '@octokit/plugin-paginate-rest': 16.0.0(@octokit/core@7.0.8)
+      '@octokit/plugin-rest-endpoint-methods': 18.0.0(@octokit/core@7.0.8)
       '@octokit/plugin-retry': 8.1.1(@octokit/core@7.0.8)
       '@octokit/plugin-throttling': 11.0.5(@octokit/core@7.0.8)
       '@octokit/request': 10.0.16
-      '@octokit/types': 16.0.0
+      '@octokit/types': 18.0.0
       '@octokit/webhooks': 14.2.0
       '@probot/get-private-key': 2.1.1
       '@probot/octokit-plugin-config': 4.1.0(@octokit/core@7.0.8)
       '@probot/pino': 5.0.1
       bottleneck: 2.19.5
-      deepmerge: 4.3.1
       import-meta-resolve: 4.2.0
       npx-import-light: 1.0.0
       octokit-auth-probot: 4.2.2(@octokit/core@7.0.8)
